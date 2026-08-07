@@ -31,7 +31,7 @@
         .avatar-option.selected { border-color: #8B5A2B; background-color: #F5EFE6; transform: scale(1.08); }
     </style>
 
-    <!-- FIREBASE REALTIME DATABASE SDK (COMPAT VERSION FOR GLOBAL SYNC) -->
+    <!-- FIREBASE REALTIME DATABASE SDK -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
 </head>
@@ -78,7 +78,7 @@
             <div class="text-center space-y-4 max-w-2xl mx-auto py-8">
                 <span class="text-xs px-3 py-1 rounded-full bg-warmbrown-100 text-warmbrown-800 font-bold tracking-wide uppercase">Ruang Aman Remaja</span>
                 <h1 class="text-3xl sm:text-4xl font-extrabold text-warmbrown-800 leading-tight">Pantau dan Jaga Kesehatan Mentalmu Sejak Dini</h1>
-                <p class="text-sm text-warmbrown-600 leading-relaxed">MindTrack Teen mendeteksi keluhan psikologis secara otomatis melalui instrumen terarah yang tersambung langsung dengan Bot Konselor AI cerdas.</p>
+                <p class="text-sm text-warmbrown-600 leading-relaxed">MindTrack Teen mendeteksi keluhan psikologis secara otomatis melalui instrumen terarah yang tersambung langsung dengan Konselor cerdas.</p>
                 <div class="pt-4 flex justify-center gap-4">
                     <button onclick="startAutoScreening()" class="px-6 py-3.5 rounded-2xl bg-warmbrown-600 text-cream-50 font-bold text-sm shadow-lg hover:bg-warmbrown-700 transition-all">Mulai Skrining Sekarang</button>
                     <button onclick="switchTab('authView')" class="px-6 py-3.5 rounded-2xl border border-warmbrown-600 text-warmbrown-800 font-bold text-sm hover:bg-cream-200 transition-all">Daftar / Login Akun</button>
@@ -93,8 +93,8 @@
                 </div>
                 <div class="bg-cream-50 p-6 rounded-3xl border border-warmbrown-300/30 space-y-2">
                     <div class="w-10 h-10 rounded-xl bg-warmbrown-100 flex items-center justify-center text-warmbrown-700"><i data-lucide="cpu" class="w-5 h-5"></i></div>
-                    <h3 class="font-bold text-base text-warmbrown-800">Konselor AI Laki & Perempuan</h3>
-                    <p class="text-xs text-warmbrown-600">Dilengkapi suara spesifik konselor Laki-Laki & Perempuan serta solusi berbasis pendekatan psikologi teruji.</p>
+                    <h3 class="font-bold text-base text-warmbrown-800">Dukungan Konselor</h3>
+                    <p class="text-xs text-warmbrown-600">Dilengkapi layanan Konselor serta solusi berbasis pendekatan psikologi teruji.</p>
                 </div>
                 <div class="bg-cream-50 p-6 rounded-3xl border border-warmbrown-300/30 space-y-2">
                     <div class="w-10 h-10 rounded-xl bg-warmbrown-100 flex items-center justify-center text-warmbrown-700"><i data-lucide="shield-check" class="w-5 h-5"></i></div>
@@ -237,18 +237,18 @@
         <section id="connectView" class="tab-content">
             <div class="bg-cream-50 p-6 sm:p-8 rounded-3xl border border-warmbrown-300/30 shadow-xl space-y-6">
                 <div>
-                    <h2 class="text-xl font-bold text-warmbrown-800">Professional Connect (AI Chatbot & Konselor)</h2>
-                    <p class="text-xs text-warmbrown-600">Konsultasi interaktif dengan pilihan konselor suara Laki-Laki & Perempuan berdasarkan rekomendasi klinis psikologi.</p>
+                    <h2 class="text-xl font-bold text-warmbrown-800">Professional Connect (Konselor)</h2>
+                    <p class="text-xs text-warmbrown-600">Konsultasi interaktif dengan pilihan konselor berdasarkan rekomendasi klinis psikologi.</p>
                 </div>
 
                 <div class="grid sm:grid-cols-2 gap-4">
-                    <!-- KONSULOR PEREMPUAN -->
+                    <!-- KONSELOR 1 -->
                     <div class="bg-cream-100 p-4 rounded-2xl border border-warmbrown-300/20 flex flex-col justify-between space-y-3">
                         <div class="flex items-center gap-3">
                             <div class="w-12 h-12 rounded-full bg-pink-200 text-pink-800 flex items-center justify-center font-bold">👩‍⚕️</div>
                             <div>
                                 <h4 class="font-bold text-sm text-warmbrown-800">Siti Rahma, M.Psi., Psikolog</h4>
-                                <p class="text-[11px] text-pink-700 font-semibold">Spesialis Remaja (Suara Perempuan 👩)</p>
+                                <p class="text-[11px] text-pink-700 font-semibold">Spesialis Remaja</p>
                             </div>
                         </div>
                         <div class="grid grid-cols-3 gap-2">
@@ -264,13 +264,13 @@
                         </div>
                     </div>
 
-                    <!-- KONSULOR LAKI-LAKI -->
+                    <!-- KONSELOR 2 -->
                     <div class="bg-cream-100 p-4 rounded-2xl border border-warmbrown-300/20 flex flex-col justify-between space-y-3">
                         <div class="flex items-center gap-3">
                             <div class="w-12 h-12 rounded-full bg-blue-200 text-blue-800 flex items-center justify-center font-bold">👨‍⚕️</div>
                             <div>
                                 <h4 class="font-bold text-sm text-warmbrown-800">Ahmad Hidayat, S.Psi.</h4>
-                                <p class="text-[11px] text-blue-700 font-semibold">Konselor Bimbingan (Suara Laki-Laki 👨)</p>
+                                <p class="text-[11px] text-blue-700 font-semibold">Konselor Bimbingan</p>
                             </div>
                         </div>
                         <div class="grid grid-cols-3 gap-2">
@@ -340,7 +340,7 @@
 
     </main>
 
-    <!-- MODAL ROOMCHAT BOT INTERAKTIF -->
+    <!-- MODAL ROOMCHAT KONSELOR -->
     <div id="chatModal" class="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm hidden flex items-center justify-center p-4">
         <div class="bg-cream-50 w-full max-w-lg rounded-3xl border border-warmbrown-300/30 shadow-2xl flex flex-col h-[580px] overflow-hidden">
             <!-- Header Chat -->
@@ -348,7 +348,7 @@
                 <div class="flex items-center gap-3">
                     <div id="chatDoctorAvatar" class="w-10 h-10 rounded-full bg-warmbrown-500 flex items-center justify-center font-bold text-white text-sm">💬</div>
                     <div>
-                        <h3 id="chatDoctorName" class="font-bold text-sm">Konselor AI</h3>
+                        <h3 id="chatDoctorName" class="font-bold text-sm">Konselor</h3>
                         <p id="chatDoctorVoiceLabel" class="text-[10px] text-cream-200 flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-green-400 inline-block"></span> Terhubung | Responsif Ilmiah</p>
                     </div>
                 </div>
@@ -385,7 +385,7 @@
                 <div>
                     <h3 id="callDoctorName" class="text-lg font-bold text-white">Konselor</h3>
                     <p id="callTypeLabel" class="text-xs text-slate-400 mt-1">Sesi Panggilan Berlangsung</p>
-                    <p id="callStatusSub" class="text-[11px] text-green-400 mt-1 animate-pulse">Menghubungkan suara konselor...</p>
+                    <p id="callStatusSub" class="text-[11px] text-green-400 mt-1 animate-pulse">Menghubungkan konselor...</p>
                     <p id="callTimer" class="text-sm font-mono text-green-400 font-bold mt-2">00:00</p>
                 </div>
 
@@ -406,7 +406,7 @@
     <script>
         lucide.createIcons();
 
-        /* FIREBASE CONFIGURATION DENGAN PUBLIC OPEN ENDPOINT UNTUK REALTIME SYNC LINTAS HP/PERANGKAT */
+        /* FIREBASE CONFIGURATION */
         const firebaseConfig = {
             databaseURL: "https://mindtrack-teen-default-rtdb.asia-southeast1.firebasedatabase.app/"
         };
@@ -590,7 +590,6 @@
             return `${deviceType} via ${browser} (${loginTime})`;
         }
 
-        /* PERINGATAN LOGGING AKUN TERINTEGRASI REALTIME DATABASE */
         function handleAuthSubmit(e) {
             e.preventDefault();
             const contactInput = document.getElementById('authContact').value.trim();
@@ -603,7 +602,6 @@
 
             localStorage.setItem('mindtrack_saved_creds', JSON.stringify({ contact: contactInput, password: passwordInput }));
 
-            // Akun Khusus Admin
             if ((contactInput === 'admin' || contactInput === 'admin@mindtrack.com') && passwordInput === 'admin123') {
                 currentUser = { contact: 'admin', name: 'Pemilik Web (Admin)', avatar: '🔑', role: 'admin' };
                 localStorage.setItem('mindtrack_user', JSON.stringify(currentUser));
@@ -644,14 +642,12 @@
                 userData.devices.unshift(currentDevice);
             }
 
-            // Simpan Ke Penyimpanan Lokal
             existingUsers[cleanKey] = userData;
             localStorage.setItem('mindtrack_local_db', JSON.stringify(existingUsers));
 
             currentUser = userData.profile;
             localStorage.setItem('mindtrack_user', JSON.stringify(currentUser));
 
-            // SIMPAN / SINKRONISASI KE FIREBASE CLOUD REALTIME DATABASE
             if (db) {
                 try {
                     db.ref('users/' + cleanKey).set(userData);
@@ -713,7 +709,6 @@
                 localStorage.setItem('mindtrack_local_db', JSON.stringify(existingUsers));
             }
 
-            // Sync Cloud Profile
             if (db) {
                 try { db.ref('users/' + cleanKey + '/profile').set(currentUser); } catch(e){}
             }
@@ -802,7 +797,7 @@
                 riskTitle = 'Risiko Tinggi (Membutuhkan Penanganan Segera)';
                 riskDesc = 'Tingkat indikasi gangguan emosional kamu cukup tinggi dan memerlukan bantuan profesional psikologi secepatnya.';
                 bgClass = 'bg-red-50 border-red-200 text-red-800';
-                actionHtml = `<div class="bg-red-100 p-4 rounded-xl text-xs space-y-2 border border-red-300"><strong class="block text-red-900 text-sm">🚨 LANGKAH DARURAT:</strong><p>Segera ceritakan masalahmu ke Konselor AI via Chat/Voice di platform ini, atau hubungi kontak pendamping terdekat.</p></div>`;
+                actionHtml = `<div class="bg-red-100 p-4 rounded-xl text-xs space-y-2 border border-red-300"><strong class="block text-red-900 text-sm">🚨 LANGKAH DARURAT:</strong><p>Segera ceritakan masalahmu ke Konselor via Chat/Voice di platform ini, atau hubungi kontak pendamping terdekat.</p></div>`;
             }
 
             const card = document.getElementById('riskCard');
@@ -824,7 +819,7 @@
             switchTab('hasilView');
         }
 
-        /* --- BOT AI KONSELOR BERDASARKAN PENDEKATAN KLINIS DAN ILMIAH (TANPA SEBUT NAMA AHLI) --- */
+        /* --- RESPON KONSELOR --- */
         function generateSmartCounselorResponse(userMsg) {
             const msg = userMsg.toLowerCase();
             const name = currentUser?.name || 'Teman';
@@ -833,7 +828,7 @@
                 return `Halo ${name}. Berdasarkan prinsip Terapi Kognitif Perilaku (CBT), rasa cemas berlebihan muncul dari siklus pikiran otomatis yang memprediksi hal buruk. Berikut langkah ilmiah penanganannya:\n\n1. Respon Fisik (Relaksasi Diagfragma): Tarik napas dalam 4 detik, tahan 4 detik, dan hembuskan perlahan 6 detik untuk menurunkan aktivitas sistem saraf simpatis.\n2. Restrukturisasi Kognitif: Tuliskan ketakutanmu, lalu tanyakan pada diri sendiri: 'Apakah ada bukti nyata hal ini pasti terjadi?'\n3. Grounding 5-4-3-2-1: Sebutkan 5 benda yang kamu lihat dan 4 benda yang bisa kamu sentuh untuk membawa pikiran kembali ke masa kini.\n\nApa hal spesifik yang paling memicu rasa cemasmu saat ini?`;
             } 
             if (msg.includes('stres') || msg.includes('tugas') || msg.includes('sekolah') || msg.includes('kuliah') || msg.includes('ujian') || msg.includes('pusing')) {
-                return `Tekanan akademik sering kali memicu beban mental berlebih (*cognitive overload*), ${name}. Langkah praktis manajemen stres secara ilmiah meliputi:\n\n1. Teknik Pomodoro: Kerjakan tugas selama 25 menit fokus penuh, lalu istirahat mutlak 5 menit untuk menyegarkan kembali fungsi memori kerja otak.\n2. Dekomposisi Tugas: Pecah tugas besar menjadi sub-tugas kecil yang mudah diselesaikan agar menurunkan resistensi emosional (penundaan).\n3. Evaluasi Kendali: Pisahkan mana hal yang bisa kamu kontrol (usaha belajar) dan luar kontrol (hasil akhir).\n\nTugas atau mata pelajaran mana yang paling menguras energimu saat ini?`;
+                return `Tekanan akademik sering kali memicu beban mental berlebih (*cognitive overload*), ${name}. Langkah practical manajemen stres secara ilmiah meliputi:\n\n1. Teknik Pomodoro: Kerjakan tugas selama 25 menit fokus penuh, lalu istirahat mutlak 5 menit untuk menyegarkan kembali fungsi memori kerja otak.\n2. Dekomposisi Tugas: Pecah tugas besar menjadi sub-tugas kecil yang mudah diselesaikan agar menurunkan resistensi emosional (penundaan).\n3. Evaluasi Kendali: Pisahkan mana hal yang bisa kamu kontrol (usaha belajar) dan luar kontrol (hasil akhir).\n\nTugas atau mata pelajaran mana yang paling menguras energimu saat ini?`;
             }
             if (msg.includes('sedih') || msg.includes('sepi') || msg.includes('menangis') || msg.includes('hampa') || msg.includes('kecewa') || msg.includes('depresi')) {
                 return `Perasaan sedih dan hampa yang bertahan lama memerlukan pendekatan *Behavioral Activation* (Aktivasi Perilaku) untuk memulihkan energi emosional, ${name}. Langkah penanganannya:\n\n1. Validasi Emosional: Buka ruang bagi dirimu untuk merasakan sedih tanpa menghakimi diri sendiri.\n2. Mikro-Aktivitas Fisik: Lakukan kegiatan fisik ringan selama 10-15 menit (seperti berjalan santai atau merapikan tempat tidur) untuk memicu hormon dopamin dan serotonin.\n3. Ekspresi Terbuka: Tuangkan perasaan ke dalam tulisan tanpa menyunting kata-katanya.\n\nSejak kapan kamu merasakan kondisi sedih dan hampa ini?`;
@@ -845,13 +840,13 @@
                 return `Kualitas tidur berhubungan langsung dengan kesehatan mental. Berdasarkan regulasi *Sleep Hygiene*, cara menangani insomnia emosional adalah:\n\n1. Kontrol Stimulus: Gunakan tempat tidur hanya untuk tidur, bukan untuk bermain HP atau belajar.\n2. Batasi Cahaya Biru: Matikan layar elektronik 30-60 menit sebelum tidur agar produksi melatonin otak tidak terganggu.\n3. Teknik Relaksasi Otot Progresif: Kencangkan dan kendurkan otot dari ujung kaki hingga kepala secara bertahap.\n\nApakah ada pikiran tertentu yang terus berputar saat kamu mencoba tidur?`;
             }
             if (msg.includes('halo') || msg.includes('hai') || msg.includes('pagi') || msg.includes('siang') || msg.includes('malam')) {
-                return `Halo ${name}! Saya Konselor AI siap mendengarkan cerita dan memberikan solusi ilmiah penanganan emosi. Apa keluhan atau tantangan yang sedang kamu hadapi saat ini?`;
+                return `Halo ${name}! Saya Konselor siap mendengarkan cerita dan memberikan solusi ilmiah penanganan emosi. Apa keluhan atau tantangan yang sedang kamu hadapi saat ini?`;
             }
 
-            return `Terima kasih sudah berbagi, ${name}. Berdasarkan prinsip regulasi emosi, langkah terbaik saat ini adalah mengurai perasaanmu menjadi bagian-bagian yang dapat dikelola secara bertahan. Bisakah kamu menceritakan pemicu utama dari keluhanmu tersebut?`;
+            return `Terima kasih sudah berbagi, ${name}. Berdasarkan prinsip regulasi emosi, langkah terbaik saat ini adalah mengurai perasaanmu menjadi bagian-bagian yang dapat dikelola secara bertahap. Bisakah kamu menceritakan pemicu utama dari keluhanmu tersebut?`;
         }
 
-        /* --- LOGIKA SUARA SPESIFIK GENDER (PEREMPUAN & LAKI-LAKI) --- */
+        /* --- SINTESIS SUARA TERPISAH --- */
         function speakCounselorVoice(text, gender) {
             if ('speechSynthesis' in window) {
                 window.speechSynthesis.cancel();
@@ -861,14 +856,12 @@
                 const voices = window.speechSynthesis.getVoices();
                 
                 if (gender === 'female') {
-                    // Konfigurasi Suara Perempuan
-                    utterance.pitch = 1.3; // Nada lebih tinggi & lembut
+                    utterance.pitch = 1.3;
                     utterance.rate = 0.95;
                     const femaleVoice = voices.find(v => v.lang.includes('id') && (v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('gadis') || v.name.toLowerCase().includes('zira')));
                     if (femaleVoice) utterance.voice = femaleVoice;
                 } else {
-                    // Konfigurasi Suara Laki-Laki
-                    utterance.pitch = 0.7; // Nada lebih rendah & berat
+                    utterance.pitch = 0.7;
                     utterance.rate = 0.9;
                     const maleVoice = voices.find(v => v.lang.includes('id') && (v.name.toLowerCase().includes('male') || v.name.toLowerCase().includes('david') || v.name.toLowerCase().includes('mantap')));
                     if (maleVoice) utterance.voice = maleVoice;
@@ -890,7 +883,7 @@
 
             document.getElementById('chatDoctorName').innerText = doctorName;
             document.getElementById('chatDoctorAvatar').innerText = gender === 'female' ? '👩‍⚕️' : '👨‍⚕️';
-            document.getElementById('chatDoctorVoiceLabel').innerText = gender === 'female' ? 'Suara Perempuan (Terhubung)' : 'Suara Laki-Laki (Terhubung)';
+            document.getElementById('chatDoctorVoiceLabel').innerHTML = '<span class="w-2 h-2 rounded-full bg-green-400 inline-block"></span> Terhubung | Responsif Ilmiah';
             
             renderChatHistory();
             document.getElementById('chatModal').classList.remove('hidden');
@@ -946,7 +939,7 @@
             saveUserConsultHistory({
                 date: new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }),
                 doctor: activeDoctor,
-                method: 'Roomchat (Bot AI)'
+                method: 'Roomchat (Konselor)'
             });
 
             setTimeout(() => {
@@ -975,7 +968,7 @@
             renderChatHistory();
         }
 
-        /* --- MODAL PANGGILAN DENGAN SUARA GENDER --- */
+        /* --- MODAL PANGGILAN --- */
         function startCallModal(doctorName, type, gender) {
             if (!currentUser) {
                 alert('Silakan login terlebih dahulu.');
@@ -1007,7 +1000,7 @@
             }, 1000);
 
             const voiceSpeech = `Halo ${currentUser.name || 'Teman'}, saya ${doctorName}. Sambungan ${type} telah terhubung. Silakan ceritakan keluhanmu, saya siap memberikan bantuan solusi penanganannya.`;
-            document.getElementById('callStatusSub').innerText = gender === 'female' ? "🔊 Suara Konselor Perempuan Berbicara..." : "🔊 Suara Konselor Laki-Laki Berbicara...";
+            document.getElementById('callStatusSub').innerText = "Konselor Berbicara...";
             
             speakCounselorVoice(voiceSpeech, gender);
 
@@ -1084,7 +1077,7 @@
                     </div>`).join('');
         }
 
-        /* --- SINKRONISASI PEMANTAUAN ADMIN REALTIME UNTUK SEMUA PERANGKAT --- */
+        /* --- SINKRONISASI PEMANTAUAN ADMIN REALTIME --- */
         function listenToRealtimeAdminData() {
             const tbody = document.getElementById('adminTableBody');
 
@@ -1124,11 +1117,9 @@
                 }).join('');
             };
 
-            // Muat Lokal Pertama
             let localDb = JSON.parse(localStorage.getItem('mindtrack_local_db')) || {};
             renderTable(localDb);
 
-            // Dengarkan Firebase Realtime Database secara Live
             if (db) {
                 try {
                     db.ref('users').on('value', snapshot => {
