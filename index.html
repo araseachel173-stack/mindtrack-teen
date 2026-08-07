@@ -41,20 +41,26 @@
                     </div>
                     <span class="font-bold text-xl text-warmbrown-800">MindTrack <span class="text-warmbrown-500 font-semibold">Teen</span></span>
                 </a>
-                <a href="#fitur-interaktif" class="px-5 py-2.5 rounded-full bg-warmbrown-600 text-cream-50 font-semibold text-sm hover:bg-warmbrown-700 transition-all">
-                    Coba Mood Tracker
+                <nav class="hidden md:flex items-center gap-6 text-sm font-semibold text-warmbrown-700">
+                    <a href="#fitur-tracker" class="hover:text-warmbrown-500 transition-colors">Input Mood</a>
+                    <a href="#ringkasan" class="hover:text-warmbrown-500 transition-colors">Ringkasan</a>
+                    <a href="#grafik" class="hover:text-warmbrown-500 transition-colors">Pantau Tren</a>
+                    <a href="#tips" class="hover:text-warmbrown-500 transition-colors">Tips Relaksasi</a>
+                </nav>
+                <a href="#fitur-tracker" class="px-5 py-2.5 rounded-full bg-warmbrown-600 text-cream-50 font-semibold text-sm hover:bg-warmbrown-700 transition-all">
+                    Coba Sekarang
                 </a>
             </div>
         </div>
     </header>
 
-    <!-- HERO SECTION -->
-    <section class="relative pt-12 pb-20 md:pt-20 md:pb-32 overflow-hidden">
+    <!-- HERO SECTION + INPUT MOOD -->
+    <section id="fitur-tracker" class="relative pt-12 pb-16 overflow-hidden">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid lg:grid-cols-12 gap-12 items-center">
                 
                 <!-- Left Content -->
-                <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+                <div class="lg:col-span-6 space-y-6 text-center lg:text-left">
                     <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cream-200/80 border border-warmbrown-300/30 text-warmbrown-600 text-xs sm:text-sm font-semibold">
                         <i data-lucide="sparkles" class="w-4 h-4 text-warmbrown-500"></i>
                         <span>Ruang Aman Digital untuk Remaja Indonesia</span>
@@ -63,12 +69,12 @@
                         Pahami Perasaanmu, Ambil Kendali atas Kesehatan Mentalmu
                     </h1>
                     <p class="text-base sm:text-lg text-warmbrown-700/80">
-                        Catat perasaanmu hari ini secara langsung di bawah ini. Datamu tersimpan aman di peramban ini secara otomatis.
+                        Catat perasaanmu harian, pantau persentase emosimu, dan dapatkan tips khusus yang disesuaikan dengan kondisi mentalmu saat ini.
                     </p>
                 </div>
 
-                <!-- Right Visual (INTERACTIVE FORM) -->
-                <div id="fitur-interaktif" class="lg:col-span-5 relative">
+                <!-- Right Form Input -->
+                <div class="lg:col-span-6">
                     <div class="bg-gradient-to-br from-cream-50 to-cream-200 p-6 sm:p-8 rounded-3xl border border-warmbrown-300/30 shadow-xl space-y-6">
                         
                         <div class="flex items-center justify-between border-b border-warmbrown-300/20 pb-4">
@@ -77,50 +83,39 @@
                                     <i data-lucide="smile" class="w-6 h-6"></i>
                                 </div>
                                 <div>
-                                    <div class="text-xs text-warmbrown-600 font-medium">Jurnal Hari Ini</div>
-                                    <div class="text-sm font-bold text-warmbrown-800">Bagaimana perasaanmu?</div>
+                                    <div class="text-xs text-warmbrown-600 font-medium">Jurnal Harian</div>
+                                    <div class="text-sm font-bold text-warmbrown-800">Bagaimana perasaanmu saat ini?</div>
                                 </div>
                             </div>
-                            <span class="text-xs px-2.5 py-1 rounded-full bg-warmbrown-100 text-warmbrown-700 font-semibold">Interaktif</span>
+                            <span class="text-xs px-2.5 py-1 rounded-full bg-warmbrown-100 text-warmbrown-700 font-semibold">Input Data</span>
                         </div>
 
                         <!-- Mood Selector -->
-                        <div class="grid grid-cols-4 gap-2">
-                            <button onclick="selectMood('Senang', '😊')" class="mood-btn bg-cream-50 p-3 rounded-2xl border border-warmbrown-300/20 text-center hover:border-warmbrown-500 transition-all focus:ring-2 focus:ring-warmbrown-500">
-                                <div class="text-2xl mb-1">😊</div>
-                                <div class="text-[10px] font-bold text-warmbrown-700">Senang</div>
+                        <div class="grid grid-cols-4 gap-3">
+                            <button onclick="selectMood('Senang', '😊')" class="mood-btn bg-cream-50 p-3 rounded-2xl border border-warmbrown-300/20 text-center hover:border-warmbrown-500 transition-all">
+                                <div class="text-3xl mb-1">😊</div>
+                                <div class="text-xs font-bold text-warmbrown-700">Senang</div>
                             </button>
-                            <button onclick="selectMood('Tenang', '😌')" class="mood-btn bg-cream-50 p-3 rounded-2xl border border-warmbrown-300/20 text-center hover:border-warmbrown-500 transition-all focus:ring-2 focus:ring-warmbrown-500">
-                                <div class="text-2xl mb-1">😌</div>
-                                <div class="text-[10px] font-bold text-warmbrown-700">Tenang</div>
+                            <button onclick="selectMood('Tenang', '😌')" class="mood-btn bg-cream-50 p-3 rounded-2xl border border-warmbrown-300/20 text-center hover:border-warmbrown-500 transition-all">
+                                <div class="text-3xl mb-1">😌</div>
+                                <div class="text-xs font-bold text-warmbrown-700">Tenang</div>
                             </button>
-                            <button onclick="selectMood('Sedih', '😔')" class="mood-btn bg-cream-50 p-3 rounded-2xl border border-warmbrown-300/20 text-center hover:border-warmbrown-500 transition-all focus:ring-2 focus:ring-warmbrown-500">
-                                <div class="text-2xl mb-1">😔</div>
-                                <div class="text-[10px] font-bold text-warmbrown-700">Sedih</div>
+                            <button onclick="selectMood('Sedih', '😔')" class="mood-btn bg-cream-50 p-3 rounded-2xl border border-warmbrown-300/20 text-center hover:border-warmbrown-500 transition-all">
+                                <div class="text-3xl mb-1">😔</div>
+                                <div class="text-xs font-bold text-warmbrown-700">Sedih</div>
                             </button>
-                            <button onclick="selectMood('Cemas', '🤯')" class="mood-btn bg-cream-50 p-3 rounded-2xl border border-warmbrown-300/20 text-center hover:border-warmbrown-500 transition-all focus:ring-2 focus:ring-warmbrown-500">
-                                <div class="text-2xl mb-1">🤯</div>
-                                <div class="text-[10px] font-bold text-warmbrown-700">Cemas</div>
-                            </button>
-                        </div>
-
-                        <!-- Text Input Form -->
-                        <div class="space-y-2">
-                            <input type="text" id="noteInput" placeholder="Ceritakan alasanmu secara singkat..." class="w-full px-4 py-2 text-sm rounded-xl border border-warmbrown-300/40 bg-cream-50 text-warmbrown-800 focus:outline-none focus:border-warmbrown-600">
-                            <button onclick="saveMood()" class="w-full py-3 rounded-xl bg-warmbrown-600 hover:bg-warmbrown-700 text-cream-50 font-bold text-sm transition-all shadow-md">
-                                Simpan Catatan Hari Ini
+                            <button onclick="selectMood('Cemas', '🤯')" class="mood-btn bg-cream-50 p-3 rounded-2xl border border-warmbrown-300/20 text-center hover:border-warmbrown-500 transition-all">
+                                <div class="text-3xl mb-1">🤯</div>
+                                <div class="text-xs font-bold text-warmbrown-700">Cemas</div>
                             </button>
                         </div>
 
-                        <!-- Result Display Section -->
-                        <div class="border-t border-warmbrown-300/20 pt-4 space-y-3">
-                            <div class="flex justify-between items-center text-xs font-semibold">
-                                <span class="text-warmbrown-800">Riwayat Perasaan Kamu:</span>
-                                <button onclick="clearHistory()" class="text-red-500 hover:underline">Hapus Semua</button>
-                            </div>
-                            <div id="historyList" class="space-y-2 max-h-40 overflow-y-auto pr-1">
-                                <!-- Data akan muncul di sini secara otomatis -->
-                            </div>
+                        <!-- Form Input -->
+                        <div class="space-y-3">
+                            <textarea id="noteInput" rows="2" placeholder="Tulis hal yang membuatmu merasa begitu hari ini..." class="w-full px-4 py-3 text-sm rounded-xl border border-warmbrown-300/40 bg-cream-50 text-warmbrown-800 focus:outline-none focus:border-warmbrown-600 resize-none"></textarea>
+                            <button onclick="saveMood()" class="w-full py-3.5 rounded-xl bg-warmbrown-600 hover:bg-warmbrown-700 text-cream-50 font-bold text-sm transition-all shadow-md">
+                                Simpan Emosi Hari Ini
+                            </button>
                         </div>
 
                     </div>
@@ -130,17 +125,78 @@
         </div>
     </section>
 
-    <!-- SCRIPT PEMROSES DATA -->
+    <!-- RINGKASAN & STATISTIK REAL-TIME -->
+    <section id="ringkasan" class="py-12 bg-cream-200/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-2xl font-bold text-warmbrown-800 mb-6 flex items-center gap-2">
+                <i data-lucide="bar-chart-2" class="w-6 h-6 text-warmbrown-600"></i> Ringkasan Emosi Kamu
+            </h2>
+
+            <div class="grid md:grid-cols-3 gap-6">
+                <!-- Stat Card 1 -->
+                <div class="bg-cream-50 p-6 rounded-2xl border border-warmbrown-300/20 shadow-sm">
+                    <div class="text-xs text-warmbrown-600 font-semibold">Total Catatan Emosi</div>
+                    <div id="statTotal" class="text-3xl font-extrabold text-warmbrown-800 mt-2">0</div>
+                    <p class="text-xs text-warmbrown-700/70 mt-1">Sesi tercatat di peramban ini</p>
+                </div>
+                <!-- Stat Card 2 -->
+                <div class="bg-cream-50 p-6 rounded-2xl border border-warmbrown-300/20 shadow-sm">
+                    <div class="text-xs text-warmbrown-600 font-semibold">Emosi Dominan</div>
+                    <div id="statDominant" class="text-3xl font-extrabold text-warmbrown-800 mt-2">-</div>
+                    <p class="text-xs text-warmbrown-700/70 mt-1">Perasaan yang paling sering dirasakan</p>
+                </div>
+                <!-- Stat Card 3 -->
+                <div class="bg-cream-50 p-6 rounded-2xl border border-warmbrown-300/20 shadow-sm">
+                    <div class="text-xs text-warmbrown-600 font-semibold">Tingkat Stabilitas</div>
+                    <div id="statStability" class="text-3xl font-extrabold text-warmbrown-800 mt-2">0%</div>
+                    <p class="text-xs text-warmbrown-700/70 mt-1">Rasio perasaan positif (Senang & Tenang)</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- RIWAYAT & PANTAU TREN -->
+    <section id="grafik" class="py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h2 class="text-2xl font-bold text-warmbrown-800">Pantau Riwayat Emosi</h2>
+                    <p class="text-sm text-warmbrown-600">Daftar seluruh jurnal emosi yang kamu masukkan</p>
+                </div>
+                <button onclick="clearHistory()" class="px-4 py-2 rounded-lg text-xs font-semibold text-red-600 bg-red-50 hover:bg-red-100 transition-colors">
+                    Hapus Semua Data
+                </button>
+            </div>
+
+            <!-- List Catatan -->
+            <div id="historyList" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                <!-- Data akan dimuat otomatis lewat JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- TIPS RELAKSASI DINAMIS -->
+    <section id="tips" class="py-12 bg-cream-200/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+            <h2 class="text-2xl font-bold text-warmbrown-800 flex items-center gap-2">
+                <i data-lucide="lightbulb" class="w-6 h-6 text-warmbrown-600"></i> Rekomendasi & Tips Hari Ini
+            </h2>
+
+            <div id="recommendationBox" class="bg-cream-50 p-6 rounded-2xl border border-warmbrown-300/30 shadow-sm">
+                <p class="text-sm text-warmbrown-700">Pilih dan simpan emosimu hari ini untuk mendapatkan saran relaksasi yang pas!</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- JAVASCRIPT DINAMIS -->
     <script>
         lucide.createIcons();
 
         let selectedMoodData = { name: '', emoji: '' };
 
-        // 1. Pilih Emoji Mood
+        // 1. Fungsi Pilih Mood
         function selectMood(name, emoji) {
             selectedMoodData = { name, emoji };
-            
-            // Efek visual tombol terpilih
             document.querySelectorAll('.mood-btn').forEach(btn => {
                 btn.classList.remove('border-2', 'border-warmbrown-600', 'bg-cream-200');
             });
@@ -152,68 +208,155 @@
             const note = document.getElementById('noteInput').value;
 
             if (!selectedMoodData.name) {
-                alert('Pilih salah satu emoji emosi terlebih dahulu!');
+                alert('Silakan pilih salah satu emoji emosi terlebih dahulu!');
                 return;
             }
 
             const newEntry = {
+                id: Date.now(),
                 mood: selectedMoodData.name,
                 emoji: selectedMoodData.emoji,
-                note: note || 'Tanpa catatan',
+                note: note || 'Tanpa catatan tambahan',
                 date: new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })
             };
 
-            // Ambil data lama & tambahkan data baru
-            let moodHistory = JSON.parse(localStorage.getItem('mindtrack_data')) || [];
-            moodHistory.unshift(newEntry);
-
-            // Simpan kembali
-            localStorage.getItem
-            localStorage.setItem('mindtrack_data', JSON.stringify(moodHistory));
+            let history = JSON.parse(localStorage.getItem('mindtrack_full_data')) || [];
+            history.unshift(newEntry);
+            localStorage.setItem('mindtrack_full_data', JSON.stringify(history));
 
             // Reset Input
             document.getElementById('noteInput').value = '';
             selectedMoodData = { name: '', emoji: '' };
             document.querySelectorAll('.mood-btn').forEach(btn => btn.classList.remove('border-2', 'border-warmbrown-600', 'bg-cream-200'));
 
-            // Perbarui Tampilan
-            renderHistory();
+            // Update UI
+            refreshApp();
         }
 
-        // 3. Tampilkan Riwayat
-        function renderHistory() {
+        // 3. Render Riwayat
+        function renderHistory(history) {
             const historyList = document.getElementById('historyList');
-            let moodHistory = JSON.parse(localStorage.getItem('mindtrack_data')) || [];
 
-            if (moodHistory.length === 0) {
-                historyList.innerHTML = '<p class="text-xs text-warmbrown-600 italic">Belum ada data emosi yang tersimpan.</p>';
+            if (history.length === 0) {
+                historyList.innerHTML = `
+                    <div class="col-span-full text-center py-8 text-warmbrown-600 italic text-sm">
+                        Belum ada riwayat emosi. Mulai isi jurnal emosi kamu di atas!
+                    </div>
+                `;
                 return;
             }
 
-            historyList.innerHTML = moodHistory.map(item => `
-                <div class="bg-cream-50 p-2.5 rounded-xl border border-warmbrown-300/20 flex items-start gap-3">
-                    <span class="text-xl">${item.emoji}</span>
-                    <div class="flex-1 text-xs">
-                        <div class="flex justify-between items-center">
-                            <span class="font-bold text-warmbrown-800">${item.mood}</span>
-                            <span class="text-[10px] text-warmbrown-500">${item.date}</span>
+            historyList.innerHTML = history.map(item => `
+                <div class="bg-cream-50 p-5 rounded-2xl border border-warmbrown-300/20 shadow-sm flex flex-col justify-between space-y-3">
+                    <div class="flex justify-between items-start">
+                        <div class="flex items-center gap-3">
+                            <span class="text-3xl">${item.emoji}</span>
+                            <div>
+                                <h4 class="font-bold text-warmbrown-800 text-base">${item.mood}</h4>
+                                <span class="text-[11px] text-warmbrown-500">${item.date}</span>
+                            </div>
                         </div>
-                        <p class="text-warmbrown-700/80 mt-0.5">${item.note}</p>
+                        <button onclick="deleteSingle(${item.id})" class="text-warmbrown-300 hover:text-red-500 transition-colors">
+                            <i data-lucide="trash-2" class="w-4 h-4"></i>
+                        </button>
                     </div>
+                    <p class="text-xs text-warmbrown-700 bg-cream-100/60 p-3 rounded-xl border border-warmbrown-300/10">
+                        "${item.note}"
+                    </p>
                 </div>
             `).join('');
+
+            lucide.createIcons();
         }
 
-        // 4. Hapus Riwayat
-        function clearHistory() {
-            if (confirm('Yakin ingin menghapus seluruh riwayat catatan emosi?')) {
-                localStorage.removeItem('mindtrack_data');
-                renderHistory();
+        // 4. Update Statistik (Ringkasan)
+        function updateStats(history) {
+            const total = history.length;
+            document.getElementById('statTotal').innerText = total;
+
+            if (total === 0) {
+                document.getElementById('statDominant').innerText = '-';
+                document.getElementById('statStability').innerText = '0%';
+                return;
+            }
+
+            // Hitung emosi dominan
+            const counts = {};
+            let positiveCount = 0;
+
+            history.forEach(item => {
+                counts[item.mood] = (counts[item.mood] || 0) + 1;
+                if (item.mood === 'Senang' || item.mood === 'Tenang') {
+                    positiveCount++;
+                }
+            });
+
+            let dominant = Object.keys(counts).reduce((a, b) => counts[a] > counts[b] ? a : b);
+            document.getElementById('statDominant').innerText = dominant;
+
+            // Hitung persentase stabilitas
+            const stabilityRate = Math.round((positiveCount / total) * 100);
+            document.getElementById('statStability').innerText = `${stabilityRate}%`;
+        }
+
+        // 5. Update Rekomendasi / Tips
+        function updateTips(history) {
+            const box = document.getElementById('recommendationBox');
+
+            if (history.length === 0) {
+                box.innerHTML = `<p class="text-sm text-warmbrown-700">Pilih dan simpan emosimu hari ini untuk mendapatkan saran relaksasi yang pas!</p>`;
+                return;
+            }
+
+            const latestMood = history[0].mood;
+
+            if (latestMood === 'Cemas') {
+                box.innerHTML = `
+                    <h3 class="font-bold text-warmbrown-800 text-base mb-2">💡 Tips saat merasa Cemas:</h3>
+                    <p class="text-sm text-warmbrown-700">Coba teknik pernapasan 4-7-8: Hirup nafas selama 4 detik, tahan selama 7 detik, lalu hembuskan perlahan selama 8 detik. Ulangi 3 kali untuk menenangkan pikiran.</p>
+                `;
+            } else if (latestMood === 'Sedih') {
+                box.innerHTML = `
+                    <h3 class="font-bold text-warmbrown-800 text-base mb-2">💡 Tips saat merasa Sedih:</h3>
+                    <p class="text-sm text-warmbrown-700">Tidak apa-apa untuk merasa sedih. Ambil jeda istirahat, dengarkan lagu favoritmu, atau ceritakan perasaan ini kepada teman dekat/keluarga yang kamu percayai.</p>
+                `;
+            } else if (latestMood === 'Senang') {
+                box.innerHTML = `
+                    <h3 class="font-bold text-warmbrown-800 text-base mb-2">🌟 Tips saat merasa Senang:</h3>
+                    <p class="text-sm text-warmbrown-700">Bagikan energi positif ini! Tuliskan 3 hal yang paling kamu syukuri hari ini di dalam jurnalmu agar rasa bahagia ini bertahan lama.</p>
+                `;
+            } else {
+                box.innerHTML = `
+                    <h3 class="font-bold text-warmbrown-800 text-base mb-2">🌿 Tips untuk Menjaga Ketenangan:</h3>
+                    <p class="text-sm text-warmbrown-700">Pertahankan pikiran jernih ini dengan minum air putih yang cukup dan melakukan peretangan singkat selama 5 menit.</p>
+                `;
             }
         }
 
-        // Jalankan fungsi saat halaman terbuka
-        renderHistory();
+        // 6. Hapus Data Tunggal / Semua
+        function deleteSingle(id) {
+            let history = JSON.parse(localStorage.getItem('mindtrack_full_data')) || [];
+            history = history.filter(item => item.id !== id);
+            localStorage.setItem('mindtrack_full_data', JSON.stringify(history));
+            refreshApp();
+        }
+
+        function clearHistory() {
+            if (confirm('Apakah kamu yakin ingin menghapus seluruh data catatan emosi?')) {
+                localStorage.removeItem('mindtrack_full_data');
+                refreshApp();
+            }
+        }
+
+        // Jalankan Semuanya
+        function refreshApp() {
+            const history = JSON.parse(localStorage.getItem('mindtrack_full_data')) || [];
+            renderHistory(history);
+            updateStats(history);
+            updateTips(history);
+        }
+
+        refreshApp();
     </script>
 </body>
 </html>
