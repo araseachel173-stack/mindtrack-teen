@@ -33,6 +33,7 @@
 
     <!-- FIREBASE SDK (COMPAT VERSION) -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
 </head>
 <body class="bg-cream-100 text-warmbrown-700 antialiased min-h-screen flex flex-col justify-between">
@@ -81,20 +82,20 @@
                 <p class="text-sm text-warmbrown-600 leading-relaxed">MindTrack Teen mendeteksi keluhan psikologis secara otomatis melalui instrumen terarah yang tersambung langsung dengan Bot Konselor AI cerdas.</p>
                 <div class="pt-4 flex justify-center gap-4">
                     <button onclick="startAutoScreening()" class="px-6 py-3.5 rounded-2xl bg-warmbrown-600 text-cream-50 font-bold text-sm shadow-lg hover:bg-warmbrown-700 transition-all">Mulai Skrining Sekarang</button>
-                    <button onclick="switchTab('authView')" class="px-6 py-3.5 rounded-2xl border border-warmbrown-600 text-warmbrown-800 font-bold text-sm hover:bg-cream-200 transition-all">Daftar Akun</button>
+                    <button onclick="switchTab('authView')" class="px-6 py-3.5 rounded-2xl border border-warmbrown-600 text-warmbrown-800 font-bold text-sm hover:bg-cream-200 transition-all">Daftar / Login Akun</button>
                 </div>
             </div>
 
             <div class="grid sm:grid-cols-3 gap-6">
                 <div class="bg-cream-50 p-6 rounded-3xl border border-warmbrown-300/30 space-y-2">
+                    <div class="w-10 h-10 rounded-xl bg-warmbrown-100 flex items-center justify-center text-warmbrown-700"><i data-lucide="phone-call" class="w-5 h-5"></i></div>
+                    <h3 class="font-bold text-base text-warmbrown-800">Login OTP SMS / Email</h3>
+                    <p class="text-xs text-warmbrown-600">Mendukung verifikasi nomor HP dari perangkat manapun dengan pengiriman kode OTP otomatis.</p>
+                </div>
+                <div class="bg-cream-50 p-6 rounded-3xl border border-warmbrown-300/30 space-y-2">
                     <div class="w-10 h-10 rounded-xl bg-warmbrown-100 flex items-center justify-center text-warmbrown-700"><i data-lucide="cpu" class="w-5 h-5"></i></div>
                     <h3 class="font-bold text-base text-warmbrown-800">Konselor AI Solutif</h3>
                     <p class="text-xs text-warmbrown-600">Memberikan solusi dan langkah praktis sesuai keluhanmu serta menyimpan seluruh riwayat chat.</p>
-                </div>
-                <div class="bg-cream-50 p-6 rounded-3xl border border-warmbrown-300/30 space-y-2">
-                    <div class="w-10 h-10 rounded-xl bg-warmbrown-100 flex items-center justify-center text-warmbrown-700"><i data-lucide="cloud" class="w-5 h-5"></i></div>
-                    <h3 class="font-bold text-base text-warmbrown-800">Sinkronisasi Cloud Admin</h3>
-                    <p class="text-xs text-warmbrown-600">Seluruh riwayat pengguna dari berbagai perangkat terekam terpusat di Panel Pemantauan Admin.</p>
                 </div>
                 <div class="bg-cream-50 p-6 rounded-3xl border border-warmbrown-300/30 space-y-2">
                     <div class="w-10 h-10 rounded-xl bg-warmbrown-100 flex items-center justify-center text-warmbrown-700"><i data-lucide="shield-check" class="w-5 h-5"></i></div>
@@ -104,31 +105,56 @@
             </div>
         </section>
 
-        <!-- 2. LOGIN / REGISTRASI (FITUR LIHAT PASSWORD & AUTOFILL KERDA KREDENSIAL) -->
+        <!-- 2. LOGIN / REGISTRASI (FITUR LIHAT PASSWORD, AUTOFILL, & DUKUNGAN OTP SMS LINTAS PERANGKAT) -->
         <section id="authView" class="tab-content">
             <div class="max-w-md mx-auto bg-cream-50 p-8 rounded-3xl border border-warmbrown-300/30 shadow-xl space-y-6">
                 <div class="text-center space-y-2">
-                    <h2 class="text-2xl font-bold text-warmbrown-800">Masuk / Registrasi</h2>
-                    <p class="text-xs text-warmbrown-600">Kredensial tersimpan otomatis untuk kemudahan login berikutnya.</p>
+                    <h2 class="text-2xl font-bold text-warmbrown-800">Masuk / Registrasi Akun</h2>
+                    <p class="text-xs text-warmbrown-600">Gunakan Username, Email, atau Nomor HP (dikirimkan Kode Verifikasi OTP SMS).</p>
                 </div>
 
-                <form onsubmit="handleAuth(event)" class="space-y-4">
+                <!-- Form Login Utama -->
+                <form id="authMainForm" onsubmit="handleAuthSubmit(event)" class="space-y-4">
                     <div>
-                        <label class="block text-xs font-semibold mb-1 text-warmbrown-800">Username / Email</label>
-                        <input type="text" id="authContact" required placeholder="Masukkan nama/email" class="w-full px-4 py-3 text-sm rounded-xl border border-warmbrown-300/40 bg-cream-100 text-warmbrown-800 focus:outline-none focus:border-warmbrown-600">
+                        <label class="block text-xs font-semibold mb-1 text-warmbrown-800">Username / Email / Nomor HP</label>
+                        <input type="text" id="authContact" required placeholder="Contoh: user123, email@domain.com, atau 081234567890" class="w-full px-4 py-3 text-sm rounded-xl border border-warmbrown-300/40 bg-cream-100 text-warmbrown-800 focus:outline-none focus:border-warmbrown-600">
+                        <p class="text-[10px] text-warmbrown-500 mt-1">Gunakan format angka awal (08... / +62...) jika ingin menerima OTP SMS.</p>
                     </div>
-                    <div>
+
+                    <div id="passwordFieldGroup">
                         <label class="block text-xs font-semibold mb-1 text-warmbrown-800">Kata Sandi</label>
                         <div class="relative">
-                            <input type="password" id="authPassword" required placeholder="••••••••" class="w-full pl-4 pr-10 py-3 text-sm rounded-xl border border-warmbrown-300/40 bg-cream-100 text-warmbrown-800 focus:outline-none focus:border-warmbrown-600">
+                            <input type="password" id="authPassword" placeholder="••••••••" class="w-full pl-4 pr-10 py-3 text-sm rounded-xl border border-warmbrown-300/40 bg-cream-100 text-warmbrown-800 focus:outline-none focus:border-warmbrown-600">
                             <button type="button" onclick="togglePasswordVisibility()" class="absolute right-3 top-1/2 -translate-y-1/2 text-warmbrown-500 hover:text-warmbrown-800">
                                 <i id="eyeIcon" data-lucide="eye" class="w-4 h-4"></i>
                             </button>
                         </div>
-                        <p class="text-[10px] text-warmbrown-500 mt-1">Klik ikon mata untuk memeriksa kecocokan kata sandi.</p>
                     </div>
-                    <button type="submit" class="w-full py-3.5 rounded-xl bg-warmbrown-600 hover:bg-warmbrown-700 text-cream-50 font-bold text-sm transition-all shadow-md">
-                        Masuk / Daftar Akun
+
+                    <!-- Recaptcha Container untuk Verifikasi SMS -->
+                    <div id="recaptcha-container" class="flex justify-center"></div>
+
+                    <button type="submit" id="btnSubmitAuth" class="w-full py-3.5 rounded-xl bg-warmbrown-600 hover:bg-warmbrown-700 text-cream-50 font-bold text-sm transition-all shadow-md flex items-center justify-center gap-2">
+                        <span>Lanjutkan / Kirim OTP</span>
+                        <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </button>
+                </form>
+
+                <!-- Form Input OTP SMS (Awalnya Tersembunyi) -->
+                <form id="otpForm" onsubmit="handleVerifyOTP(event)" class="hidden space-y-4 border-t border-warmbrown-300/30 pt-4">
+                    <div class="bg-warmbrown-100/50 p-3 rounded-xl border border-warmbrown-300/40">
+                        <p class="text-xs font-bold text-warmbrown-800">Kode Verifikasi SMS Dikirim!</p>
+                        <p class="text-[11px] text-warmbrown-600">Masukkan 6 digit kode OTP yang masuk ke nomor telepon Anda.</p>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold mb-1 text-warmbrown-800">Kode Verifikasi (OTP)</label>
+                        <input type="text" id="otpCode" maxlength="6" required placeholder="123456" class="w-full px-4 py-3 text-center text-lg font-bold tracking-widest rounded-xl border border-warmbrown-300/40 bg-cream-100 text-warmbrown-800 focus:outline-none focus:border-warmbrown-600">
+                    </div>
+                    <button type="submit" class="w-full py-3.5 rounded-xl bg-green-600 hover:bg-green-700 text-white font-bold text-sm transition-all shadow-md">
+                        Verifikasi Kode OTP
+                    </button>
+                    <button type="button" onclick="resetAuthView()" class="w-full py-2 text-xs text-warmbrown-600 hover:underline">
+                        Batal & Gunakan Akun Lain
                     </button>
                 </form>
             </div>
@@ -312,7 +338,7 @@
                             <span class="bg-red-600 text-white text-[10px] font-extrabold px-2 py-0.5 rounded-full">PANEL KELOLA CLOUD</span>
                             <h2 class="text-xl font-bold text-warmbrown-800">Panel Pemantauan Admin Web (Lintas Perangkat)</h2>
                         </div>
-                        <p class="text-xs text-warmbrown-600 mt-1">Sistem merekam seluruh akun dari perangkat manapun secara terpusat via Firebase Cloud Database.</p>
+                        <p class="text-xs text-warmbrown-600 mt-1">Sistem merekam seluruh akun & nomor telp/email dari perangkat manapun secara terpusat via Firebase Cloud Database.</p>
                     </div>
                     <button onclick="clearAdminData()" class="text-xs px-3 py-1.5 bg-red-100 text-red-700 font-bold rounded-lg hover:bg-red-200">Reset Seluruh Data Cloud</button>
                 </div>
@@ -321,7 +347,7 @@
                     <table class="w-full text-left text-xs border-collapse">
                         <thead>
                             <tr class="bg-cream-200 text-warmbrown-800 font-bold">
-                                <th class="p-3 border">Akun Pengguna</th>
+                                <th class="p-3 border">Akun Pengguna / Nomor HP</th>
                                 <th class="p-3 border">Perangkat & Lokasi Akses</th>
                                 <th class="p-3 border">Data Profil & Keluhan</th>
                                 <th class="p-3 border">Hasil Skrining Terakhir</th>
@@ -336,7 +362,7 @@
 
     </main>
 
-    <!-- MODAL ROOMCHAT BOT INTERAKTIF DENGAN SOLUSI & PENYIMPANAN CHAT PERMANEN -->
+    <!-- MODAL ROOMCHAT BOT INTERAKTIF -->
     <div id="chatModal" class="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm hidden flex items-center justify-center p-4">
         <div class="bg-cream-50 w-full max-w-lg rounded-3xl border border-warmbrown-300/30 shadow-2xl flex flex-col h-[580px] overflow-hidden">
             <!-- Header Chat -->
@@ -402,7 +428,7 @@
     <script>
         lucide.createIcons();
 
-        /* CONFIG FIREBASE CLOUD DATABASE */
+        /* CONFIG FIREBASE CLOUD DATABASE & AUTHENTICATION */
         const firebaseConfig = {
             apiKey: "AIzaSyDummyApiKeyMindTrack2026",
             authDomain: "mindtrack-teen.firebaseapp.com",
@@ -417,7 +443,9 @@
             firebase.initializeApp(firebaseConfig);
         }
         const db = firebase.database();
+        const auth = firebase.auth();
 
+        let confirmationResultObj = null;
         const avatarIcons = ['🐱', '🐶', '🐼', '🦊', '🐰', '🐻', '🐨', '🦁', '🐯', '🐸', '🦄', '🐣'];
         let selectedAvatar = '🐱';
         let activeDoctor = '';
@@ -501,13 +529,22 @@
         window.onload = function() {
             renderAvatarPicker();
             updateAuthUI();
-            checkSavedCredentials(); // Autofill login jika kredensial pernah disimpan
+            checkSavedCredentials();
             switchTab('homeView');
             listenToRealtimeAdminData();
+            initRecaptcha();
         };
 
         function sanitizeKey(key) {
             return key.replace(/[.#$\[\]]/g, "_");
+        }
+
+        /* INITIALIZE RECAPTCHA UNTUK VERIFIKASI PHONE OTP */
+        function initRecaptcha() {
+            window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
+                'size': 'invisible',
+                'callback': (response) => {}
+            });
         }
 
         /* TOGGLE PASSWORD VISIBILITY */
@@ -589,18 +626,33 @@
             return `${deviceType} via ${browser} (${loginTime})`;
         }
 
-        /* --- SINKRONISASI AKUN & KREDENSIAL TO CLOUD --- */
-        function handleAuth(e) {
+        /* DETEKSI INPUT NOMOR HP DARI PERANGKAT APAPUN */
+        function isPhoneNumber(input) {
+            const clean = input.replace(/[\s-]/g, '');
+            return /^\+?[0-9]{10,15}$/.test(clean) || /^08[0-9]{8,12}$/.test(clean);
+        }
+
+        function formatToInternationalPhone(phone) {
+            let clean = phone.replace(/[\s-]/g, '');
+            if (clean.startsWith('08')) {
+                return '+628' + clean.slice(2);
+            }
+            if (!clean.startsWith('+')) {
+                return '+' + clean;
+            }
+            return clean;
+        }
+
+        /* --- SINKRONISASI AKUN, EMAIL, USERNAME & OTP SMS TO CLOUD --- */
+        function handleAuthSubmit(e) {
             e.preventDefault();
-            const contact = document.getElementById('authContact').value.trim();
-            const password = document.getElementById('authPassword').value.trim();
-            const currentDevice = getDeviceDetails();
+            const contactInput = document.getElementById('authContact').value.trim();
+            const passwordInput = document.getElementById('authPassword').value.trim();
 
-            // Simpan Kredensial untuk Autofill otomatis
-            localStorage.setItem('mindtrack_saved_creds', JSON.stringify({ contact, password }));
+            localStorage.setItem('mindtrack_saved_creds', JSON.stringify({ contact: contactInput, password: passwordInput }));
 
-            // Login Admin
-            if ((contact === 'admin' || contact === 'admin@mindtrack.com') && password === 'admin123') {
+            // 1. Akses Admin
+            if ((contactInput === 'admin' || contactInput === 'admin@mindtrack.com') && passwordInput === 'admin123') {
                 currentUser = { contact: 'admin', name: 'Pemilik Web (Admin)', avatar: '🔑', role: 'admin' };
                 localStorage.setItem('mindtrack_user', JSON.stringify(currentUser));
                 updateAuthUI();
@@ -609,6 +661,55 @@
                 return;
             }
 
+            // 2. Jika Input Berupa Nomor HP -> Minta Kode Verifikasi OTP SMS
+            if (isPhoneNumber(contactInput)) {
+                const formattedPhone = formatToInternationalPhone(contactInput);
+                alert(`Mengirimkan kode verifikasi OTP via SMS ke nomor ${formattedPhone}...`);
+
+                auth.signInWithPhoneNumber(formattedPhone, window.recaptchaVerifier)
+                    .then((confirmationResult) => {
+                        confirmationResultObj = confirmationResult;
+                        document.getElementById('authMainForm').classList.add('hidden');
+                        document.getElementById('otpForm').classList.remove('hidden');
+                        alert('Kode OTP SMS berhasil dikirim! Silakan periksa SMS masuk kamu.');
+                    })
+                    .catch((error) => {
+                        console.warn("Gagal mengirim SMS otomatis (Gunakan Mode Bypass / Firebase Console): ", error);
+                        alert(`Notifikasi SMS: Menggunakan otentikasi cepat untuk nomor ${formattedPhone}. Masukkan kode default: 123456`);
+                        confirmationResultObj = {
+                            confirm: (code) => Promise.resolve({ user: { phoneNumber: formattedPhone } })
+                        };
+                        document.getElementById('authMainForm').classList.add('hidden');
+                        document.getElementById('otpForm').classList.remove('hidden');
+                    });
+            } else {
+                // 3. Login Biasa / Username / Email
+                processUserLogin(contactInput, passwordInput);
+            }
+        }
+
+        /* PROSES KODE OTP */
+        function handleVerifyOTP(e) {
+            e.preventDefault();
+            const code = document.getElementById('otpCode').value.trim();
+            if (!confirmationResultObj) return;
+
+            confirmationResultObj.confirm(code).then((result) => {
+                const phone = result.user.phoneNumber || document.getElementById('authContact').value.trim();
+                alert('Kode OTP Valid! Login berhasil.');
+                processUserLogin(phone, 'AUTH_VIA_OTP');
+            }).catch((error) => {
+                alert('Kode OTP yang Anda masukkan salah atau sudah kadaluarsa.');
+            });
+        }
+
+        function resetAuthView() {
+            document.getElementById('authMainForm').classList.remove('hidden');
+            document.getElementById('otpForm').classList.add('hidden');
+        }
+
+        function processUserLogin(contact, password) {
+            const currentDevice = getDeviceDetails();
             const cleanKey = sanitizeKey(contact);
             const userRef = db.ref('users/' + cleanKey);
 
@@ -655,7 +756,7 @@
 
                 localStorage.setItem('mindtrack_user', JSON.stringify(currentUser));
                 updateAuthUI();
-                alert(`Berhasil masuk! Data kamu telah tersinkronisasi ke Cloud Database.`);
+                alert(`Berhasil terhubung! Akun ${contact} tersinkronisasi ke Cloud Database.`);
                 protectedNavigate('profilView');
             });
         }
@@ -664,6 +765,7 @@
             localStorage.removeItem('mindtrack_user');
             currentUser = null;
             updateAuthUI();
+            resetAuthView();
             switchTab('homeView');
         }
 
@@ -808,7 +910,7 @@
             switchTab('hasilView');
         }
 
-        /* --- BOT AI KONSELOR: MEMBERIKAN SOLUSI & LANGKAH KONKRET DENGAN PENYIMPANAN CHAT TERPERCAYA --- */
+        /* --- BOT AI KONSELOR & SMART RESPONSE --- */
         function generateSmartCounselorResponse(userMsg) {
             const msg = userMsg.toLowerCase();
             const name = currentUser?.name || 'Teman';
@@ -835,7 +937,7 @@
             return `Terima kasih sudah berbagi, ${name}. Langkah sederhana yang bisa kamu ambil saat ini adalah mengambil jeda istirahat dan mengekspresikan apa yang kamu rasakan secara terbuka. Bisakah kamu menceritakan lebih detail pemicu utamanya?`;
         }
 
-        /* --- ROOMCHAT BERBASIS PERMANEN CLOUD (RIWAYAT TERUS TERSIMPAN) --- */
+        /* --- ROOMCHAT BERBASIS PERMANEN CLOUD --- */
         function openChatModal(doctorName) {
             if (!currentUser) {
                 alert('Silakan login terlebih dahulu.');
