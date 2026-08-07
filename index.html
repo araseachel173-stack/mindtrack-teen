@@ -52,7 +52,6 @@
                     <button onclick="protectedNavigate('riwayatView')" class="hover:text-warmbrown-500">Riwayat & Perkembangan</button>
                     <button onclick="protectedNavigate('connectView')" class="hover:text-warmbrown-500 text-warmbrown-600 font-bold">Professional Connect</button>
                     
-                    <!-- MENU ADMIN HANYA MUNCUL PADA AKUN ADMIN -->
                     <button id="adminNavBtn" onclick="accessAdminPanel()" class="hidden text-xs bg-red-100 text-red-700 border border-red-300 font-bold px-3 py-1.5 rounded-lg hover:bg-red-200">Panel Admin</button>
                 </nav>
 
@@ -75,7 +74,7 @@
             <div class="text-center space-y-4 max-w-2xl mx-auto py-8">
                 <span class="text-xs px-3 py-1 rounded-full bg-warmbrown-100 text-warmbrown-800 font-bold tracking-wide uppercase">Ruang Aman Remaja</span>
                 <h1 class="text-3xl sm:text-4xl font-extrabold text-warmbrown-800 leading-tight">Pantau dan Jaga Kesehatan Mentalmu Sejak Dini</h1>
-                <p class="text-sm text-warmbrown-600 leading-relaxed">MindTrack Teen mendeteksi keluhan psikologis secara otomatis melalui 15 instrumen terarah yang tersambung langsung dengan konselor.</p>
+                <p class="text-sm text-warmbrown-600 leading-relaxed">MindTrack Teen mendeteksi keluhan psikologis secara otomatis melalui instrumen terarah yang tersambung langsung dengan konselor.</p>
                 <div class="pt-4 flex justify-center gap-4">
                     <button onclick="startAutoScreening()" class="px-6 py-3.5 rounded-2xl bg-warmbrown-600 text-cream-50 font-bold text-sm shadow-lg hover:bg-warmbrown-700 transition-all">Mulai Skrining Sekarang</button>
                     <button onclick="switchTab('authView')" class="px-6 py-3.5 rounded-2xl border border-warmbrown-600 text-warmbrown-800 font-bold text-sm hover:bg-cream-200 transition-all">Daftar Akun</button>
@@ -91,12 +90,12 @@
                 <div class="bg-cream-50 p-6 rounded-3xl border border-warmbrown-300/30 space-y-2">
                     <div class="w-10 h-10 rounded-xl bg-warmbrown-100 flex items-center justify-center text-warmbrown-700"><i data-lucide="user-check" class="w-5 h-5"></i></div>
                     <h3 class="font-bold text-base text-warmbrown-800">Professional Connect</h3>
-                    <p class="text-xs text-warmbrown-600">Terhubung langsung melalui Roomchat, Voice Call, atau Video Call dengan konselor.</p>
+                    <p class="text-xs text-warmbrown-600">Terhubung langsung melalui Roomchat, Voice Call, atau Video Call dengan suara instruksi konselor.</p>
                 </div>
                 <div class="bg-cream-50 p-6 rounded-3xl border border-warmbrown-300/30 space-y-2">
                     <div class="w-10 h-10 rounded-xl bg-warmbrown-100 flex items-center justify-center text-warmbrown-700"><i data-lucide="line-chart" class="w-5 h-5"></i></div>
                     <h3 class="font-bold text-base text-warmbrown-800">Riwayat Tak Terbatas</h3>
-                    <p class="text-xs text-warmbrown-600">Simpan seluruh riwayat perkembangan psikologis tanpa batasan kuota.</p>
+                    <p class="text-xs text-warmbrown-600">Simpan seluruh riwayat perkembangan, sesi chat, serta akses perangkat secara permanen.</p>
                 </div>
             </div>
         </section>
@@ -133,7 +132,6 @@
                     <p class="text-xs text-warmbrown-600">Kelola identitas, foto profil lucu, dan deskripsi keluhan utama kamu.</p>
                 </div>
 
-                <!-- 12 AVATAR LUCU -->
                 <div class="space-y-3">
                     <label class="block text-xs font-bold text-warmbrown-800">Pilih Icon Gambar Profil (12 Avatar Lucu):</label>
                     <div id="avatarPicker" class="grid grid-cols-4 sm:grid-cols-6 gap-3"></div>
@@ -178,7 +176,7 @@
             </div>
         </section>
 
-        <!-- 4. ISIAN SOAL SKRINING (15 SOAL) -->
+        <!-- 4. ISIAN SOAL SKRINING -->
         <section id="skriningView" class="tab-content">
             <div class="bg-cream-50 p-6 sm:p-8 rounded-3xl border border-warmbrown-300/30 shadow-xl space-y-6">
                 <div class="border-b border-warmbrown-300/20 pb-4">
@@ -289,7 +287,7 @@
                     <h3 class="text-sm font-bold text-warmbrown-800 border-b pb-2">Catatan Skrining Mandiri</h3>
                     <div id="screeningHistoryList" class="space-y-2 text-xs"></div>
 
-                    <h3 class="text-sm font-bold text-warmbrown-800 border-b pb-2 pt-4">Riwayat Sesi Konsultasi & Chat</h3>
+                    <h3 class="text-sm font-bold text-warmbrown-800 border-b pb-2 pt-4">Riwayat Sesi Konsultasi & Panggilan</h3>
                     <div id="consultHistoryList" class="space-y-2 text-xs"></div>
                 </div>
             </div>
@@ -304,7 +302,7 @@
                             <span class="bg-red-600 text-white text-[10px] font-extrabold px-2 py-0.5 rounded-full">PANEL KELOLA</span>
                             <h2 class="text-xl font-bold text-warmbrown-800">Panel Pemantauan Admin Web</h2>
                         </div>
-                        <p class="text-xs text-warmbrown-600 mt-1">Daftar seluruh pengguna terdaftar, profil lengkap, keluhan, serta rekap riwayat skrining.</p>
+                        <p class="text-xs text-warmbrown-600 mt-1">Daftar pengguna terdaftar, profil, keluhan, riwayat skrining, serta log perangkat mengakses.</p>
                     </div>
                     <button onclick="clearAdminData()" class="text-xs px-3 py-1.5 bg-red-100 text-red-700 font-bold rounded-lg hover:bg-red-200">Reset Seluruh Data</button>
                 </div>
@@ -314,9 +312,10 @@
                         <thead>
                             <tr class="bg-cream-200 text-warmbrown-800 font-bold">
                                 <th class="p-3 border">Akun Pengguna</th>
+                                <th class="p-3 border">Perangkat & Browser Mengakses</th>
                                 <th class="p-3 border">Data Profil & Keluhan Utama</th>
                                 <th class="p-3 border">Hasil Skrining Terakhir</th>
-                                <th class="p-3 border">Seluruh Riwayat Skrining (Tak Terbatas)</th>
+                                <th class="p-3 border">Seluruh Riwayat Skrining</th>
                             </tr>
                         </thead>
                         <tbody id="adminTableBody"></tbody>
@@ -336,7 +335,7 @@
                     <div class="w-10 h-10 rounded-full bg-warmbrown-500 flex items-center justify-center font-bold text-white text-sm">💬</div>
                     <div>
                         <h3 id="chatDoctorName" class="font-bold text-sm">Konselor</h3>
-                        <p class="text-[10px] text-cream-200 flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-green-400 inline-block"></span> Online | MindTrack Roomchat</p>
+                        <p class="text-[10px] text-cream-200 flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-green-400 inline-block"></span> Online | Roomchat Tersimpan</p>
                     </div>
                 </div>
                 <button onclick="closeChatModal()" class="text-cream-200 hover:text-white"><i data-lucide="x" class="w-6 h-6"></i></button>
@@ -347,7 +346,7 @@
 
             <!-- Input Pesan -->
             <form onsubmit="sendChatMessage(event)" class="p-3 bg-cream-50 border-t border-warmbrown-300/20 flex gap-2">
-                <input type="text" id="chatInput" placeholder="Tulis pesan atau keluhanmu di sini..." required class="flex-1 px-4 py-2.5 rounded-xl border border-warmbrown-300/40 bg-cream-100 text-xs focus:outline-none focus:border-warmbrown-600">
+                <input type="text" id="chatInput" placeholder="Tulis masalah atau pertanyaanmu di sini..." required class="flex-1 px-4 py-2.5 rounded-xl border border-warmbrown-300/40 bg-cream-100 text-xs focus:outline-none focus:border-warmbrown-600">
                 <button type="submit" class="px-4 py-2.5 rounded-xl bg-warmbrown-600 text-cream-50 font-bold text-xs hover:bg-warmbrown-700 flex items-center gap-1">
                     Kirim <i data-lucide="send" class="w-3.5 h-3.5"></i>
                 </button>
@@ -355,7 +354,7 @@
         </div>
     </div>
 
-    <!-- MODAL TELEPON / PANGGILAN VIDEO -->
+    <!-- MODAL TELEPON / PANGGILAN VIDEO (DENGAN VOICE RESPONSE) -->
     <div id="callModal" class="fixed inset-0 z-50 bg-slate-900/90 backdrop-blur-md hidden flex items-center justify-center p-4">
         <div class="bg-slate-800 text-white w-full max-w-md rounded-3xl shadow-2xl p-8 text-center space-y-6 border border-slate-700 relative overflow-hidden">
             <div id="videoPlaceholder" class="hidden absolute inset-0 bg-slate-950 flex items-center justify-center">
@@ -372,6 +371,7 @@
                 <div>
                     <h3 id="callDoctorName" class="text-lg font-bold text-white">Konselor</h3>
                     <p id="callTypeLabel" class="text-xs text-slate-400 mt-1">Sesi Panggilan Berlangsung</p>
+                    <p id="callStatusSub" class="text-[11px] text-green-400 mt-1 animate-pulse">Menghubungkan suara konselor...</p>
                     <p id="callTimer" class="text-sm font-mono text-green-400 font-bold mt-2">00:00</p>
                 </div>
 
@@ -519,10 +519,27 @@
             }
         }
 
+        /* --- SENSING INFORMASI PERANGKAT & BROWSER --- */
+        function getDeviceType() {
+            const ua = navigator.userAgent;
+            let device = "Desktop / PC";
+            if (/mobile/i.test(ua)) device = "Smartphone (Mobile)";
+            else if (/ipad|tablet/i.test(ua)) device = "Tablet";
+
+            let browser = "Browser Umum";
+            if (ua.includes("Chrome")) browser = "Google Chrome";
+            else if (ua.includes("Safari")) browser = "Safari";
+            else if (ua.includes("Firefox")) browser = "Firefox";
+            else if (ua.includes("Edg")) browser = "Microsoft Edge";
+
+            return `${device} - ${browser}`;
+        }
+
         function handleAuth(e) {
             e.preventDefault();
             const contact = document.getElementById('authContact').value.trim();
             const password = document.getElementById('authPassword').value.trim();
+            const deviceInfo = getDeviceType();
 
             // Kredensial Khusus Admin
             if ((contact === 'admin' || contact === 'admin@mindtrack.com') && password === 'admin123') {
@@ -534,19 +551,22 @@
                 return;
             }
 
-            // Pengguna Biasa -> Otomatis Tersimpan ke Admin Monitoring
+            // Pengguna Biasa -> Catat Akun & Perangkat
             let adminUsers = JSON.parse(localStorage.getItem('mindtrack_all_users')) || [];
             let existingUser = adminUsers.find(u => u.contact === contact);
 
-            if (existingUser && existingUser.profile) {
+            if (existingUser) {
+                if (!existingUser.devices) existingUser.devices = [];
+                if (!existingUser.devices.includes(deviceInfo)) existingUser.devices.push(deviceInfo);
+
                 currentUser = {
                     contact: contact,
-                    name: existingUser.profile.name || contact,
-                    age: existingUser.profile.age || '',
-                    gender: existingUser.profile.gender || '',
-                    education: existingUser.profile.education || '',
-                    info: existingUser.profile.info || '',
-                    avatar: existingUser.profile.avatar || '🐱',
+                    name: existingUser.profile?.name || contact,
+                    age: existingUser.profile?.age || '',
+                    gender: existingUser.profile?.gender || '',
+                    education: existingUser.profile?.education || '',
+                    info: existingUser.profile?.info || '',
+                    avatar: existingUser.profile?.avatar || '🐱',
                     role: 'user'
                 };
             } else {
@@ -560,10 +580,17 @@
                     avatar: '🐱',
                     role: 'user'
                 };
-                adminUsers.push({ contact: contact, profile: currentUser, history: [], consults: [] });
-                localStorage.setItem('mindtrack_all_users', JSON.stringify(adminUsers));
+                adminUsers.push({
+                    contact: contact,
+                    profile: currentUser,
+                    history: [],
+                    consults: [],
+                    chatLogs: {},
+                    devices: [deviceInfo]
+                });
             }
 
+            localStorage.setItem('mindtrack_all_users', JSON.stringify(adminUsers));
             localStorage.setItem('mindtrack_user', JSON.stringify(currentUser));
             updateAuthUI();
             alert('Berhasil masuk!');
@@ -716,7 +743,31 @@
             switchTab('hasilView');
         }
 
-        /* --- FITUR ROOMCHAT INTERAKTIF --- */
+        /* --- ENGINE PEMBALAS CERDAS KONSELOR (NYAMBUNG & SOLUTIF) --- */
+        function generateSmartCounselorResponse(userMsg) {
+            const msg = userMsg.toLowerCase();
+            const name = currentUser?.name || 'Teman';
+
+            if (msg.includes('cemas') || msg.includes('takut') || msg.includes('panik') || msg.includes('gugup')) {
+                return `Halo ${name}, wajar sekali merasa cemas atau takut saat menghadapi tekanan. Solusi praktis yang bisa kamu coba sekarang adalah teknik grounding 5-4-3-2-1 atau latihan pernapasan perut (tarik 4 detik, tahan 4 detik, hembuskan 6 detik). Coba tuliskan apa hal terbesar yang memicu rasa cemasmu saat ini?`;
+            } 
+            if (msg.includes('stres') || msg.includes('tugas') || msg.includes('sekolah') || msg.includes('kuliah') || msg.includes('ujian') || msg.includes('pusing')) {
+                return `Memang tekanan akademik sering membuat kewalahan, ${name}. Solusi langkah kecilnya: bagi tugas besar menjadi bagian-bagian kecil (Teknik Pomodoro 25 menit belajar, 5 menit rehat). Jangan paksakan menyelesaikan semua sekaligus. Apa tugas yang paling memberatkanmu hari ini?`;
+            }
+            if (msg.includes('sedih') || msg.includes('sepi') || msg.includes('menangis') || msg.includes('hampa') || msg.includes('kecewa')) {
+                return `Terima kasih sudah berani mengungkapkan rasa sedihmu, ${name}. Perasaanmu sangat valid. Solusi terbaik saat ini adalah berikan dirimu waktu untuk beristirahat tanpa menghakimi diri sendiri. Cobalah minum air hangat dan cerita lebih lanjut, apa yang baru saja terjadi?`;
+            }
+            if (msg.includes('tidur') || msg.includes('insomnia') || msg.includes('begadang')) {
+                return `Kualitas tidur sangat berpengaruh ke emosimu, ${name}. Cobalah solusi 'sleep hygiene': matikan layar HP 30 menit sebelum tidur, redupkan lampu, dan hindari kafein di sore hari. Apakah ada pikiran berulang yang mengganggumu saat mau tidur?`;
+            }
+            if (msg.includes('halo') || msg.includes('hai') || msg.includes('pagi') || msg.includes('siang') || msg.includes('malam')) {
+                return `Halo ${name}! Terima kasih sudah menyapa. Saya di sini siap mendengarkan cerita dan membantumu mencari solusi. Apa yang sedang kamu pikirkan atau rasakan saat ini?`;
+            }
+
+            return `Terima kasih sudah menceritakan hal itu, ${name}. Mengutarakan apa yang ada di pikiranmu adalah langkah awal yang sangat baik. Mari kita urai bersama: menurutmu, langkah kecil apa yang paling bisa membuat perasaanmu sedikit lebih lega saat ini?`;
+        }
+
+        /* --- FITUR ROOMCHAT DENGAN RIWAYAT PERMANEN --- */
         function openChatModal(doctorName) {
             if (!currentUser) {
                 alert('Silakan login terlebih dahulu.');
@@ -726,19 +777,43 @@
             activeDoctor = doctorName;
             document.getElementById('chatDoctorName').innerText = doctorName;
             
-            const messagesBox = document.getElementById('chatMessages');
-            messagesBox.innerHTML = `
-                <div class="text-center text-[10px] text-warmbrown-500 my-2">-- Sesi Roomchat Dimulai dengan ${doctorName} --</div>
-                <div class="bg-white p-3 rounded-2xl max-w-[80%] border border-warmbrown-300/20 shadow-sm text-warmbrown-800 space-y-1">
-                    <p class="font-bold text-[11px] text-warmbrown-600">${doctorName}</p>
-                    <p>Halo ${currentUser.name || 'Teman MindTrack'}! Halo, ada yang ingin kamu ceritakan atau konsultasikan hari ini? Aku siap mendengarkan.</p>
-                </div>
-            `;
+            renderChatHistory();
             document.getElementById('chatModal').classList.remove('hidden');
         }
 
         function closeChatModal() {
             document.getElementById('chatModal').classList.add('hidden');
+        }
+
+        function renderChatHistory() {
+            const messagesBox = document.getElementById('chatMessages');
+            let adminUsers = JSON.parse(localStorage.getItem('mindtrack_all_users')) || [];
+            let myData = adminUsers.find(u => u.contact === currentUser.contact);
+
+            if (!myData.chatLogs) myData.chatLogs = {};
+            let history = myData.chatLogs[activeDoctor] || [];
+
+            if (history.length === 0) {
+                messagesBox.innerHTML = `
+                    <div class="text-center text-[10px] text-warmbrown-500 my-2">-- Sesi Roomchat Dimulai dengan ${activeDoctor} --</div>
+                    <div class="bg-white p-3 rounded-2xl max-w-[80%] border border-warmbrown-300/20 shadow-sm text-warmbrown-800 space-y-1">
+                        <p class="font-bold text-[11px] text-warmbrown-600">${activeDoctor}</p>
+                        <p>Halo ${currentUser.name || 'Teman MindTrack'}! Ada yang ingin kamu ceritakan atau konsultasikan hari ini? Aku siap mendengarkan dan mencari solusi bersama.</p>
+                    </div>
+                `;
+            } else {
+                messagesBox.innerHTML = `<div class="text-center text-[10px] text-warmbrown-500 my-2">-- Riwayat Chat Tersimpan Permanen --</div>` + 
+                history.map(m => `
+                    <div class="flex ${m.sender === 'user' ? 'justify-end' : 'justify-start'}">
+                        <div class="${m.sender === 'user' ? 'bg-warmbrown-600 text-cream-50' : 'bg-white text-warmbrown-800 border border-warmbrown-300/20'} p-3 rounded-2xl max-w-[80%] shadow-sm space-y-1">
+                            <p class="font-bold text-[10px] ${m.sender === 'user' ? 'text-cream-200' : 'text-warmbrown-600'}">${m.sender === 'user' ? 'Kamu' : activeDoctor}</p>
+                            <p>${m.text}</p>
+                            <span class="block text-[8px] opacity-70 text-right">${m.time}</span>
+                        </div>
+                    </div>
+                `).join('');
+            }
+            messagesBox.scrollTop = messagesBox.scrollHeight;
         }
 
         function sendChatMessage(e) {
@@ -747,48 +822,53 @@
             const message = input.value.trim();
             if (!message) return;
 
-            const messagesBox = document.getElementById('chatMessages');
+            const timeStr = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
 
-            // Pesan Pengguna
-            messagesBox.innerHTML += `
-                <div class="flex justify-end">
-                    <div class="bg-warmbrown-600 text-cream-50 p-3 rounded-2xl max-w-[80%] shadow-sm space-y-1">
-                        <p class="font-bold text-[10px] text-cream-200">Kamu</p>
-                        <p>${message}</p>
-                    </div>
-                </div>
-            `;
+            saveChatMessageToStorage(activeDoctor, 'user', message, timeStr);
+            renderChatHistory();
 
             input.value = '';
-            messagesBox.scrollTop = messagesBox.scrollHeight;
 
-            // Catat ke Riwayat Sesi Konsultasi Pengguna
+            // Catat Sesi Konsultasi
             saveUserConsultHistory({
                 date: new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }),
                 doctor: activeDoctor,
                 method: 'Roomchat'
             });
 
-            // Respon Otomatis Konselor
+            // Auto-Reply Cerdas Konselor
             setTimeout(() => {
-                const autoReplies = [
-                    `Terima kasih sudah berbagi cerita, ${currentUser.name || ''}. Perasaan yang kamu alami itu sangat valid. Apa yang biasanya kamu lakukan saat rasa tertekan itu muncul?`,
-                    `Aku memahami kondisi kamu. Ingat bahwa kamu tidak sendirian. Mari kita urai perlahan-lahan apa yang paling mengganggumu saat ini.`,
-                    `Terima kasih atas keterbukaanmu. Mengakui keluhan adalah langkah awal yang sangat berani. Cobalah tarik napas dalam-dalam, mari kita cari solusinya bersama.`
-                ];
-                const reply = autoReplies[Math.floor(Math.random() * autoReplies.length)];
-
-                messagesBox.innerHTML += `
-                    <div class="bg-white p-3 rounded-2xl max-w-[80%] border border-warmbrown-300/20 shadow-sm text-warmbrown-800 space-y-1">
-                        <p class="font-bold text-[11px] text-warmbrown-600">${activeDoctor}</p>
-                        <p>${reply}</p>
-                    </div>
-                `;
-                messagesBox.scrollTop = messagesBox.scrollHeight;
+                const smartReply = generateSmartCounselorResponse(message);
+                saveChatMessageToStorage(activeDoctor, 'doctor', smartReply, new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }));
+                renderChatHistory();
             }, 1000);
         }
 
-        /* --- FITUR PANGGILAN TELEPON / VIDEO --- */
+        function saveChatMessageToStorage(doctor, sender, text, time) {
+            let adminUsers = JSON.parse(localStorage.getItem('mindtrack_all_users')) || [];
+            let idx = adminUsers.findIndex(u => u.contact === currentUser.contact);
+
+            if (idx !== -1) {
+                if (!adminUsers[idx].chatLogs) adminUsers[idx].chatLogs = {};
+                if (!adminUsers[idx].chatLogs[doctor]) adminUsers[idx].chatLogs[doctor] = [];
+                
+                adminUsers[idx].chatLogs[doctor].push({ sender, text, time });
+                localStorage.setItem('mindtrack_all_users', JSON.stringify(adminUsers));
+            }
+        }
+
+        /* --- FITUR PANGGILAN TELEPON / VIDEO DENGAN SUARA JAWABAN KONSELOR --- */
+        function speakCounselorVoice(text) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel(); // Hentikan suara sebelumnya
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'id-ID';
+                utterance.rate = 0.9;
+                utterance.pitch = 1.0;
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+
         function startCallModal(doctorName, type) {
             if (!currentUser) {
                 alert('Silakan login terlebih dahulu.');
@@ -818,7 +898,11 @@
                 document.getElementById('callTimer').innerText = `${mins}:${secs}`;
             }, 1000);
 
-            // Simpan ke Riwayat Konsultasi
+            // Konselor Menjawab Secara Lisan / Suara
+            const voiceSpeech = `Halo ${currentUser.name || 'Teman'}, saya ${doctorName}. Sambungan ${type} telah terhubung. Silakan ceritakan masalahmu, saya siap mendengarkan.`;
+            document.getElementById('callStatusSub').innerText = "🔊 Konselor sedang berbicara...";
+            speakCounselorVoice(voiceSpeech);
+
             saveUserConsultHistory({
                 date: new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }),
                 doctor: doctorName,
@@ -827,12 +911,15 @@
         }
 
         function endCallModal() {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+            }
             clearInterval(callTimerInterval);
             document.getElementById('callModal').classList.add('hidden');
             alert(`Sesi panggilan dengan ${activeDoctor} telah diakhiri dan dicatat ke riwayat.`);
         }
 
-        /* --- SIMPAN RIWAYAT TANPA BATAS & SYNC PENGGUNA TERDAFTAR --- */
+        /* --- SIMPAN RIWAYAT TANPA BATAS & SYNC ADMIN --- */
         function saveUserScreeningHistory(entry) {
             let adminUsers = JSON.parse(localStorage.getItem('mindtrack_all_users')) || [];
             let idx = adminUsers.findIndex(u => u.contact === currentUser.contact);
@@ -896,18 +983,22 @@
             let adminUsers = JSON.parse(localStorage.getItem('mindtrack_all_users')) || [];
 
             if (adminUsers.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="4" class="p-4 text-center italic text-warmbrown-500">Belum ada data pengguna yang terdaftar di platform.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="5" class="p-4 text-center italic text-warmbrown-500">Belum ada data pengguna yang terdaftar di platform.</td></tr>`;
                 return;
             }
 
             tbody.innerHTML = adminUsers.map(u => {
                 const p = u.profile || {};
                 const lastScreening = u.history && u.history.length > 0 ? u.history[0] : null;
+                const devicesList = u.devices && u.devices.length > 0 ? u.devices.join('<br>• ') : 'Perangkat Tidak Terdeteksi';
 
                 return `
                     <tr class="border-b hover:bg-cream-100">
                         <td class="p-3 font-semibold text-warmbrown-800">
                             <span class="text-lg mr-1">${p.avatar || '👤'}</span> ${u.contact}
+                        </td>
+                        <td class="p-3 text-[11px] text-warmbrown-700">
+                            • ${devicesList}
                         </td>
                         <td class="p-3">
                             ${p.name ? `<strong>Nama:</strong> ${p.name}<br><strong>Usia:</strong> ${p.age || '-'} thn | <strong>Gender:</strong> ${p.gender || '-'}<br><strong>Keluhan:</strong> <em>"${p.info || '-'}"</em>` : '<span class="text-warmbrown-400 italic">Profil belum diisi</span>'}
