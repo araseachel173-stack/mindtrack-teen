@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MindTrack Teen - Pahami Perasaanmu, Ambil Kendali atas Kesehatan Mentalmu</title>
+    <!-- Google Fonts: Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cream: {
+                            50: '#FDFBF7',
+                            100: '#FAF7F2',
+                            200: '#F5EFE6',
+                            300: '#E8DFD1',
+                        },
+                        warmbrown: {
+                            100: '#D9C3B0',
+                            300: '#B88E68',
+                            500: '#8B5A2B',
+                            600: '#6F4E37',
+                            700: '#5C3D2E',
+                            800: '#4A3024',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #FAF7F2;
+            color: #5C3D2E;
+        }
+    </style>
+</head>
+<body class="bg-cream-100 text-warmbrown-700 antialiased selection:bg-warmbrown-100 selection:text-warmbrown-800">
+
+    <!-- NAVBAR -->
+    <header class="sticky top-0 z-50 bg-cream-100/80 backdrop-blur-md border-b border-warmbrown-300/20 transition-all">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Logo -->
+                <a href="#" class="flex items-center gap-3 group">
+                    <div class="w-10 h-10 rounded-2xl bg-warmbrown-600 flex items-center justify-center text-cream-100 shadow-md shadow-warmbrown-600/20 group-hover:scale-105 transition-transform">
+                        <i data-lucide="heart-handshake" class="w-6 h-6"></i>
+                    </div>
+                    <span class="font-bold text-xl tracking-tight text-warmbrown-800">MindTrack <span class="text-warmbrown-500 font-semibold">Teen</span></span>
+                </a>
+
+                <!-- Desktop Navigation -->
+                <nav class="hidden md:flex items-center gap-8 text-sm font-semibold text-warmbrown-700/80">
+                    <a href="#mengapa" class="hover:text-warmbrown-600 transition-colors">Mengapa Kami</a>
+                    <a href="#fitur" class="hover:text-warmbrown-600 transition-colors">Fitur</a>
+                    <a href="#langkah" class="hover:text-warmbrown-600 transition-colors">Alur Penggunaan</a>
+                    <a href="#privasi" class="hover:text-warmbrown-600 transition-colors">Keamanan</a>
+                </nav>
+
+                <!-- Header CTA Button -->
+                <div class="hidden sm:flex items-center gap-4">
+                    <a href="#skrining" class="px-5 py-2.5 rounded-full bg-warmbrown-600 text-cream-50 font-semibold text-sm hover:bg-warmbrown-700 active:scale-95 transition-all shadow-md shadow-warmbrown-600/20">
+                        Mulai Skrining Gratis
+                    </a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <button id="menu-btn" class="md:hidden p-2 rounded-xl text-warmbrown-700 hover:bg-cream-200 focus:outline-none" aria-label="Toggle Navigation">
+                    <i data-lucide="menu" class="w-6 h-6"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobile-menu" class="hidden md:hidden bg-cream-50 border-b border-warmbrown-300/20 px-4 pt-2 pb-6 space-y-3">
+            <a href="#mengapa" class="block px-3 py-2 rounded-xl text-base font-semibold text-warmbrown-700 hover:bg-cream-200">Mengapa Kami</a>
+            <a href="#fitur" class="block px-3 py-2 rounded-xl text-base font-semibold text-warmbrown-700 hover:bg-cream-200">Fitur</a>
+            <a href="#langkah" class="block px-3 py-2 rounded-xl text-base font-semibold text-warmbrown-700 hover:bg-cream-200">Alur Penggunaan</a>
+            <a href="#privasi" class="block px-3 py-2 rounded-xl text-base font-semibold text-warmbrown-700 hover:bg-cream-200">Keamanan</a>
+            <a href="#skrining" class="block text-center w-full mt-4 px-5 py-3 rounded-xl bg-warmbrown-600 text-cream-50 font-semibold text-sm hover:bg-warmbrown-700">
+                Mulai Skrining Gratis
+            </a>
+        </div>
+    </header>
+
+    <!-- 1. HERO SECTION -->
+    <section class="relative pt-12 pb-20 md:pt-20 md:pb-32 overflow-hidden">
+        <!-- Background Ambient Accents -->
+        <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-warmbrown-300/10 rounded-full blur-3xl -z-10 pointer-events-none"></div>
+        
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid lg:grid-cols-12 gap-12 items-center">
+                
+                <!-- Left Hero Content -->
+                <div class="lg:col-span-7 text-center lg:text-left space-y-6">
+                    <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cream-200/80 border border-warmbrown-300/30 text-warmbrown-600 text-xs sm:text-sm font-semibold shadow-sm">
+                        <i data-lucide="sparkles" class="w-4 h-4 text-warmbrown-500"></i>
+                        <span>Ruang Aman Digital untuk Remaja Indonesia</span>
+                    </div>
+
+                    <h1 class="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-warmbrown-800 leading-tight tracking-tight">
+                        Pahami Perasaanmu, Ambil Kendali atas <span class="text-warmbrown-500 relative inline-block">
+                            Kesehatan Mentalmu
+                            <svg class="absolute -bottom-2 left-0 w-full h-3 text-warmbrown-300/40" viewBox="0 0 100 20" preserveAspectRatio="none">
+                                <path d="M0,15 Q50,5 100,15" stroke="currentColor" stroke-width="8" fill="none" stroke-linecap="round"/>
+                            </svg>
+                        </span>
+                    </h1>
+
+                    <p class="text-base sm:text-lg text-warmbrown-700/80 leading-relaxed max-w-2xl mx-auto lg:mx-0">
+                        Ruang aman digital untuk mengenali emosi, memantau mood, dan terhubung dengan profesional kesehatan mental kapan saja, dari mana saja.
+                    </p>
+
+                    <div id="skrining" class="pt-4 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
+                        <a href="#" class="w-full sm:w-auto px-8 py-4 rounded-2xl bg-warmbrown-600 hover:bg-warmbrown-700 text-cream-50 font-bold text-base transition-all shadow-lg shadow-warmbrown-600/25 hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center gap-2">
+                            <span>Mulai Skrining Gratis</span>
+                            <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                        </a>
+                        <a href="#fitur" class="w-full sm:w-auto px-8 py-4 rounded-2xl bg-cream-200/80 hover:bg-cream-300/60 text-warmbrown-700 font-bold text-base border border-warmbrown-300/40 transition-all flex items-center justify-center gap-2">
+                            <span>Jelajahi Fitur</span>
+                            <i data-lucide="compass" class="w-5 h-5"></i>
+                        </a>
+                    </div>
+
+                    <!-- Social Proof / Trust Badge -->
+                    <div class="pt-6 flex items-center justify-center lg:justify-start gap-6 text-xs text-warmbrown-600 font-medium border-t border-warmbrown-300/20">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="shield-check" class="w-4 h-4 text-warmbrown-500"></i>
+                            <span>100% Rahasia & Anonim</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="check-circle-2" class="w-4 h-4 text-warmbrown-500"></i>
+                            <span>Sesuai Standar Psikologi</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Hero Visual Card -->
+                <div class="lg:col-span-5 relative">
+                    <div class="relative mx-auto max-w-md lg:max-w-none">
+                        <div class="bg-gradient-to-br from-cream-50 to-cream-200 p-6 sm:p-8 rounded-3xl border border-warmbrown-300/30 shadow-xl shadow-warmbrown-800/5 space-y-6">
+                            
+                            <div class="flex items-center justify-between border-b border-warmbrown-300/20 pb-4">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-full bg-warmbrown-500/20 flex items-center justify-center text-warmbrown-600">
+                                        <i data-lucide="smile" class="w-6 h-6"></i>
+                                    </div>
+                                    <div>
+                                        <div class="text-xs text-warmbrown-600 font-medium">Jurnal Hari Ini</div>
+                                        <div class="text-sm font-bold text-warmbrown-800">Bagaimana perasaanmu?</div>
+                                    </div>
+                                </div>
+                                <span class="text-xs px-2.5 py-1 rounded-full bg-warmbrown-100 text-warmbrown-700 font-semibold">Aktif</span>
+                            </div>
+
+                            <div class="grid grid-cols-4 gap-2">
+                                <div class="bg-cream-50 p-3 rounded-2xl border border-warmbrown-300/20 text-center hover:border-warmbrown-500 cursor-pointer transition-all">
+                                    <div class="text-2xl mb-1">😊</div>
+                                    <div class="text-[10px] font-bold text-warmbrown-700">Senang</div>
+                                </div>
+                                <div class="bg-cream-100 p-3 rounded-2xl border-2 border-warmbrown-500 text-center shadow-sm cursor-pointer">
+                                    <div class="text-2xl mb-1">😌</div>
+                                    <div class="text-[10px] font-bold text-warmbrown-800">Tenang</div>
+                                </div>
+                                <div class="bg-cream-50 p-3 rounded-2xl border border-warmbrown-300/20 text-center hover:border-warmbrown-500 cursor-pointer transition-all">
+                                    <div class="text-2xl mb-1">😔</div>
+                                    <div class="text-[10px] font-bold text-warmbrown-700">Sedih</div>
+                                </div>
+                                <div class="bg-cream-50 p-3 rounded-2xl border border-warmbrown-300/20 text-center hover:border-warmbrown-500 cursor-pointer transition-all">
+                                    <div class="text-2xl mb-1">🤯</div>
+                                    <div class="text-[10px] font-bold text-warmbrown-700">Cemas</div>
+                                </div>
+                            </div>
+
+                            <div class="bg-cream-50 p-4 rounded-2xl border border-warmbrown-300/20 space-y-2">
+                                <div class="flex justify-between text-xs font-semibold">
+                                    <span class="text-warmbrown-700">Keseimbangan Emosi Mingguan</span>
+                                    <span class="text-warmbrown-600">85% Stabil</span>
+                                </div>
+                                <div class="w-full bg-cream-200 h-2.5 rounded-full overflow-hidden">
+                                    <div class="bg-warmbrown-500 h-full rounded-full w-[85%]"></div>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center gap-3 p-3 bg-warmbrown-600 text-cream-50 rounded-2xl shadow-md">
+                                <i data-lucide="message-square-heart" class="w-6 h-6 text-warmbrown-100 shrink-0"></i>
+                                <p class="text-xs leading-snug">"Kamu sudah melakukan yang terbaik hari ini. Istirahat sejenak ya!"</p>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- 2. VALUE PROPOSITION -->
+    <section id="mengapa" class="py-16 md:py-24 bg-cream-200/50 relative border-y border-warmbrown-300/20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto space-y-4">
+                <span class="text-xs font-bold uppercase tracking-wider text-warmbrown-500 px-3 py-1 rounded-full bg-cream-50 border border-warmbrown-300/30">
+                    Mengapa MindTrack Teen?
+                </span>
+                <h2 class="text-2xl sm:text-4xl font-extrabold text-warmbrown-800">
+                    Kamu Tidak Sendirian dalam Perjalanan Ini
+                </h2>
+                <p class="text-warmbrown-700/80 text-base sm:text-lg leading-relaxed">
+                    Menjalani masa remaja bisa terasa membingungkan dan melelahkan. MindTrack Teen hadir sebagai teman perjalananmu untuk memahami kondisi psikologis secara objektif tanpa penghakiman.
+                </p>
+            </div>
+
+            <!-- 3 Main Pillars Grid -->
+            <div class="grid md:grid-cols-3 gap-8 mt-12">
+                <!-- Pillar 1 -->
+                <div class="bg-cream-50 p-8 rounded-2xl border border-warmbrown-300/30 hover:border-warmbrown-500/50 transition-all shadow-sm hover:shadow-md space-y-4 group">
+                    <div class="w-14 h-14 rounded-2xl bg-cream-200 flex items-center justify-center text-warmbrown-600 group-hover:scale-110 group-hover:bg-warmbrown-600 group-hover:text-cream-50 transition-all">
+                        <i data-lucide="brain-circuit" class="w-7 h-7"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-warmbrown-800">Berdasarkan Sains</h3>
+                    <p class="text-warmbrown-700/80 text-sm leading-relaxed">
+                        Alat ukur valid untuk mendeteksi stres, kecemasan, dan depresi secara akurat berdasarkan metodologi klinis teruji.
+                    </p>
+                </div>
+
+                <!-- Pillar 2 -->
+                <div class="bg-cream-50 p-8 rounded-2xl border border-warmbrown-300/30 hover:border-warmbrown-500/50 transition-all shadow-sm hover:shadow-md space-y-4 group">
+                    <div class="w-14 h-14 rounded-2xl bg-cream-200 flex items-center justify-center text-warmbrown-600 group-hover:scale-110 group-hover:bg-warmbrown-600 group-hover:text-cream-50 transition-all">
+                        <i data-lucide="lock" class="w-7 h-7"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-warmbrown-800">Privasi Terjamin 100%</h3>
+                    <p class="text-warmbrown-700/80 text-sm leading-relaxed">
+                        Data pribadi dan riwayat kesehatanmu tersimpan aman dan terenkripsi. Tidak ada orang lain yang bisa mengakses tanpa izinmu.
+                    </p>
+                </div>
+
+                <!-- Pillar 3 -->
+                <div class="bg-cream-50 p-8 rounded-2xl border border-warmbrown-300/30 hover:border-warmbrown-500/50 transition-all shadow-sm hover:shadow-md space-y-4 group">
+                    <div class="w-14 h-14 rounded-2xl bg-cream-200 flex items-center justify-center text-warmbrown-600 group-hover:scale-110 group-hover:bg-warmbrown-600 group-hover:text-cream-50 transition-all">
+                        <i data-lucide="clock" class="w-7 h-7"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-warmbrown-800">Akses Mudah 24/7</h3>
+                    <p class="text-warmbrown-700/80 text-sm leading-relaxed">
+                        Bisa diakses kapan pun dan di mana pun langsung dari smartphone maupun laptopmu tanpa hambatan.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. FITUR UNGGULAN -->
+    <section id="fitur" class="py-16 md:py-24">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto space-y-4">
+                <span class="text-xs font-bold uppercase tracking-wider text-warmbrown-500 px-3 py-1 rounded-full bg-cream-200 border border-warmbrown-300/30">
+                    Fitur Ekosistem
+                </span>
+                <h2 class="text-2xl sm:text-4xl font-extrabold text-warmbrown-800">
+                    Fitur Lengkap untuk Kesejahteraan Mentalmu
+                </h2>
+                <p class="text-warmbrown-700/80 text-base sm:text-lg">
+                    Didesain khusus untuk memenuhi kebutuhan emosional dan kesehatan mental remaja secara holistik.
+                </p>
+            </div>
+
+            <!-- Features Grid (6 Cards) -->
+            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 mt-12">
+                
+                <!-- Feature 1 -->
+                <div class="p-6 rounded-2xl bg-cream-50 border border-warmbrown-300/30 hover:shadow-md hover:border-warmbrown-300 transition-all flex flex-col justify-between">
+                    <div class="space-y-4">
+                        <div class="w-12 h-12 rounded-xl bg-warmbrown-100 flex items-center justify-center text-warmbrown-700">
+                            <i data-lucide="clipboard-check" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-warmbrown-800">Skrining Mandiri & Hasil Otomatis</h3>
+                        <p class="text-warmbrown-700/80 text-sm leading-relaxed">
+                            Tes singkat berkala untuk mengetahui tingkat stres, kecemasan, atau depresi dengan penjelasan hasil yang mudah dipahami.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Feature 2 -->
+                <div class="p-6 rounded-2xl bg-cream-50 border border-warmbrown-300/30 hover:shadow-md hover:border-warmbrown-300 transition-all flex flex-col justify-between">
+                    <div class="space-y-4">
+                        <div class="w-12 h-12 rounded-xl bg-warmbrown-100 flex items-center justify-center text-warmbrown-700">
+                            <i data-lucide="smile-plus" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-warmbrown-800">Mood Tracker Harian</h3>
+                        <p class="text-warmbrown-700/80 text-sm leading-relaxed">
+                            Catat perasaan dan pemicu emosimu setiap hari secara cepat untuk membangun kesadaran diri yang lebih baik.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Feature 3 -->
+                <div class="p-6 rounded-2xl bg-cream-50 border border-warmbrown-300/30 hover:shadow-md hover:border-warmbrown-300 transition-all flex flex-col justify-between">
+                    <div class="space-y-4">
+                        <div class="w-12 h-12 rounded-xl bg-warmbrown-100 flex items-center justify-center text-warmbrown-700">
+                            <i data-lucide="line-chart" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-warmbrown-800">Grafik Perkembangan Mental</h3>
+                        <p class="text-warmbrown-700/80 text-sm leading-relaxed">
+                            Visualisasi tren emosi bulanan yang membantu kamu dan profesional melihat dinamika psikologis dari waktu ke waktu.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Feature 4 -->
+                <div class="p-6 rounded-2xl bg-cream-50 border border-warmbrown-300/30 hover:shadow-md hover:border-warmbrown-300 transition-all flex flex-col justify-between">
+                    <div class="space-y-4">
+                        <div class="w-12 h-12 rounded-xl bg-warmbrown-100 flex items-center justify-center text-warmbrown-700">
+                            <i data-lucide="user-check" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-warmbrown-800">Professional Connect</h3>
+                        <p class="text-warmbrown-700/80 text-sm leading-relaxed">
+                            Hubungkan akunmu langsung dengan psikolog, konselor sekolah, atau tenaga kesehatan profesional tepercaya.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Feature 5 -->
+                <div class="p-6 rounded-2xl bg-cream-50 border border-warmbrown-300/30 hover:shadow-md hover:border-warmbrown-300 transition-all flex flex-col justify-between">
+                    <div class="space-y-4">
+                        <div class="w-12 h-12 rounded-xl bg-warmbrown-100 flex items-center justify-center text-warmbrown-700">
+                            <i data-lucide="calendar-heart" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-warmbrown-800">Sistem Reservasi Praktis</h3>
+                        <p class="text-warmbrown-700/80 text-sm leading-relaxed">
+                            Atur jadwal sesi konseling tatap muka maupun online secara langsung tanpa prosedur yang rumit.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Feature 6 -->
+                <div class="p-6 rounded-2xl bg-cream-50 border border-warmbrown-300/30 hover:shadow-md hover:border-warmbrown-300 transition-all flex flex-col justify-between">
+                    <div class="space-y-4">
+                        <div class="w-12 h-12 rounded-xl bg-warmbrown-100 flex items-center justify-center text-warmbrown-700">
+                            <i data-lucide="book-open-check" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-warmbrown-800">Edukasi & Artikel Berbasis Bukti</h3>
+                        <p class="text-warmbrown-700/80 text-sm leading-relaxed">
+                            Akses pustaka konten interaktif, teknik regulasi emosi, dan tips kesehatan mental yang tervalidasi secara ilmiah.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. ALUR PENGGUNAAN -->
+    <section id="langkah" class="py-16 md:py-24 bg-cream-200/40 border-y border-warmbrown-300/20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto space-y-4">
+                <span class="text-xs font-bold uppercase tracking-wider text-warmbrown-500 px-3 py-1 rounded-full bg-cream-50 border border-warmbrown-300/30">
+                    Proses Sederhana
+                </span>
+                <h2 class="text-2xl sm:text-4xl font-extrabold text-warmbrown-800">
+                    4 Langkah Mudah Memulai Perjalananmu
+                </h2>
+                <p class="text-warmbrown-700/80 text-base">
+                    Memulai kepedulian pada diri sendiri tidak pernah semudah ini.
+                </p>
+            </div>
+
+            <!-- Steps Grid -->
+            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-12 relative">
+                
+                <!-- Step 1 -->
+                <div class="bg-cream-50 p-6 rounded-2xl border border-warmbrown-300/30 relative space-y-4">
+                    <div class="flex justify-between items-center">
+                        <span class="text-3xl font-extrabold text-warmbrown-300">01</span>
+                        <div class="w-10 h-10 rounded-xl bg-warmbrown-600 text-cream-50 flex items-center justify-center">
+                            <i data-lucide="user-plus" class="w-5 h-5"></i>
+                        </div>
+                    </div>
+                    <h3 class="text-lg font-bold text-warmbrown-800">Buat Akun</h3>
+                    <p class="text-xs text-warmbrown-700/80 leading-relaxed">
+                        Daftar secara gratis hanya dalam 1 menit. Tanpa syarat rumit dan identitasmu terlindungi.
+                    </p>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="bg-cream-50 p-6 rounded-2xl border border-warmbrown-300/30 relative space-y-4">
+                    <div class="flex justify-between items-center">
+                        <span class="text-3xl font-extrabold text-warmbrown-300">02</span>
+                        <div class="w-10 h-10 rounded-xl bg-warmbrown-600 text-cream-50 flex items-center justify-center">
+                            <i data-lucide="activity" class="w-5 h-5"></i>
+                        </div>
+                    </div>
+                    <h3 class="text-lg font-bold text-warmbrown-800">Cek Kondisi</h3>
+                    <p class="text-xs text-warmbrown-700/80 leading-relaxed">
+                        Isi kuesioner skrining mandiri singkat untuk mengetahui gambaran awal kondisi psikologismu.
+                    </p>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="bg-cream-50 p-6 rounded-2xl border border-warmbrown-300/30 relative space-y-4">
+                    <div class="flex justify-between items-center">
+                        <span class="text-3xl font-extrabold text-warmbrown-300">03</span>
+                        <div class="w-10 h-10 rounded-xl bg-warmbrown-600 text-cream-50 flex items-center justify-center">
+                            <i data-lucide="calendar" class="w-5 h-5"></i>
+                        </div>
+                    </div>
+                    <h3 class="text-lg font-bold text-warmbrown-800">Rutin Pantau</h3>
+                    <p class="text-xs text-warmbrown-700/80 leading-relaxed">
+                        Catat emosi harianmu dan lihat bagaimana perkembangan kesehatan mentalmu dari grafik intuitif.
+                    </p>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="bg-cream-50 p-6 rounded-2xl border border-warmbrown-300/30 relative space-y-4">
+                    <div class="flex justify-between items-center">
+                        <span class="text-3xl font-extrabold text-warmbrown-300">04</span>
+                        <div class="w-10 h-10 rounded-xl bg-warmbrown-600 text-cream-50 flex items-center justify-center">
+                            <i data-lucide="heart-handshake" class="w-5 h-5"></i>
+                        </div>
+                    </div>
+                    <h3 class="text-lg font-bold text-warmbrown-800">Terhubung</h3>
+                    <p class="text-xs text-warmbrown-700/80 leading-relaxed">
+                        Dapatkan rekomendasi penanganan atau konsultasikan langsung dengan profesional jika diperlukan.
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. KEAMANAN & PENDAMPING -->
+    <section id="privasi" class="py-16 md:py-24">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-gradient-to-br from-warmbrown-800 to-warmbrown-700 text-cream-50 p-8 sm:p-12 rounded-3xl shadow-xl space-y-8 relative overflow-hidden">
+                <div class="absolute -right-10 -bottom-10 w-64 h-64 bg-warmbrown-500/20 rounded-full blur-2xl"></div>
+
+                <div class="max-w-2xl space-y-4 relative z-10">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-warmbrown-600/60 border border-warmbrown-500/30 text-cream-200 text-xs font-semibold">
+                        <i data-lucide="shield-check" class="w-4 h-4 text-warmbrown-300"></i>
+                        <span>Keamanan & Ekosistem Pendamping</span>
+                    </div>
+                    <h2 class="text-2xl sm:text-4xl font-extrabold text-cream-50">
+                        Privasi Dijaga, Dukungan Dilipatgandakan
+                    </h2>
+                    <p class="text-cream-200/90 text-sm sm:text-base leading-relaxed">
+                        Kami paham betul pentingnya kerahasiaan bagimu. Semua catatan, hasil skrining, dan riwayat konsultasi tersimpan secara enkripsi ketat.
+                    </p>
+                </div>
+
+                <div class="grid sm:grid-cols-2 gap-6 pt-4 border-t border-warmbrown-600/60 relative z-10">
+                    <div class="space-y-2">
+                        <div class="flex items-center gap-2 text-warmbrown-300 font-bold text-sm">
+                            <i data-lucide="users" class="w-4 h-4"></i>
+                            <span>Peran Pendamping Terarah</span>
+                        </div>
+                        <p class="text-xs text-cream-200/80 leading-relaxed">
+                            MindTrack Teen memfasilitasi keterlibatan pendamping (orang tua, guru BK, atau tenaga kesehatan) secara aman dan terkontrol hanya dengan persetujuanmu.
+                        </p>
+                    </div>
+                    <div class="space-y-2">
+                        <div class="flex items-center gap-2 text-warmbrown-300 font-bold text-sm">
+                            <i data-lucide="key-round" class="w-4 h-4"></i>
+                            <span>Kendali Penuh di Tanganmu</span>
+                        </div>
+                        <p class="text-xs text-cream-200/80 leading-relaxed">
+                            Kamu yang menentukan data mana yang ingin dibagikan. Kami menciptakan jembatan komunikasi yang sehat tanpa melanggar batas privasimu.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 6. FINAL CTA SECTION -->
+    <section class="py-16 md:py-24 bg-cream-200/60 relative">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-8">
+            <div class="w-16 h-16 rounded-full bg-warmbrown-600 text-cream-50 mx-auto flex items-center justify-center shadow-lg shadow-warmbrown-600/20">
+                <i data-lucide="sparkles" class="w-8 h-8"></i>
+            </div>
+            
+            <div class="space-y-4">
+                <h2 class="text-3xl sm:text-5xl font-extrabold text-warmbrown-800 tracking-tight">
+                    Siap Menjadi Versi Terbaik dari Dirimu?
+                </h2>
+                <p class="text-warmbrown-700/80 text-base sm:text-lg max-w-2xl mx-auto">
+                    Langkah pertama menuju pikiran yang lebih tenang dimulai hari ini. Daftar gratis dan mulai kenali dirimu lebih dalam.
+                </p>
+            </div>
+
+            <div class="pt-2">
+                <a href="#" class="inline-flex items-center justify-center gap-3 px-10 py-5 rounded-2xl bg-warmbrown-600 hover:bg-warmbrown-700 text-cream-50 font-bold text-lg transition-all shadow-xl shadow-warmbrown-600/25 hover:shadow-2xl hover:-translate-y-1 active:translate-y-0 w-full sm:w-auto">
+                    <span>Daftar Sekarang - Gratis!</span>
+                    <i data-lucide="arrow-right" class="w-6 h-6"></i>
+                </a>
+            </div>
+
+            <p class="text-xs text-warmbrown-600 font-medium">
+                Tidak memerlukan kartu kredit • Akses instan dalam 1 menit
+            </p>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-cream-100 border-t border-warmbrown-300/20 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+                
+                <!-- Footer Brand -->
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-xl bg-warmbrown-600 flex items-center justify-center text-cream-100">
+                        <i data-lucide="heart-handshake" class="w-5 h-5"></i>
+                    </div>
+                    <span class="font-bold text-lg text-warmbrown-800">MindTrack <span class="text-warmbrown-500">Teen</span></span>
+                </div>
+
+                <!-- Nav Links Footer -->
+                <div class="flex flex-wrap justify-center gap-6 text-xs font-semibold text-warmbrown-700/80">
+                    <a href="#mengapa" class="hover:text-warmbrown-600 transition-colors">Tentang Kami</a>
+                    <a href="#fitur" class="hover:text-warmbrown-600 transition-colors">Fitur Utama</a>
+                    <a href="#privasi" class="hover:text-warmbrown-600 transition-colors">Kebijakan Privasi</a>
+                    <a href="#" class="hover:text-warmbrown-600 transition-colors">Syarat & Ketentuan</a>
+                </div>
+
+                <!-- Copyright -->
+                <div class="text-xs text-warmbrown-600/70 text-center md:text-right">
+                    &copy; 2026 MindTrack Teen. Hak Cipta Dilindungi.
+                </div>
+
+            </div>
+        </div>
+    </footer>
+
+    <!-- Lucide Icons Initialization & Mobile Menu Toggle Script -->
+    <script>
+        // Initialize Icons
+        lucide.createIcons();
+
+        // Mobile Menu Toggle
+        const menuBtn = document.getElementById('menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        menuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Close mobile menu when clicking a link
+        document.querySelectorAll('#mobile-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+    </script>
+</body>
+</html>
