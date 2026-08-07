@@ -27,6 +27,8 @@
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #FAF7F2; color: #5C3D2E; }
         .tab-content { display: none; }
         .tab-content.active { display: block; }
+        .avatar-option { transition: all 0.2s ease-in-out; }
+        .avatar-option.selected { border-color: #8B5A2B; background-color: #F5EFE6; transform: scale(1.08); }
     </style>
 </head>
 <body class="bg-cream-100 text-warmbrown-700 antialiased min-h-screen flex flex-col justify-between">
@@ -49,14 +51,17 @@
                     <button onclick="startAutoScreening()" class="hover:text-warmbrown-500">Skrining Mental</button>
                     <button onclick="protectedNavigate('riwayatView')" class="hover:text-warmbrown-500">Riwayat & Perkembangan</button>
                     <button onclick="protectedNavigate('connectView')" class="hover:text-warmbrown-500 text-warmbrown-600 font-bold">Professional Connect</button>
-                    <button onclick="accessAdminPanel()" class="text-xs bg-warmbrown-100 px-3 py-1.5 rounded-lg border border-warmbrown-300 text-warmbrown-800 hover:bg-warmbrown-200">Panel Admin</button>
+                    
+                    <!-- MENU ADMIN: HANYA MUNCUL PADA AKUN ADMIN -->
+                    <button id="adminNavBtn" onclick="accessAdminPanel()" class="hidden text-xs bg-red-100 text-red-700 border border-red-300 font-bold px-3 py-1.5 rounded-lg hover:bg-red-200">Panel Admin</button>
                 </nav>
 
                 <div id="authNavContainer">
                     <button id="btnLoginNav" onclick="switchTab('authView')" class="px-5 py-2.5 rounded-xl bg-warmbrown-600 text-cream-50 font-bold text-xs shadow-md hover:bg-warmbrown-700">Masuk / Daftar</button>
                     <div id="userBadge" class="hidden items-center gap-3">
-                        <span id="navUserName" class="text-xs font-bold text-warmbrown-800 bg-cream-200 px-3 py-1.5 rounded-full"></span>
-                        <button onclick="logout()" class="text-xs text-red-600 font-semibold hover:underline">Keluar</button>
+                        <div id="navAvatarDisplay" class="w-8 h-8 rounded-full bg-warmbrown-200 flex items-center justify-center text-lg border border-warmbrown-300">👤</div>
+                        <span id="navUserName" class="text-xs font-bold text-warmbrown-800"></span>
+                        <button onclick="logout()" class="text-xs text-red-600 font-semibold hover:underline ml-1">Keluar</button>
                     </div>
                 </div>
             </div>
@@ -65,7 +70,7 @@
 
     <main class="max-w-5xl mx-auto px-4 py-8 w-full flex-1">
 
-        <!-- 1. HALAMAN BERANDA -->
+        <!-- 1. BERANDA -->
         <section id="homeView" class="tab-content active space-y-12">
             <div class="text-center space-y-4 max-w-2xl mx-auto py-8">
                 <span class="text-xs px-3 py-1 rounded-full bg-warmbrown-100 text-warmbrown-800 font-bold tracking-wide uppercase">Ruang Aman Remaja</span>
@@ -90,23 +95,23 @@
                 </div>
                 <div class="bg-cream-50 p-6 rounded-3xl border border-warmbrown-300/30 space-y-2">
                     <div class="w-10 h-10 rounded-xl bg-warmbrown-100 flex items-center justify-center text-warmbrown-700"><i data-lucide="line-chart" class="w-5 h-5"></i></div>
-                    <h3 class="font-bold text-base text-warmbrown-800">Pemantauan Berkala</h3>
-                    <p class="text-xs text-warmbrown-600">Simpan riwayat perkembangan emosionalmu secara aman dan terpantau kapan saja.</p>
+                    <h3 class="font-bold text-base text-warmbrown-800">Pemantauan Pribadi</h3>
+                    <p class="text-xs text-warmbrown-600">Riwayat perkembangan emosionalmu tersimpan secara khusus dan privat pada akunmu.</p>
                 </div>
             </div>
         </section>
 
-        <!-- 2. REGISTRASI / LOGIN PENGGUNA DAN ADMIN -->
+        <!-- 2. LOGIN / REGISTRASI -->
         <section id="authView" class="tab-content">
             <div class="max-w-md mx-auto bg-cream-50 p-8 rounded-3xl border border-warmbrown-300/30 shadow-xl space-y-6">
                 <div class="text-center space-y-2">
                     <h2 class="text-2xl font-bold text-warmbrown-800">Masuk / Registrasi</h2>
-                    <p class="text-xs text-warmbrown-600">Gunakan email/telepon aktif untuk Pengguna, atau Akun Khusus Admin</p>
+                    <p class="text-xs text-warmbrown-600">Gunakan email/ID Pengguna atau Akun Khusus Admin</p>
                 </div>
 
                 <form onsubmit="handleAuth(event)" class="space-y-4">
                     <div>
-                        <label class="block text-xs font-semibold mb-1 text-warmbrown-800">Email / ID Pengguna / Admin</label>
+                        <label class="block text-xs font-semibold mb-1 text-warmbrown-800">Email / Username</label>
                         <input type="text" id="authContact" required placeholder="contoh@email.com atau 'admin'" class="w-full px-4 py-3 text-sm rounded-xl border border-warmbrown-300/40 bg-cream-100 text-warmbrown-800 focus:outline-none focus:border-warmbrown-600">
                     </div>
                     <div>
@@ -117,21 +122,29 @@
                         Masuk / Daftar Akun
                     </button>
                 </form>
-                <p class="text-[11px] text-center text-warmbrown-500">Akses Khusus Pemilik Web (Admin): Username <strong>admin</strong> | Password <strong>admin123</strong></p>
+                <p class="text-[11px] text-center text-warmbrown-500">Akses Pemilik Web (Admin): Username <strong>admin</strong> | Password <strong>admin123</strong></p>
             </div>
         </section>
 
-        <!-- 3. KELENGKAPAN PROFIL -->
+        <!-- 3. BAGIAN PROFIL TERSENDIRI + SELEKSI 12 AVATAR LUCU -->
         <section id="profilView" class="tab-content">
-            <div class="bg-cream-50 p-6 sm:p-8 rounded-3xl border border-warmbrown-300/30 shadow-xl space-y-6 max-w-2xl mx-auto">
-                <div class="border-b border-warmbrown-300/20 pb-4">
-                    <h2 class="text-xl font-bold text-warmbrown-800">Lengkapi Profil Pengguna</h2>
-                    <p class="text-xs text-warmbrown-600">Sampaikan apa yang kamu rasakan pada kolom keluhan agar sistem dapat menyiapkan 15 soal skrining yang paling sesuai.</p>
+            <div class="bg-cream-50 p-6 sm:p-8 rounded-3xl border border-warmbrown-300/30 shadow-xl space-y-8 max-w-2xl mx-auto">
+                <div class="border-b border-warmbrown-300/20 pb-4 text-center sm:text-left">
+                    <h2 class="text-2xl font-bold text-warmbrown-800">Profil Saya</h2>
+                    <p class="text-xs text-warmbrown-600">Kelola identitas, foto profil lucu, dan deskripsi keluhan utama kamu.</p>
+                </div>
+
+                <!-- PILIHAN 12 AVATAR LUCU -->
+                <div class="space-y-3">
+                    <label class="block text-xs font-bold text-warmbrown-800">Pilih Icon Gambar Profil (12 Avatar Lucu):</label>
+                    <div id="avatarPicker" class="grid grid-cols-4 sm:grid-cols-6 gap-3">
+                        <!-- Generasi 12 Avatar Lucu lewat JS -->
+                    </div>
                 </div>
 
                 <form onsubmit="saveProfile(event)" class="grid sm:grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-xs font-semibold mb-1">Nama Lengkap</label>
+                        <label class="block text-xs font-semibold mb-1">Nama Lengkap / Panggilan</label>
                         <input type="text" id="profNama" required class="w-full px-4 py-2.5 text-sm rounded-xl border border-warmbrown-300/40 bg-cream-100">
                     </div>
                     <div>
@@ -156,12 +169,12 @@
                         </select>
                     </div>
                     <div class="sm:col-span-2">
-                        <label class="block text-xs font-semibold mb-1">Apa yang Sedang Kamu Rasakan? (Keluhan Utama)</label>
+                        <label class="block text-xs font-semibold mb-1">Keluhan Utama / Apa yang Sedang Kamu Rasakan?</label>
                         <textarea id="profInfo" rows="3" required placeholder="Contoh: Sering cemas berlebih kalau mau ujian, sedih tanpa alasan jelas, atau sering stres karena tugas bertumpuk..." class="w-full px-4 py-2.5 text-sm rounded-xl border border-warmbrown-300/40 bg-cream-100"></textarea>
                     </div>
-                    <div class="sm:col-span-2">
-                        <button type="submit" class="w-full py-3 rounded-xl bg-warmbrown-600 text-cream-50 font-bold text-sm hover:bg-warmbrown-700 transition-all">
-                            Simpan Profil & Lanjut ke Skrining
+                    <div class="sm:col-span-2 pt-2">
+                        <button type="submit" class="w-full py-3.5 rounded-xl bg-warmbrown-600 text-cream-50 font-bold text-sm hover:bg-warmbrown-700 transition-all shadow-md">
+                            Simpan Perubahan Profil
                         </button>
                     </div>
                 </form>
@@ -210,7 +223,7 @@
 
                 <div class="flex flex-col sm:flex-row gap-4 pt-2">
                     <button onclick="switchTab('riwayatView')" class="w-full py-3 rounded-xl border border-warmbrown-600 text-warmbrown-800 font-bold text-xs hover:bg-cream-200">
-                        Lihat Riwayat & Perkembangan
+                        Lihat Riwayat & Perkembangan Saya
                     </button>
                     <button onclick="switchTab('connectView')" class="w-full py-3 rounded-xl bg-warmbrown-600 text-cream-50 font-bold text-xs hover:bg-warmbrown-700">
                         Buka Professional Connect
@@ -273,16 +286,16 @@
             </div>
         </section>
 
-        <!-- 7. RIWAYAT PENGGUNA -->
+        <!-- 7. RIWAYAT PENGGUNA (KHUSUS PEMILIK AKUN LOGIN) -->
         <section id="riwayatView" class="tab-content">
             <div class="bg-cream-50 p-6 sm:p-8 rounded-3xl border border-warmbrown-300/30 shadow-xl space-y-6">
                 <div>
-                    <h2 class="text-xl font-bold text-warmbrown-800">Riwayat Skrining & Konsultasi</h2>
-                    <p class="text-xs text-warmbrown-600">Pantau perkembangan kesehatan mentalmu yang tersimpan secara aman.</p>
+                    <h2 class="text-xl font-bold text-warmbrown-800">Riwayat & Perkembangan Saya</h2>
+                    <p class="text-xs text-warmbrown-600">Catatan khusus dari akun yang sedang aktif (<span id="historyAccountLabel" class="font-bold">--</span>).</p>
                 </div>
 
                 <div class="space-y-4">
-                    <h3 class="text-sm font-bold text-warmbrown-800 border-b pb-2">Catatan Skrining Berkala</h3>
+                    <h3 class="text-sm font-bold text-warmbrown-800 border-b pb-2">Catatan Skrining Mandiri</h3>
                     <div id="screeningHistoryList" class="space-y-2 text-xs"></div>
 
                     <h3 class="text-sm font-bold text-warmbrown-800 border-b pb-2 pt-4">Riwayat Sesi Konsultasi</h3>
@@ -291,14 +304,14 @@
             </div>
         </section>
 
-        <!-- 8. DASHBOARD ADMIN TERKUNCI (HANYA PEMILIK WEB / ADMIN) -->
+        <!-- 8. PANEL ADMIN (KHUSUS PEMILIK WEB / ADMIN) -->
         <section id="adminView" class="tab-content">
             <div class="bg-cream-50 p-6 sm:p-8 rounded-3xl border border-warmbrown-300/30 shadow-xl space-y-6">
                 <div class="flex justify-between items-center border-b pb-4">
                     <div>
                         <div class="flex items-center gap-2">
-                            <span class="bg-red-600 text-white text-[10px] font-extrabold px-2 py-0.5 rounded-full">ADMIN KHUSUS</span>
-                            <h2 class="text-xl font-bold text-warmbrown-800">Panel Pemantauan Pemilik Web</h2>
+                            <span class="bg-red-600 text-white text-[10px] font-extrabold px-2 py-0.5 rounded-full">PANEL KELOLA</span>
+                            <h2 class="text-xl font-bold text-warmbrown-800">Panel Pemantauan Admin Web</h2>
                         </div>
                         <p class="text-xs text-warmbrown-600 mt-1">Daftar seluruh pengguna, profil lengkap, keluhan, serta rekap hasil skrining.</p>
                     </div>
@@ -309,7 +322,7 @@
                     <table class="w-full text-left text-xs border-collapse">
                         <thead>
                             <tr class="bg-cream-200 text-warmbrown-800 font-bold">
-                                <th class="p-3 border">Kontak Pengguna</th>
+                                <th class="p-3 border">Akun Pengguna</th>
                                 <th class="p-3 border">Data Profil & Keluhan Utama</th>
                                 <th class="p-3 border">Hasil Skrining Terakhir</th>
                                 <th class="p-3 border">Seluruh Riwayat Skrining</th>
@@ -329,9 +342,17 @@
         © 2026 MindTrack Teen — Platform Pemantauan Kesehatan Mental Remaja
     </footer>
 
-    <!-- LOGIKA SISTEM LENGKAP -->
+    <!-- LOGIKA SISTEM -->
     <script>
         lucide.createIcons();
+
+        // 12 Icon Avatar Lucu MindTrack Teen
+        const avatarIcons = [
+            '🐱', '🐶', '🐼', '🦊', '🐰', '🐻', 
+            '🐨', '🦁', '🐯', '🐸', '🦄', '🐣'
+        ];
+
+        let selectedAvatar = '🐱';
 
         // Bank Soal 15 Pertanyaan per Kategori Risiko
         const questionBank = {
@@ -409,9 +430,26 @@
         let detectedCategory = 'Evaluasi Kesejahteraan Umum';
 
         window.onload = function() {
+            renderAvatarPicker();
             updateAuthUI();
             switchTab('homeView');
         };
+
+        function renderAvatarPicker() {
+            const picker = document.getElementById('avatarPicker');
+            picker.innerHTML = avatarIcons.map(icon => `
+                <button type="button" onclick="selectAvatar('${icon}')" id="avatar-btn-${icon}" class="avatar-option p-3 text-2xl bg-cream-100 rounded-2xl border border-warmbrown-300/30 flex justify-center items-center hover:bg-cream-200">
+                    ${icon}
+                </button>
+            `).join('');
+        }
+
+        function selectAvatar(icon) {
+            selectedAvatar = icon;
+            document.querySelectorAll('.avatar-option').forEach(el => el.classList.remove('selected'));
+            const activeBtn = document.getElementById(`avatar-btn-${icon}`);
+            if (activeBtn) activeBtn.classList.add('selected');
+        }
 
         function switchTab(tabId) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
@@ -429,19 +467,13 @@
             }
         }
 
-        // HANYA ADMIN/PEMILIK WEB YANG BISA BUKA PANEL ADMIN
+        // PANEL ADMIN HANYA BISA DIAKSES ADMIN
         function accessAdminPanel() {
-            if (!currentUser) {
-                alert('Akses Terkunci! Hanya Admin/Pemilik Web yang dapat mengakses halaman ini.');
-                switchTab('authView');
-                return;
-            }
-
-            if (currentUser.role === 'admin') {
+            if (currentUser && currentUser.role === 'admin') {
                 renderAdminDashboard();
                 switchTab('adminView');
             } else {
-                alert('AKSES DITOLAK: Halaman ini khusus untuk Admin / Pemilik Web.');
+                alert('Akses Ditolak! Hanya Admin yang dapat mengakses halaman ini.');
             }
         }
 
@@ -450,33 +482,55 @@
             const contact = document.getElementById('authContact').value.trim();
             const password = document.getElementById('authPassword').value.trim();
 
-            // Kredensial Khusus Pemilik Web / Admin
+            // Kredensial Admin Web
             if ((contact === 'admin' || contact === 'admin@mindtrack.com') && password === 'admin123') {
                 currentUser = {
-                    contact: 'ADMIN_PEMILIK_WEB',
+                    contact: 'admin',
                     name: 'Pemilik Web (Admin)',
+                    avatar: '🔑',
                     role: 'admin'
                 };
                 localStorage.setItem('mindtrack_user', JSON.stringify(currentUser));
                 updateAuthUI();
-                alert('Berhasil Masuk sebagai Admin/Pemilik Web!');
+                alert('Berhasil Masuk sebagai Admin!');
                 accessAdminPanel();
                 return;
             }
 
             // Pengguna Biasa
-            currentUser = { contact: contact, name: '', age: '', gender: '', education: '', info: '', role: 'user' };
-            localStorage.setItem('mindtrack_user', JSON.stringify(currentUser));
-            
             let adminUsers = JSON.parse(localStorage.getItem('mindtrack_all_users')) || [];
-            if (!adminUsers.find(u => u.contact === contact)) {
-                adminUsers.push({ contact: contact, profile: {}, history: [] });
+            let existingUser = adminUsers.find(u => u.contact === contact);
+
+            if (existingUser && existingUser.profile) {
+                currentUser = {
+                    contact: contact,
+                    name: existingUser.profile.name || '',
+                    age: existingUser.profile.age || '',
+                    gender: existingUser.profile.gender || '',
+                    education: existingUser.profile.education || '',
+                    info: existingUser.profile.info || '',
+                    avatar: existingUser.profile.avatar || '🐱',
+                    role: 'user'
+                };
+            } else {
+                currentUser = {
+                    contact: contact,
+                    name: '',
+                    age: '',
+                    gender: '',
+                    education: '',
+                    info: '',
+                    avatar: '🐱',
+                    role: 'user'
+                };
+                adminUsers.push({ contact: contact, profile: currentUser, history: [], consults: [] });
                 localStorage.setItem('mindtrack_all_users', JSON.stringify(adminUsers));
             }
 
+            localStorage.setItem('mindtrack_user', JSON.stringify(currentUser));
             updateAuthUI();
-            alert('Berhasil masuk! Silakan lengkapi profil kamu.');
-            switchTab('profilView');
+            alert('Berhasil masuk!');
+            protectedNavigate('profilView');
         }
 
         function logout() {
@@ -487,14 +541,25 @@
         }
 
         function updateAuthUI() {
+            const adminNavBtn = document.getElementById('adminNavBtn');
+
             if (currentUser) {
                 document.getElementById('btnLoginNav').classList.add('hidden');
                 document.getElementById('userBadge').classList.remove('hidden');
                 document.getElementById('userBadge').classList.add('flex');
-                document.getElementById('navUserName').innerText = currentUser.role === 'admin' ? '🔑 Admin Web' : (currentUser.name || currentUser.contact);
+                document.getElementById('navAvatarDisplay').innerText = currentUser.avatar || '🐱';
+                document.getElementById('navUserName').innerText = currentUser.name || currentUser.contact;
+
+                // Tampilkan menu Admin hanya jika role admin
+                if (currentUser.role === 'admin') {
+                    adminNavBtn.classList.remove('hidden');
+                } else {
+                    adminNavBtn.classList.add('hidden');
+                }
             } else {
                 document.getElementById('btnLoginNav').classList.remove('hidden');
                 document.getElementById('userBadge').classList.add('hidden');
+                adminNavBtn.classList.add('hidden');
             }
         }
 
@@ -505,13 +570,13 @@
             currentUser.gender = document.getElementById('profGender').value;
             currentUser.education = document.getElementById('profPendidikan').value;
             currentUser.info = document.getElementById('profInfo').value;
+            currentUser.avatar = selectedAvatar;
 
             localStorage.setItem('mindtrack_user', JSON.stringify(currentUser));
-            updateAdminUserProfile(currentUser);
+            syncUserDataToAdmin();
 
             updateAuthUI();
-            alert('Profil berhasil disimpan!');
-            startAutoScreening();
+            alert('Profil dan foto avatar berhasil diperbarui!');
         }
 
         function loadProfileData() {
@@ -520,9 +585,9 @@
             if (currentUser.gender) document.getElementById('profGender').value = currentUser.gender;
             if (currentUser.education) document.getElementById('profPendidikan').value = currentUser.education;
             if (currentUser.info) document.getElementById('profInfo').value = currentUser.info;
+            if (currentUser.avatar) selectAvatar(currentUser.avatar);
         }
 
-        // SISTEM DETEKSI OTOMATIS & GENERATE 15 SOAL
         function startAutoScreening() {
             if (!currentUser) {
                 alert('Akses Terkunci! Silakan masuk atau mendaftar akun terlebih dahulu.');
@@ -531,8 +596,8 @@
             }
 
             if (!currentUser.info || currentUser.info.trim() === '') {
-                alert('Silakan isi keluhan utama di profil kamu terlebih dahulu agar sistem dapat mendeteksi kebutuhan skrining.');
-                switchTab('profilView');
+                alert('Silakan lengkapi keluhan utama di profil kamu terlebih dahulu.');
+                protectedNavigate('profilView');
                 return;
             }
 
@@ -578,7 +643,6 @@
 
             let riskLevel = '', riskTitle = '', riskDesc = '', actionHtml = '', bgClass = '';
 
-            // Rentang Skor 0 - 45 (15 Pertanyaan x Maksimal 3)
             if (score <= 12) {
                 riskLevel = 'Rendah';
                 riskTitle = 'Risiko Rendah / Kondisi Stabil';
@@ -621,67 +685,81 @@
                 risk: riskLevel
             };
 
-            let history = JSON.parse(localStorage.getItem('mindtrack_screenings')) || [];
-            history.unshift(entry);
-            localStorage.setItem('mindtrack_screenings', JSON.stringify(history));
-
-            updateAdminUserHistory(entry);
+            // Simpan riwayat khusus pengguna yang sedang login
+            saveUserScreeningHistory(entry);
             renderHistories();
             switchTab('hasilView');
         }
 
         function startConsult(type, doctorName) {
             alert(`Memulai sesi ${type} dengan ${doctorName}...`);
-            let consultHistory = JSON.parse(localStorage.getItem('mindtrack_consults')) || [];
-            consultHistory.unshift({
+            const entry = {
                 date: new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }),
                 doctor: doctorName,
                 method: type
-            });
-            localStorage.setItem('mindtrack_consults', JSON.stringify(consultHistory));
+            };
+            saveUserConsultHistory(entry);
             renderHistories();
         }
 
+        // FUNGSI KHUSUS RIWAYAT AKUN AKTIF
+        function saveUserScreeningHistory(entry) {
+            let adminUsers = JSON.parse(localStorage.getItem('mindtrack_all_users')) || [];
+            let idx = adminUsers.findIndex(u => u.contact === currentUser.contact);
+            if (idx !== -1) {
+                if (!adminUsers[idx].history) adminUsers[idx].history = [];
+                adminUsers[idx].history.unshift(entry);
+                localStorage.setItem('mindtrack_all_users', JSON.stringify(adminUsers));
+            }
+        }
+
+        function saveUserConsultHistory(entry) {
+            let adminUsers = JSON.parse(localStorage.getItem('mindtrack_all_users')) || [];
+            let idx = adminUsers.findIndex(u => u.contact === currentUser.contact);
+            if (idx !== -1) {
+                if (!adminUsers[idx].consults) adminUsers[idx].consults = [];
+                adminUsers[idx].consults.unshift(entry);
+                localStorage.setItem('mindtrack_all_users', JSON.stringify(adminUsers));
+            }
+        }
+
+        function syncUserDataToAdmin() {
+            let adminUsers = JSON.parse(localStorage.getItem('mindtrack_all_users')) || [];
+            let idx = adminUsers.findIndex(u => u.contact === currentUser.contact);
+            if (idx !== -1) {
+                adminUsers[idx].profile = currentUser;
+                localStorage.setItem('mindtrack_all_users', JSON.stringify(adminUsers));
+            }
+        }
+
+        // TAMPILKAN HANYA RIWAYAT MILIK AKUN TERSEBUT
         function renderHistories() {
+            if (!currentUser) return;
+
+            document.getElementById('historyAccountLabel').innerText = currentUser.name || currentUser.contact;
+
             const screenList = document.getElementById('screeningHistoryList');
             const consultList = document.getElementById('consultHistoryList');
 
-            let screenings = JSON.parse(localStorage.getItem('mindtrack_screenings')) || [];
-            let consults = JSON.parse(localStorage.getItem('mindtrack_consults')) || [];
+            let adminUsers = JSON.parse(localStorage.getItem('mindtrack_all_users')) || [];
+            let myData = adminUsers.find(u => u.contact === currentUser.contact) || {};
 
-            screenList.innerHTML = screenings.length === 0 ? `<p class="text-warmbrown-500 italic">Belum ada riwayat skrining.</p>` :
+            let screenings = myData.history || [];
+            let consults = myData.consults || [];
+
+            screenList.innerHTML = screenings.length === 0 ? `<p class="text-warmbrown-500 italic">Belum ada riwayat skrining pada akun ini.</p>` :
                 screenings.map(s => `
                     <div class="bg-cream-100 p-3 rounded-xl border border-warmbrown-300/20 flex justify-between items-center">
                         <div><span class="font-bold">[${s.category}]</span> Skor: ${s.score}/45 — <span class="font-semibold">${s.risk}</span></div>
                         <span class="text-[10px] text-warmbrown-500">${s.date}</span>
                     </div>`).join('');
 
-            consultList.innerHTML = consults.length === 0 ? `<p class="text-warmbrown-500 italic">Belum ada riwayat konsultasi.</p>` :
+            consultList.innerHTML = consults.length === 0 ? `<p class="text-warmbrown-500 italic">Belum ada riwayat konsultasi pada akun ini.</p>` :
                 consults.map(c => `
                     <div class="bg-cream-100 p-3 rounded-xl border border-warmbrown-300/20 flex justify-between items-center">
                         <div><span class="font-bold">${c.doctor}</span> (${c.method})</div>
                         <span class="text-[10px] text-warmbrown-500">${c.date}</span>
                     </div>`).join('');
-        }
-
-        function updateAdminUserProfile(profileData) {
-            let adminUsers = JSON.parse(localStorage.getItem('mindtrack_all_users')) || [];
-            let idx = adminUsers.findIndex(u => u.contact === profileData.contact);
-            if (idx !== -1) {
-                adminUsers[idx].profile = profileData;
-                localStorage.setItem('mindtrack_all_users', JSON.stringify(adminUsers));
-            }
-        }
-
-        function updateAdminUserHistory(screeningEntry) {
-            if (!currentUser || currentUser.role === 'admin') return;
-            let adminUsers = JSON.parse(localStorage.getItem('mindtrack_all_users')) || [];
-            let idx = adminUsers.findIndex(u => u.contact === currentUser.contact);
-            if (idx !== -1) {
-                if (!adminUsers[idx].history) adminUsers[idx].history = [];
-                adminUsers[idx].history.unshift(screeningEntry);
-                localStorage.setItem('mindtrack_all_users', JSON.stringify(adminUsers));
-            }
         }
 
         function renderAdminDashboard() {
@@ -699,7 +777,9 @@
 
                 return `
                     <tr class="border-b hover:bg-cream-100">
-                        <td class="p-3 font-semibold text-warmbrown-800">${u.contact}</td>
+                        <td class="p-3 font-semibold text-warmbrown-800">
+                            <span class="text-lg mr-1">${p.avatar || '👤'}</span> ${u.contact}
+                        </td>
                         <td class="p-3">
                             ${p.name ? `<strong>Nama:</strong> ${p.name}<br><strong>Usia:</strong> ${p.age} thn | <strong>Gender:</strong> ${p.gender}<br><strong>Keluhan:</strong> <em>"${p.info}"</em>` : '<span class="text-warmbrown-400 italic">Profil belum diisi</span>'}
                         </td>
@@ -707,7 +787,7 @@
                             ${lastScreening ? `<span class="font-bold">${lastScreening.risk}</span> (Skor: ${lastScreening.score}/45)<br><span class="text-[10px] text-warmbrown-500">${lastScreening.category} - ${lastScreening.date}</span>` : '<span class="text-warmbrown-400 italic">Belum skrining</span>'}
                         </td>
                         <td class="p-3">
-                            ${u.history && u.history.length > 0 ? u.history.map(h => `• ${h.date}: ${h.category} (Skor: ${h.score}/45, ${h.risk})`).join('<br>') : '-'}
+                            ${u.history && u.history.length > 0 ? u.history.map(h => `• ${h.date}: ${h.category} (${h.score}/45, ${h.risk})`).join('<br>') : '-'}
                         </td>
                     </tr>
                 `;
