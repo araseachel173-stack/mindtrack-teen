@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MindTrack-Teen | Pemantauan Kesehatan Mental Remaja</title>
+    <title>MindTrack-Teen | Sistem Pemantauan Deteksi Dini Kesehatan Mental Remaja</title>
+    
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -11,119 +12,209 @@
             theme: {
                 extend: {
                     colors: {
-                        cream: { 100: '#FFFDF9', 200: '#FAF3E0', 300: '#F4E8C1', 400: '#E2D4A8' },
-                        warmbrown: { 100: '#F5EBE1', 200: '#E3D0BF', 400: '#B8977E', 500: '#8B5E3C', 800: '#4A3319' }
+                        cream: { 
+                            100: '#FFFDF9', 
+                            200: '#FAF3E0', 
+                            300: '#F4E8C1', 
+                            400: '#E2D4A8' 
+                        },
+                        warmbrown: { 
+                            100: '#F5EBE1', 
+                            200: '#E3D0BF', 
+                            400: '#B8977E', 
+                            500: '#8B5E3C', 
+                            800: '#4A3319' 
+                        }
                     }
                 }
             }
         }
     </script>
-    <!-- Firebase SDK (v8) -->
+
+    <!-- Firebase SDK v8 (App & Realtime Database) -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 </head>
-<body class="bg-cream-100 text-warmbrown-800 font-sans antialiased min-h-screen flex flex-col justify-between">
+<body class="bg-cream-100 text-warmbrown-800 font-sans antialiased min-h-screen flex flex-col justify-between selection:bg-warmbrown-200">
 
-    <!-- HEADER / NAVIGATION -->
-    <header class="bg-white/80 backdrop-blur-md border-b border-warmbrown-200 sticky top-0 z-50">
+    <!-- HEADER & NAVIGASI UTAMA -->
+    <header class="bg-white/90 backdrop-blur-md border-b border-warmbrown-200 sticky top-0 z-50 shadow-sm">
         <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
-            <div class="flex items-center gap-2 cursor-pointer" onclick="switchTab('screening')">
+            <!-- LOGO BRAND -->
+            <div class="flex items-center gap-2 cursor-pointer transition hover:opacity-80" onclick="switchTab('hero')">
                 <span class="text-2xl">🌱</span>
                 <span class="font-bold text-xl text-warmbrown-800 tracking-tight">MindTrack<span class="text-warmbrown-500">-Teen</span></span>
             </div>
+            
+            <!-- MENU UTAMA -->
             <nav class="flex gap-1 md:gap-2 text-xs md:text-sm font-medium">
-                <button onclick="switchTab('screening')" class="px-3 py-1.5 rounded-lg hover:bg-cream-200 text-warmbrown-800 transition">Skrining Mandiri</button>
-                <button onclick="switchTab('profile')" class="px-3 py-1.5 rounded-lg hover:bg-cream-200 text-warmbrown-800 transition">Profil Pengguna</button>
-                <button onclick="switchTab('admin')" class="px-3 py-1.5 rounded-lg bg-warmbrown-800 text-white hover:bg-warmbrown-500 transition shadow-sm">Panel Admin</button>
+                <button id="nav-hero" onclick="switchTab('hero')" class="px-3 py-1.5 rounded-lg hover:bg-cream-200 text-warmbrown-800 transition">
+                    Beranda
+                </button>
+                <button id="nav-screening" onclick="switchTab('screening')" class="px-3 py-1.5 rounded-lg hover:bg-cream-200 text-warmbrown-800 transition">
+                    Skrining Mandiri
+                </button>
+                <button id="nav-profile" onclick="switchTab('profile')" class="px-3 py-1.5 rounded-lg hover:bg-cream-200 text-warmbrown-800 transition">
+                    Profil Pengguna
+                </button>
+                <button id="nav-admin" onclick="switchTab('admin')" class="px-3 py-1.5 rounded-lg bg-warmbrown-800 text-white hover:bg-warmbrown-500 transition shadow-sm">
+                    Panel Admin
+                </button>
             </nav>
         </div>
     </header>
 
-    <!-- MAIN CONTENT -->
+    <!-- KONTEN UTAMA APLIKASI -->
     <main class="max-w-4xl mx-auto px-4 py-8 w-full flex-grow">
 
-        <!-- 1. TAB SKRINING MANDIRI (15 KUESIONER) -->
-        <section id="tab-screening" class="tab-content">
+        <!-- ==================== 1. TAB BERANDA / LANDING PAGE ==================== -->
+        <section id="tab-hero" class="tab-content py-8 text-center">
+            <div class="inline-block bg-cream-200 text-warmbrown-800 text-xs font-semibold px-4 py-1.5 rounded-full mb-6 border border-warmbrown-400/30 shadow-sm">
+                ✨ Ruang Aman Deteksi Dini Kesehatan Mental Remaja
+            </div>
+            
+            <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight leading-tight text-warmbrown-800 mb-6">
+                Pahami Perasaanmu,<br><span class="text-warmbrown-500">Jaga Kesehatan Mentalmu</span>
+            </h1>
+            
+            <p class="text-base md:text-lg text-warmbrown-800/80 max-w-2xl mx-auto mb-8 leading-relaxed">
+                Layanan deteksi dini dan pemantauan kondisi emosional awal khusus untuk remaja secara mandiri, rahasia, dan tersinkronisasi secara real-time.
+            </p>
+            
+            <div class="flex flex-wrap justify-center gap-4">
+                <button onclick="switchTab('screening')" class="px-6 py-3.5 rounded-xl bg-warmbrown-800 text-white font-semibold hover:bg-warmbrown-500 transition shadow-md flex items-center gap-2">
+                    Mulai Skrining Mandiri 📋
+                </button>
+                <button onclick="switchTab('profile')" class="px-6 py-3.5 rounded-xl bg-white border border-warmbrown-400 text-warmbrown-800 font-semibold hover:bg-cream-200 transition flex items-center gap-2">
+                    Lengkapi Profil Diri 👤
+                </button>
+            </div>
+
+            <!-- FITUR HIGHLIGHT -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-16 text-left">
+                <div class="bg-white p-6 rounded-2xl border border-warmbrown-200 shadow-sm">
+                    <div class="text-3xl mb-2">🔒</div>
+                    <h3 class="font-bold text-warmbrown-800 mb-1">Privasi Terjaga</h3>
+                    <p class="text-xs text-warmbrown-800/70">Data tersimpan menggunakan ID unik tanpa memerlukan kerumitan kata sandi.</p>
+                </div>
+                <div class="bg-white p-6 rounded-2xl border border-warmbrown-200 shadow-sm">
+                    <div class="text-3xl mb-2">📊</div>
+                    <h3 class="font-bold text-warmbrown-800 mb-1">Skrining Valid</h3>
+                    <p class="text-xs text-warmbrown-800/70">Menggunakan 15 indikator pertanyaan standar pemantauan emosional remaja.</p>
+                </div>
+                <div class="bg-white p-6 rounded-2xl border border-warmbrown-200 shadow-sm">
+                    <div class="text-3xl mb-2">⚡</div>
+                    <h3 class="font-bold text-warmbrown-800 mb-1">Pantauan Real-Time</h3>
+                    <p class="text-xs text-warmbrown-800/70">Terhubung langsung dengan cloud database untuk pemantauan tenaga ahli/admin.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== 2. TAB SKRINING MANDIRI ==================== -->
+        <section id="tab-screening" class="tab-content hidden">
             <div class="bg-white p-6 md:p-8 rounded-3xl border border-warmbrown-200 shadow-md mb-8">
-                <h1 class="text-2xl md:text-3xl font-extrabold text-warmbrown-800 mb-2">Skrining Deteksi Dini Kesehatan Mental Remaja</h1>
-                <p class="text-xs md:text-sm text-warmbrown-800/70 mb-6">Jawablah pertanyaan berikut dengan jujur sesuai dengan apa yang kamu rasakan dalam 30 hari terakhir.</p>
+                <div class="border-b border-cream-300 pb-4 mb-6">
+                    <h2 class="text-2xl md:text-3xl font-extrabold text-warmbrown-800 mb-2">Skrining Deteksi Dini Kesehatan Mental</h2>
+                    <p class="text-xs md:text-sm text-warmbrown-800/70">Jawablah pertanyaan berikut dengan jujur sesuai dengan apa yang kamu rasakan dalam 30 hari terakhir.</p>
+                </div>
 
                 <form id="mainScreeningForm" class="space-y-6">
-                    <div>
-                        <label class="block text-xs md:text-sm font-semibold mb-1 text-warmbrown-800">Nomor Kontak / WhatsApp / Email</label>
-                        <input type="text" id="screeningContact" placeholder="Masukkan kontak untuk menyimpan riwayat" class="w-full px-4 py-2.5 rounded-xl border border-warmbrown-200 text-sm focus:outline-none focus:ring-2 focus:ring-warmbrown-500" required>
+                    <!-- IDENTITAS / KONTAK -->
+                    <div class="bg-cream-100 p-4 rounded-2xl border border-warmbrown-200">
+                        <label class="block text-xs md:text-sm font-bold mb-1 text-warmbrown-800">
+                            Nomor Kontak / WhatsApp / Email Pengguna <span class="text-red-500">*</span>
+                        </label>
+                        <input type="text" id="screeningContact" placeholder="Contoh: 08123456789 atau nama_pengguna" class="w-full px-4 py-2.5 rounded-xl border border-warmbrown-200 text-sm focus:outline-none focus:ring-2 focus:ring-warmbrown-500 bg-white" required>
+                        <p class="text-[10px] text-warmbrown-800/60 mt-1">* Kontak ini digunakan sebagai ID unik untuk menyimpan riwayat skriningmu.</p>
                     </div>
 
-                    <hr class="border-cream-200">
-
-                    <!-- Container 15 Pertanyaan Skrining -->
+                    <!-- CONTAINER 15 PERTANYAAN SKRINING -->
                     <div id="questionsContainer" class="space-y-4"></div>
 
-                    <button type="submit" class="w-full py-3.5 bg-warmbrown-800 text-white font-bold rounded-xl hover:bg-warmbrown-500 transition shadow-md">
-                        Kirim & Lihat Hasil Skrining
+                    <button type="submit" class="w-full py-4 bg-warmbrown-800 text-white font-bold text-base rounded-xl hover:bg-warmbrown-500 transition shadow-lg flex justify-center items-center gap-2">
+                        <span>Kirim & Lihat Hasil Skrining</span> 🚀
                     </button>
                 </form>
             </div>
         </section>
 
-        <!-- 2. TAB PROFIL PENGGUNA -->
+        <!-- ==================== 3. TAB PROFIL PENGGUNA ==================== -->
         <section id="tab-profile" class="tab-content hidden">
             <div class="bg-white p-6 md:p-8 rounded-3xl border border-warmbrown-200 shadow-md">
-                <h2 class="text-2xl font-bold mb-4">Profil Diri Pengguna</h2>
+                <div class="border-b border-cream-300 pb-4 mb-6">
+                    <h2 class="text-2xl font-bold text-warmbrown-800 mb-1">Profil Diri Pengguna</h2>
+                    <p class="text-xs text-warmbrown-800/70">Lengkapi data diri untuk mempermudah identifikasi saat berkonsultasi.</p>
+                </div>
+
                 <form id="profileForm" class="space-y-4">
                     <div>
-                        <label class="block text-xs font-semibold mb-1">Kontak / WhatsApp</label>
-                        <input type="text" id="profContact" class="w-full px-4 py-2 rounded-xl border border-warmbrown-200 text-sm" required>
+                        <label class="block text-xs font-semibold mb-1 text-warmbrown-800">
+                            Kontak / WhatsApp (ID Pengguna) <span class="text-red-500">*</span>
+                        </label>
+                        <input type="text" id="profContact" class="w-full px-4 py-2.5 rounded-xl border border-warmbrown-200 text-sm focus:outline-none focus:ring-2 focus:ring-warmbrown-500" placeholder="Gunakan ID/Kontak yang sama dengan Skrining" required>
                     </div>
+                    
                     <div>
-                        <label class="block text-xs font-semibold mb-1">Nama Lengkap / Panggilan</label>
-                        <input type="text" id="profName" class="w-full px-4 py-2 rounded-xl border border-warmbrown-200 text-sm">
+                        <label class="block text-xs font-semibold mb-1 text-warmbrown-800">Nama Lengkap / Panggilan</label>
+                        <input type="text" id="profName" class="w-full px-4 py-2.5 rounded-xl border border-warmbrown-200 text-sm focus:outline-none focus:ring-2 focus:ring-warmbrown-500" placeholder="Masukkan nama kamu">
                     </div>
-                    <div class="grid grid-cols-2 gap-4">
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-xs font-semibold mb-1">Usia (Tahun)</label>
-                            <input type="number" id="profAge" class="w-full px-4 py-2 rounded-xl border border-warmbrown-200 text-sm">
+                            <label class="block text-xs font-semibold mb-1 text-warmbrown-800">Usia (Tahun)</label>
+                            <input type="number" id="profAge" min="10" max="25" class="w-full px-4 py-2.5 rounded-xl border border-warmbrown-200 text-sm focus:outline-none focus:ring-2 focus:ring-warmbrown-500" placeholder="Contoh: 16">
                         </div>
                         <div>
-                            <label class="block text-xs font-semibold mb-1">Jenis Kelamin</label>
-                            <select id="profGender" class="w-full px-4 py-2 rounded-xl border border-warmbrown-200 text-sm">
+                            <label class="block text-xs font-semibold mb-1 text-warmbrown-800">Jenis Kelamin</label>
+                            <select id="profGender" class="w-full px-4 py-2.5 rounded-xl border border-warmbrown-200 text-sm focus:outline-none focus:ring-2 focus:ring-warmbrown-500 bg-white">
                                 <option value="Laki-laki">Laki-laki</option>
                                 <option value="Perempuan">Perempuan</option>
                             </select>
                         </div>
                     </div>
+
                     <div>
-                        <label class="block text-xs font-semibold mb-1">Keluhan / Catatan Informasi Tambahan</label>
-                        <textarea id="profInfo" rows="3" class="w-full px-4 py-2 rounded-xl border border-warmbrown-200 text-sm"></textarea>
+                        <label class="block text-xs font-semibold mb-1 text-warmbrown-800">Keluhan / Catatan Informasi Tambahan</label>
+                        <textarea id="profInfo" rows="4" class="w-full px-4 py-2.5 rounded-xl border border-warmbrown-200 text-sm focus:outline-none focus:ring-2 focus:ring-warmbrown-500" placeholder="Tuliskan keluhan atau kondisi emosional yang sering kamu rasakan..."></textarea>
                     </div>
-                    <button type="submit" class="w-full py-3 bg-warmbrown-500 text-white font-bold rounded-xl hover:bg-warmbrown-800 transition">Simpan Profil</button>
+
+                    <button type="submit" class="w-full py-3.5 bg-warmbrown-500 text-white font-bold rounded-xl hover:bg-warmbrown-800 transition shadow">
+                        Simpan Perubahan Profil
+                    </button>
                 </form>
             </div>
         </section>
 
-        <!-- 3. TAB PANEL PEMANTAUAN ADMIN -->
+        <!-- ==================== 4. TAB PANEL PEMANTAUAN ADMIN ==================== -->
         <section id="tab-admin" class="tab-content hidden">
-            <div class="flex justify-between items-center mb-6">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
                 <div>
-                    <h2 class="text-2xl font-bold">Panel Pemantauan Admin</h2>
-                    <p class="text-xs text-warmbrown-800/70">Pemantauan Skrining Pengguna secara Real-Time.</p>
+                    <h2 class="text-2xl font-bold text-warmbrown-800">Panel Pemantauan Admin</h2>
+                    <p class="text-xs text-warmbrown-800/70">Pemantauan Skrining Pengguna secara Real-Time dari Realtime Database.</p>
                 </div>
-                <button onclick="listenToRealtimeAdminData()" class="px-3 py-1.5 bg-warmbrown-200 text-xs font-semibold rounded-lg hover:bg-warmbrown-400">🔄 Refresh Data</button>
+                <button onclick="listenToRealtimeAdminData()" class="px-4 py-2 bg-warmbrown-200 text-warmbrown-800 text-xs font-bold rounded-xl hover:bg-warmbrown-400 transition flex items-center gap-1.5 shadow-sm">
+                    🔄 Synchronize Cloud Data
+                </button>
             </div>
 
-            <div class="bg-white rounded-2xl border border-warmbrown-200 overflow-hidden shadow-sm">
+            <!-- TABEL DATA ADMIN -->
+            <div class="bg-white rounded-2xl border border-warmbrown-200 overflow-hidden shadow-md">
                 <div class="overflow-x-auto">
                     <table class="w-full text-left border-collapse text-xs">
                         <thead>
-                            <tr class="bg-warmbrown-800 text-white uppercase tracking-wider">
-                                <th class="p-3">Pengguna</th>
-                                <th class="p-3">Profil Diri</th>
-                                <th class="p-3">Hasil Skrining Terakhir</th>
-                                <th class="p-3">Riwayat Skrining</th>
+                            <tr class="bg-warmbrown-800 text-white uppercase tracking-wider text-[11px]">
+                                <th class="p-3.5">ID / Kontak</th>
+                                <th class="p-3.5">Profil Diri</th>
+                                <th class="p-3.5">Hasil Skrining Terakhir</th>
+                                <th class="p-3.5">Riwayat Skrining</th>
                             </tr>
                         </thead>
                         <tbody id="adminTableBody" class="divide-y divide-warmbrown-100">
-                            <tr><td colspan="4" class="p-4 text-center italic">Memuat data dari cloud...</td></tr>
+                            <tr>
+                                <td colspan="4" class="p-6 text-center italic text-warmbrown-500">
+                                    Memuat data dari cloud database...
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -132,14 +223,36 @@
 
     </main>
 
+    <!-- MODAL POPUP HASIL SKRINING -->
+    <div id="resultModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+        <div class="bg-white max-w-md w-full rounded-3xl p-6 md:p-8 shadow-2xl border border-warmbrown-200 text-center space-y-4">
+            <div class="text-5xl" id="modalEmoji">🌱</div>
+            <h3 class="text-2xl font-extrabold text-warmbrown-800" id="modalTitle">Hasil Skrining</h3>
+            
+            <div class="bg-cream-100 p-4 rounded-2xl border border-cream-300">
+                <p class="text-xs text-warmbrown-800/70 mb-1">Skor Total Kamu</p>
+                <p class="text-3xl font-black text-warmbrown-800" id="modalScore">0 / 45</p>
+                <p class="text-sm font-bold text-warmbrown-500 mt-1" id="modalRisk">Kategori</p>
+            </div>
+
+            <p class="text-xs text-warmbrown-800/80 leading-relaxed" id="modalDesc">
+                Deskripsi hasil analisis akan muncul di sini.
+            </p>
+
+            <button onclick="closeModal()" class="w-full py-3 bg-warmbrown-800 text-white font-bold rounded-xl hover:bg-warmbrown-500 transition">
+                Tutup & Pahami
+            </button>
+        </div>
+    </div>
+
     <!-- FOOTER -->
-    <footer class="bg-white border-t border-warmbrown-200 py-4 text-center text-xs text-warmbrown-800/60">
-        &copy; MindTrack-Teen - Layanan Deteksi Dini Kesehatan Mental Remaja.
+    <footer class="bg-white border-t border-warmbrown-200 py-4 text-center text-xs text-warmbrown-800/60 mt-8">
+        <p>&copy; MindTrack-Teen - Sistem Pemantauan Kesehatan Mental Remaja Mandiri.</p>
     </footer>
 
-    <!-- LOGIKA JAVASCRIPT & SINKRONISASI FIREBASE -->
+    <!-- LOGIKA JAVASCRIPT LENGKAP -->
     <script>
-        // FIREBASE CONFIGURATION
+        // 1. INISIALISASI FIREBASE
         const firebaseConfig = {
             databaseURL: "https://mindtrack-teen-default-rtdb.asia-southeast1.firebasedatabase.app/"
         };
@@ -149,75 +262,95 @@
             if (typeof firebase !== 'undefined') {
                 firebase.initializeApp(firebaseConfig);
                 db = firebase.database();
+                console.log("Firebase Database Connected Successfully.");
             }
         } catch (e) {
-            console.error("Firebase Error:", e);
+            console.error("Firebase Initialization Error:", e);
         }
 
-        // LIST 15 PERTANYAAN SKRINING ASLI
+        // 2. LIST 15 PERTANYAAN SKRINING
         const screeningQuestions = [
-            "Sering merasa sakit kepala atau pusing?",
-            "Kurang nafsu makan atau makan berlebihan?",
-            "Tidur tidak nyenyak atau sering terbangun?",
-            "Mudah merasa cemas, tegang, atau khawatir?",
-            "Tangan sering gemetar atau merasa gelisah?",
-            "Merasa sulit berkonsentrasi saat belajar?",
-            "Merasa tidak bahagia atau sedih berkepanjangan?",
-            "Sering menangis tanpa alasan yang jelas?",
-            "Merasa kehilangan minat pada hobi/kegiatan kesukaan?",
-            "Merasa diri tidak berguna atau menyalahkan diri sendiri?",
+            "Sering merasa sakit kepala, pusing, atau ketegangan fisik?",
+            "Kurang nafsu makan atau justru makan secara berlebihan?",
+            "Tidur tidak nyenyak, sering terbangun, atau mengalami insomnia?",
+            "Mudah merasa cemas, tegang, khawatir, atau gelisah?",
+            "Tangan sering gemetar, jantung berdebar, atau merasa panik?",
+            "Merasa sulit berkonsentrasi saat belajar atau mengerjakan tugas?",
+            "Merasa tidak bahagia, sedih, atau hampa secara berkepanjangan?",
+            "Sering menangis secara tiba-tiba tanpa alasan yang jelas?",
+            "Merasa kehilangan minat pada hobi atau kegiatan kesukaan?",
+            "Merasa diri tidak berguna, gagal, atau menyalahkan diri sendiri?",
             "Merasa lelah sepanjang waktu meskipun tidak beraktivitas berat?",
-            "Mudah tersinggung atau marah karena hal-hal kecil?",
-            "Merasa enggan berinteraksi dengan teman atau keluarga?",
-            "Merasa masa depan tampak suram atau tanpa harapan?",
+            "Mudah tersinggung, frustrasi, atau marah karena hal-hal kecil?",
+            "Merasa enggan berinteraksi atau menarik diri dari teman/keluarga?",
+            "Merasa masa depan tampak suram, kelam, atau tanpa harapan?",
             "Pernah memiliki pikiran untuk menyakiti diri sendiri?"
         ];
 
-        // RENDER PERTANYAAN SKRINING
+        // 3. RENDER AUTOMATIS 15 PERTANYAAN KE DOM
         const qContainer = document.getElementById('questionsContainer');
         qContainer.innerHTML = screeningQuestions.map((q, idx) => `
-            <div class="p-3 bg-cream-100 rounded-xl border border-cream-300">
-                <p class="font-semibold text-xs md:text-sm text-warmbrown-800 mb-2">${idx + 1}. ${q}</p>
-                <div class="flex gap-6 text-xs font-medium">
-                    <label class="flex items-center gap-1.5 cursor-pointer">
-                        <input type="radio" name="q_${idx}" value="3" class="accent-warmbrown-500" required> Sangat Sering
+            <div class="p-4 bg-cream-100/60 hover:bg-cream-100 rounded-2xl border border-cream-300 transition">
+                <p class="font-bold text-xs md:text-sm text-warmbrown-800 mb-3">${idx + 1}. ${q}</p>
+                <div class="flex flex-wrap gap-4 md:gap-8 text-xs font-medium">
+                    <label class="flex items-center gap-2 cursor-pointer">
+                        <input type="radio" name="q_${idx}" value="3" class="w-4 h-4 accent-warmbrown-500 cursor-pointer" required>
+                        <span>Sangat Sering</span>
                     </label>
-                    <label class="flex items-center gap-1.5 cursor-pointer">
-                        <input type="radio" name="q_${idx}" value="2" class="accent-warmbrown-500"> Kadang-kadang
+                    <label class="flex items-center gap-2 cursor-pointer">
+                        <input type="radio" name="q_${idx}" value="2" class="w-4 h-4 accent-warmbrown-500 cursor-pointer">
+                        <span>Kadang-kadang</span>
                     </label>
-                    <label class="flex items-center gap-1.5 cursor-pointer">
-                        <input type="radio" name="q_${idx}" value="0" class="accent-warmbrown-500"> Tidak Pernah
+                    <label class="flex items-center gap-2 cursor-pointer">
+                        <input type="radio" name="q_${idx}" value="0" class="w-4 h-4 accent-warmbrown-500 cursor-pointer">
+                        <span>Tidak Pernah</span>
                     </label>
                 </div>
             </div>
         `).join('');
 
-        // NAVIGASI TAB
+        // 4. NAVIGASI TAB UTAMA
         function switchTab(tab) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
             document.getElementById(`tab-${tab}`).classList.remove('hidden');
-            if (tab === 'admin') listenToRealtimeAdminData();
+            
+            if (tab === 'admin') {
+                listenToRealtimeAdminData();
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // SIMPAN FORM SKRINING
+        // 5. HANDLING SUBMIT FORM SKRINING
         document.getElementById('mainScreeningForm').addEventListener('submit', function(e) {
             e.preventDefault();
+            
             const contact = document.getElementById('screeningContact').value.trim();
-            let totalScore = 0;
-
-            for (let i = 0; i < screeningQuestions.length; i++) {
-                const checked = document.querySelector(`input[name="q_${i}"]:checked`);
-                if (checked) totalScore += parseInt(checked.value);
+            if (!contact) {
+                alert("Silakan masukkan Nomor Kontak/ID Pengguna terlebih dahulu.");
+                return;
             }
 
-            let risk = 'Stabil / Rendah';
-            let category = 'Kondisi emosional terpantau baik.';
+            let totalScore = 0;
+            for (let i = 0; i < screeningQuestions.length; i++) {
+                const checked = document.querySelector(`input[name="q_${i}"]:checked`);
+                if (checked) {
+                    totalScore += parseInt(checked.value);
+                }
+            }
+
+            // PENENTUAN KATEGORI & REKOMENDASI
+            let risk = 'Stabil / Risiko Rendah';
+            let category = 'Kondisi emosional kamu secara umum terpantau baik dan stabil. Tetap jaga pola hidup sehat dan istirahat yang cukup.';
+            let emoji = '😊';
+
             if (totalScore >= 25) {
                 risk = 'Risiko Tinggi';
-                category = 'Disarankan melakukan konseling dengan profesional.';
+                category = 'Kamu mengalami indikasi tekanan emosional yang cukup berat. Sangat disarankan untuk berdiskusi dengan konselor, psikolog, atau orang dewasa terpercaya.';
+                emoji = '🆘';
             } else if (totalScore >= 12) {
                 risk = 'Risiko Sedang';
-                category = 'Perlu perhatian dan manajemen stres harian.';
+                category = 'Kamu menunjukkan beberapa gejala stres atau kelelahan emosional. Cobalah lakukan teknik relaksasi, kelola waktu, dan ceritakan keluhanmu pada teman dekat.';
+                emoji = '⚠️';
             }
 
             const screeningData = {
@@ -227,6 +360,7 @@
                 date: new Date().toLocaleString('id-ID')
             };
 
+            // SIMPAN KE FIREBASE
             const userKey = contact.replace(/[^a-zA-Z0-9]/g, "_");
 
             if (db) {
@@ -235,40 +369,65 @@
                     if (!u.history) u.history = [];
                     u.history.unshift(screeningData);
                     return u;
-                }, (err) => {
-                    if (!err) alert(`Skrining Berhasil Disimpan!\nSkor Total: ${totalScore}/45\nKategori: ${risk}`);
+                }, (err, committed) => {
+                    if (!err && committed) {
+                        showModal(emoji, risk, totalScore, category);
+                        document.getElementById('mainScreeningForm').reset();
+                    } else {
+                        alert("Terjadi kesalahan saat menyimpan data ke cloud server.");
+                    }
                 });
+            } else {
+                showModal(emoji, risk, totalScore, category);
             }
         });
 
-        // SIMPAN PROFIL
+        // 6. HANDLING SUBMIT FORM PROFIL
         document.getElementById('profileForm').addEventListener('submit', function(e) {
             e.preventDefault();
+            
             const contact = document.getElementById('profContact').value.trim();
+            if (!contact) {
+                alert("Kontak / ID Pengguna wajib diisi.");
+                return;
+            }
+
             const profileData = {
                 name: document.getElementById('profName').value.trim(),
                 age: document.getElementById('profAge').value,
                 gender: document.getElementById('profGender').value,
                 info: document.getElementById('profInfo').value.trim()
             };
+
             const userKey = contact.replace(/[^a-zA-Z0-9]/g, "_");
 
             if (db) {
                 db.ref(`users/${userKey}/profile`).set(profileData, (err) => {
-                    if (!err) alert("Profil Pengguna Berhasil Diperbarui!");
+                    if (!err) {
+                        alert("Profil Pengguna Berhasil Disimpan!");
+                    } else {
+                        alert("Gagal memperbarui profil di server.");
+                    }
                 });
             }
         });
 
-        // BACA DATA LENGKAP UNTUK ADMIN
+        // 7. SINKRONISASI DATA REALTIME ADMIN
         function listenToRealtimeAdminData() {
             if (!db) return;
+            
+            const tbody = document.getElementById('adminTableBody');
+            
             db.ref('users').on('value', snapshot => {
                 const users = snapshot.val() || {};
-                const tbody = document.getElementById('adminTableBody');
 
                 if (Object.keys(users).length === 0) {
-                    tbody.innerHTML = `<tr><td colspan="4" class="p-4 text-center italic text-warmbrown-500">Belum ada data masuk.</td></tr>`;
+                    tbody.innerHTML = `
+                        <tr>
+                            <td colspan="4" class="p-6 text-center italic text-warmbrown-500">
+                                Belum ada data pengguna yang masuk ke dalam database.
+                            </td>
+                        </tr>`;
                     return;
                 }
 
@@ -278,22 +437,41 @@
                     const lastScr = (u.history && u.history[0]) || null;
 
                     return `
-                        <tr class="hover:bg-cream-100">
-                            <td class="p-3 font-semibold text-warmbrown-800">${u.contact || k}</td>
-                            <td class="p-3 text-[11px]">
-                                ${p.name ? `<b>${p.name}</b> (${p.age || '-'} thn, ${p.gender || '-'})<br><i>"${p.info || '-'}"</i>` : '<span class="text-gray-400 italic">Belum diisi</span>'}
+                        <tr class="hover:bg-cream-100/80 transition">
+                            <td class="p-3.5 font-bold text-warmbrown-800">${u.contact || k}</td>
+                            <td class="p-3.5 text-[11px]">
+                                ${p.name ? `<b class="text-warmbrown-800">${p.name}</b> (${p.age || '-'} thn, ${p.gender || '-'})<br><i class="text-warmbrown-800/70">"${p.info || 'Tidak ada catatan'}"</i>` : '<span class="text-gray-400 italic">Belum mengisi profil</span>'}
                             </td>
-                            <td class="p-3">
-                                ${lastScr ? `<span class="font-bold">${lastScr.risk}</span> (Skor: ${lastScr.score}/45)<br><span class="text-[10px] text-warmbrown-500">${lastScr.date}</span>` : '<span class="text-gray-400 italic">Belum skrining</span>'}
+                            <td class="p-3.5">
+                                ${lastScr ? `
+                                    <span class="inline-block px-2 py-0.5 rounded text-[10px] font-bold ${lastScr.score >= 25 ? 'bg-red-100 text-red-700' : lastScr.score >= 12 ? 'bg-amber-100 text-amber-700' : 'bg-green-100 text-green-700'} mb-1">
+                                        ${lastScr.risk}
+                                    </span><br>
+                                    <b>Skor: ${lastScr.score} / 45</b><br>
+                                    <span class="text-[10px] text-warmbrown-500">${lastScr.date}</span>
+                                ` : '<span class="text-gray-400 italic">Belum pernah skrining</span>'}
                             </td>
-                            <td class="p-3 text-[10px]">
-                                <b>Skrining dilakukan:</b> ${u.history ? u.history.length : 0}x<br>
-                                ${u.history ? u.history.slice(0, 3).map(h => `• ${h.date}: ${h.risk} (${h.score})`).join('<br>') : '-'}
+                            <td class="p-3.5 text-[10px] leading-relaxed">
+                                <b>Total Skrining:</b> ${u.history ? u.history.length : 0}x<br>
+                                ${u.history ? u.history.slice(0, 3).map(h => `• ${h.date}: Skor ${h.score}`).join('<br>') : '-'}
                             </td>
                         </tr>
                     `;
                 }).join('');
             });
+        }
+
+        // 8. KONTROL MODAL HASIL
+        function showModal(emoji, risk, score, desc) {
+            document.getElementById('modalEmoji').innerText = emoji;
+            document.getElementById('modalRisk').innerText = risk;
+            document.getElementById('modalScore').innerText = `${score} / 45`;
+            document.getElementById('modalDesc').innerText = desc;
+            document.getElementById('resultModal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('resultModal').classList.add('hidden');
         }
     </script>
 </body>
