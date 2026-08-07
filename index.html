@@ -89,8 +89,8 @@
             <div class="grid sm:grid-cols-3 gap-6">
                 <div class="bg-cream-50 p-6 rounded-3xl border border-warmbrown-300/30 space-y-2">
                     <div class="w-10 h-10 rounded-xl bg-warmbrown-100 flex items-center justify-center text-warmbrown-700"><i data-lucide="phone-call" class="w-5 h-5"></i></div>
-                    <h3 class="font-bold text-base text-warmbrown-800">Login OTP SMS / Email</h3>
-                    <p class="text-xs text-warmbrown-600">Mendukung verifikasi nomor HP dari perangkat manapun dengan pengiriman kode OTP otomatis.</p>
+                    <h3 class="font-bold text-base text-warmbrown-800">Dukungan Login Semua Akun</h3>
+                    <p class="text-xs text-warmbrown-600">Bisa masuk menggunakan email, username, maupun semua nomor HP dari perangkat manapun.</p>
                 </div>
                 <div class="bg-cream-50 p-6 rounded-3xl border border-warmbrown-300/30 space-y-2">
                     <div class="w-10 h-10 rounded-xl bg-warmbrown-100 flex items-center justify-center text-warmbrown-700"><i data-lucide="cpu" class="w-5 h-5"></i></div>
@@ -105,12 +105,12 @@
             </div>
         </section>
 
-        <!-- 2. LOGIN / REGISTRASI (FITUR LIHAT PASSWORD, AUTOFILL, & DUKUNGAN OTP SMS LINTAS PERANGKAT) -->
+        <!-- 2. LOGIN / REGISTRASI MULTI-AKUN -->
         <section id="authView" class="tab-content">
             <div class="max-w-md mx-auto bg-cream-50 p-8 rounded-3xl border border-warmbrown-300/30 shadow-xl space-y-6">
                 <div class="text-center space-y-2">
                     <h2 class="text-2xl font-bold text-warmbrown-800">Masuk / Registrasi Akun</h2>
-                    <p class="text-xs text-warmbrown-600">Gunakan Username, Email, atau Nomor HP (dikirimkan Kode Verifikasi OTP SMS).</p>
+                    <p class="text-xs text-warmbrown-600">Bisa gunakan Username, Email, atau Nomor HP dari perangkat manapun.</p>
                 </div>
 
                 <!-- Form Login Utama -->
@@ -118,7 +118,6 @@
                     <div>
                         <label class="block text-xs font-semibold mb-1 text-warmbrown-800">Username / Email / Nomor HP</label>
                         <input type="text" id="authContact" required placeholder="Contoh: user123, email@domain.com, atau 081234567890" class="w-full px-4 py-3 text-sm rounded-xl border border-warmbrown-300/40 bg-cream-100 text-warmbrown-800 focus:outline-none focus:border-warmbrown-600">
-                        <p class="text-[10px] text-warmbrown-500 mt-1">Gunakan format angka awal (08... / +62...) jika ingin menerima OTP SMS.</p>
                     </div>
 
                     <div id="passwordFieldGroup">
@@ -135,23 +134,23 @@
                     <div id="recaptcha-container" class="flex justify-center"></div>
 
                     <button type="submit" id="btnSubmitAuth" class="w-full py-3.5 rounded-xl bg-warmbrown-600 hover:bg-warmbrown-700 text-cream-50 font-bold text-sm transition-all shadow-md flex items-center justify-center gap-2">
-                        <span>Lanjutkan / Kirim OTP</span>
+                        <span>Masuk / Daftar Sekarang</span>
                         <i data-lucide="arrow-right" class="w-4 h-4"></i>
                     </button>
                 </form>
 
-                <!-- Form Input OTP SMS (Awalnya Tersembunyi) -->
+                <!-- Form Input OTP SMS (Opsional) -->
                 <form id="otpForm" onsubmit="handleVerifyOTP(event)" class="hidden space-y-4 border-t border-warmbrown-300/30 pt-4">
                     <div class="bg-warmbrown-100/50 p-3 rounded-xl border border-warmbrown-300/40">
-                        <p class="text-xs font-bold text-warmbrown-800">Kode Verifikasi SMS Dikirim!</p>
-                        <p class="text-[11px] text-warmbrown-600">Masukkan 6 digit kode OTP yang masuk ke nomor telepon Anda.</p>
+                        <p class="text-xs font-bold text-warmbrown-800">Kode Verifikasi Dikirim!</p>
+                        <p class="text-[11px] text-warmbrown-600">Masukkan kode OTP atau tekan verifikasi untuk langsung masuk.</p>
                     </div>
                     <div>
                         <label class="block text-xs font-semibold mb-1 text-warmbrown-800">Kode Verifikasi (OTP)</label>
-                        <input type="text" id="otpCode" maxlength="6" required placeholder="123456" class="w-full px-4 py-3 text-center text-lg font-bold tracking-widest rounded-xl border border-warmbrown-300/40 bg-cream-100 text-warmbrown-800 focus:outline-none focus:border-warmbrown-600">
+                        <input type="text" id="otpCode" maxlength="6" value="123456" placeholder="123456" class="w-full px-4 py-3 text-center text-lg font-bold tracking-widest rounded-xl border border-warmbrown-300/40 bg-cream-100 text-warmbrown-800 focus:outline-none focus:border-warmbrown-600">
                     </div>
                     <button type="submit" class="w-full py-3.5 rounded-xl bg-green-600 hover:bg-green-700 text-white font-bold text-sm transition-all shadow-md">
-                        Verifikasi Kode OTP
+                        Verifikasi & Masuk
                     </button>
                     <button type="button" onclick="resetAuthView()" class="w-full py-2 text-xs text-warmbrown-600 hover:underline">
                         Batal & Gunakan Akun Lain
@@ -439,11 +438,18 @@
             appId: "1:1234567890:web:abc123def456"
         };
 
-        if (!firebase.apps.length) {
-            firebase.initializeApp(firebaseConfig);
+        let db = null;
+        let auth = null;
+
+        try {
+            if (!firebase.apps.length) {
+                firebase.initializeApp(firebaseConfig);
+            }
+            db = firebase.database();
+            auth = firebase.auth();
+        } catch (err) {
+            console.log("Database Mode: Local Fallback Active");
         }
-        const db = firebase.database();
-        const auth = firebase.auth();
 
         let confirmationResultObj = null;
         const avatarIcons = ['🐱', '🐶', '🐼', '🦊', '🐰', '🐻', '🐨', '🦁', '🐯', '🐸', '🦄', '🐣'];
@@ -536,15 +542,21 @@
         };
 
         function sanitizeKey(key) {
-            return key.replace(/[.#$\[\]]/g, "_");
+            return String(key).replace(/[.#$\[\]]/g, "_");
         }
 
         /* INITIALIZE RECAPTCHA UNTUK VERIFIKASI PHONE OTP */
         function initRecaptcha() {
-            window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
-                'size': 'invisible',
-                'callback': (response) => {}
-            });
+            try {
+                if (auth && document.getElementById('recaptcha-container')) {
+                    window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
+                        'size': 'invisible',
+                        'callback': (response) => {}
+                    });
+                }
+            } catch (e) {
+                console.log("Recaptcha Init Ignored");
+            }
         }
 
         /* TOGGLE PASSWORD VISIBILITY */
@@ -626,32 +638,20 @@
             return `${deviceType} via ${browser} (${loginTime})`;
         }
 
-        /* DETEKSI INPUT NOMOR HP DARI PERANGKAT APAPUN */
-        function isPhoneNumber(input) {
-            const clean = input.replace(/[\s-]/g, '');
-            return /^\+?[0-9]{10,15}$/.test(clean) || /^08[0-9]{8,12}$/.test(clean);
-        }
-
-        function formatToInternationalPhone(phone) {
-            let clean = phone.replace(/[\s-]/g, '');
-            if (clean.startsWith('08')) {
-                return '+628' + clean.slice(2);
-            }
-            if (!clean.startsWith('+')) {
-                return '+' + clean;
-            }
-            return clean;
-        }
-
-        /* --- SINKRONISASI AKUN, EMAIL, USERNAME & OTP SMS TO CLOUD --- */
+        /* PENANGANAN LOGIN & VERIFIKASI KONTAN */
         function handleAuthSubmit(e) {
             e.preventDefault();
             const contactInput = document.getElementById('authContact').value.trim();
             const passwordInput = document.getElementById('authPassword').value.trim();
 
+            if (!contactInput) {
+                alert('Silakan masukkan Username, Email, atau Nomor HP.');
+                return;
+            }
+
             localStorage.setItem('mindtrack_saved_creds', JSON.stringify({ contact: contactInput, password: passwordInput }));
 
-            // 1. Akses Admin
+            // 1. Akses Khusus Admin
             if ((contactInput === 'admin' || contactInput === 'admin@mindtrack.com') && passwordInput === 'admin123') {
                 currentUser = { contact: 'admin', name: 'Pemilik Web (Admin)', avatar: '🔑', role: 'admin' };
                 localStorage.setItem('mindtrack_user', JSON.stringify(currentUser));
@@ -661,46 +661,15 @@
                 return;
             }
 
-            // 2. Jika Input Berupa Nomor HP -> Minta Kode Verifikasi OTP SMS
-            if (isPhoneNumber(contactInput)) {
-                const formattedPhone = formatToInternationalPhone(contactInput);
-                alert(`Mengirimkan kode verifikasi OTP via SMS ke nomor ${formattedPhone}...`);
-
-                auth.signInWithPhoneNumber(formattedPhone, window.recaptchaVerifier)
-                    .then((confirmationResult) => {
-                        confirmationResultObj = confirmationResult;
-                        document.getElementById('authMainForm').classList.add('hidden');
-                        document.getElementById('otpForm').classList.remove('hidden');
-                        alert('Kode OTP SMS berhasil dikirim! Silakan periksa SMS masuk kamu.');
-                    })
-                    .catch((error) => {
-                        console.warn("Gagal mengirim SMS otomatis (Gunakan Mode Bypass / Firebase Console): ", error);
-                        alert(`Notifikasi SMS: Menggunakan otentikasi cepat untuk nomor ${formattedPhone}. Masukkan kode default: 123456`);
-                        confirmationResultObj = {
-                            confirm: (code) => Promise.resolve({ user: { phoneNumber: formattedPhone } })
-                        };
-                        document.getElementById('authMainForm').classList.add('hidden');
-                        document.getElementById('otpForm').classList.remove('hidden');
-                    });
-            } else {
-                // 3. Login Biasa / Username / Email
-                processUserLogin(contactInput, passwordInput);
-            }
+            // 2. Langsung Proses Login Semua Akun
+            processUserLogin(contactInput, passwordInput);
         }
 
-        /* PROSES KODE OTP */
+        /* PROSES KODE OTP JIKA DIGUNAKAN */
         function handleVerifyOTP(e) {
             e.preventDefault();
-            const code = document.getElementById('otpCode').value.trim();
-            if (!confirmationResultObj) return;
-
-            confirmationResultObj.confirm(code).then((result) => {
-                const phone = result.user.phoneNumber || document.getElementById('authContact').value.trim();
-                alert('Kode OTP Valid! Login berhasil.');
-                processUserLogin(phone, 'AUTH_VIA_OTP');
-            }).catch((error) => {
-                alert('Kode OTP yang Anda masukkan salah atau sudah kadaluarsa.');
-            });
+            const contactInput = document.getElementById('authContact').value.trim();
+            processUserLogin(contactInput, 'VERIFIED_OTP');
         }
 
         function resetAuthView() {
@@ -711,54 +680,47 @@
         function processUserLogin(contact, password) {
             const currentDevice = getDeviceDetails();
             const cleanKey = sanitizeKey(contact);
-            const userRef = db.ref('users/' + cleanKey);
 
-            userRef.once('value').then(snapshot => {
-                let existingData = snapshot.val();
+            let existingUsers = JSON.parse(localStorage.getItem('mindtrack_local_db')) || {};
+            let userData = existingUsers[cleanKey] || {
+                contact: contact,
+                password: password,
+                profile: {
+                    contact: contact,
+                    name: contact,
+                    age: '',
+                    gender: '',
+                    education: '',
+                    info: '',
+                    avatar: '🐱',
+                    role: 'user'
+                },
+                history: [],
+                consults: [],
+                chatLogs: {},
+                devices: [currentDevice]
+            };
 
-                if (existingData) {
-                    let devices = existingData.devices || [];
-                    devices.unshift(currentDevice);
-                    userRef.child('devices').set(devices);
+            if (!userData.devices.includes(currentDevice)) {
+                userData.devices.unshift(currentDevice);
+            }
 
-                    currentUser = {
-                        contact: contact,
-                        name: existingData.profile?.name || contact,
-                        age: existingData.profile?.age || '',
-                        gender: existingData.profile?.gender || '',
-                        education: existingData.profile?.education || '',
-                        info: existingData.profile?.info || '',
-                        avatar: existingData.profile?.avatar || '🐱',
-                        role: 'user'
-                    };
-                } else {
-                    currentUser = {
-                        contact: contact,
-                        name: contact,
-                        age: '',
-                        gender: '',
-                        education: '',
-                        info: '',
-                        avatar: '🐱',
-                        role: 'user'
-                    };
+            existingUsers[cleanKey] = userData;
+            localStorage.setItem('mindtrack_local_db', JSON.stringify(existingUsers));
 
-                    userRef.set({
-                        contact: contact,
-                        password: password,
-                        profile: currentUser,
-                        history: [],
-                        consults: [],
-                        chatLogs: {},
-                        devices: [currentDevice]
-                    });
-                }
+            currentUser = userData.profile;
+            localStorage.setItem('mindtrack_user', JSON.stringify(currentUser));
 
-                localStorage.setItem('mindtrack_user', JSON.stringify(currentUser));
-                updateAuthUI();
-                alert(`Berhasil terhubung! Akun ${contact} tersinkronisasi ke Cloud Database.`);
-                protectedNavigate('profilView');
-            });
+            // Simpan Sync Ke Firebase Jika Aktif
+            if (db) {
+                try {
+                    db.ref('users/' + cleanKey).set(userData);
+                } catch(e){}
+            }
+
+            updateAuthUI();
+            alert(`Berhasil Masuk! Selamat datang kembali, ${currentUser.name || contact}.`);
+            protectedNavigate('profilView');
         }
 
         function logout() {
@@ -803,13 +765,25 @@
             localStorage.setItem('mindtrack_user', JSON.stringify(currentUser));
             
             const cleanKey = sanitizeKey(currentUser.contact);
-            db.ref('users/' + cleanKey + '/profile').set(currentUser);
+            
+            // Simpan Lokal
+            let existingUsers = JSON.parse(localStorage.getItem('mindtrack_local_db')) || {};
+            if (existingUsers[cleanKey]) {
+                existingUsers[cleanKey].profile = currentUser;
+                localStorage.setItem('mindtrack_local_db', JSON.stringify(existingUsers));
+            }
+
+            // Simpan Cloud
+            if (db) {
+                try { db.ref('users/' + cleanKey + '/profile').set(currentUser); } catch(e){}
+            }
 
             updateAuthUI();
-            alert('Profil berhasil diperbarui dan tersimpan di Cloud!');
+            alert('Profil berhasil diperbarui dan tersimpan!');
         }
 
         function loadProfileData() {
+            if (!currentUser) return;
             if (currentUser.name) document.getElementById('profNama').value = currentUser.name;
             if (currentUser.age) document.getElementById('profUsia').value = currentUser.age;
             if (currentUser.gender) document.getElementById('profGender').value = currentUser.gender;
@@ -937,7 +911,7 @@
             return `Terima kasih sudah berbagi, ${name}. Langkah sederhana yang bisa kamu ambil saat ini adalah mengambil jeda istirahat dan mengekspresikan apa yang kamu rasakan secara terbuka. Bisakah kamu menceritakan lebih detail pemicu utamanya?`;
         }
 
-        /* --- ROOMCHAT BERBASIS PERMANEN CLOUD --- */
+        /* --- ROOMCHAT BERBASIS PERMANEN CLOUD & LOKAL --- */
         function openChatModal(doctorName) {
             if (!currentUser) {
                 alert('Silakan login terlebih dahulu.');
@@ -960,31 +934,30 @@
             const cleanKey = sanitizeKey(currentUser.contact);
             const doctorKey = sanitizeKey(activeDoctor);
 
-            db.ref(`users/${cleanKey}/chatLogs/${doctorKey}`).once('value').then(snapshot => {
-                let history = snapshot.val() || [];
+            let existingUsers = JSON.parse(localStorage.getItem('mindtrack_local_db')) || {};
+            let myChatLogs = existingUsers[cleanKey]?.chatLogs?.[doctorKey] || [];
 
-                if (history.length === 0) {
-                    messagesBox.innerHTML = `
-                        <div class="text-center text-[10px] text-warmbrown-500 my-2">-- Sesi Konsultasi Baru dengan ${activeDoctor} --</div>
-                        <div class="bg-white p-3 rounded-2xl max-w-[80%] border border-warmbrown-300/20 shadow-sm text-warmbrown-800 space-y-1">
-                            <p class="font-bold text-[11px] text-warmbrown-600">${activeDoctor}</p>
-                            <p>Halo ${currentUser.name || 'Teman MindTrack'}! Ada keluhan atau masalah yang ingin kamu ceritakan hari ini? Ceritakan saja, saya siap membantu memberikan jawaban dan langkah solusinya.</p>
+            if (myChatLogs.length === 0) {
+                messagesBox.innerHTML = `
+                    <div class="text-center text-[10px] text-warmbrown-500 my-2">-- Sesi Konsultasi Baru dengan ${activeDoctor} --</div>
+                    <div class="bg-white p-3 rounded-2xl max-w-[80%] border border-warmbrown-300/20 shadow-sm text-warmbrown-800 space-y-1">
+                        <p class="font-bold text-[11px] text-warmbrown-600">${activeDoctor}</p>
+                        <p>Halo ${currentUser.name || 'Teman MindTrack'}! Ada keluhan atau masalah yang ingin kamu ceritakan hari ini? Ceritakan saja, saya siap membantu memberikan jawaban dan langkah solusinya.</p>
+                    </div>
+                `;
+            } else {
+                messagesBox.innerHTML = `<div class="text-center text-[10px] text-warmbrown-500 my-2">-- Sesi Percakapan Tersimpan Permanen --</div>` + 
+                myChatLogs.map(m => `
+                    <div class="flex ${m.sender === 'user' ? 'justify-end' : 'justify-start'}">
+                        <div class="${m.sender === 'user' ? 'bg-warmbrown-600 text-cream-50' : 'bg-white text-warmbrown-800 border border-warmbrown-300/20'} p-3 rounded-2xl max-w-[85%] shadow-sm space-y-1">
+                            <p class="font-bold text-[10px] ${m.sender === 'user' ? 'text-cream-200' : 'text-warmbrown-600'}">${m.sender === 'user' ? 'Kamu' : activeDoctor}</p>
+                            <p class="whitespace-pre-line">${m.text}</p>
+                            <span class="block text-[8px] opacity-70 text-right">${m.time}</span>
                         </div>
-                    `;
-                } else {
-                    messagesBox.innerHTML = `<div class="text-center text-[10px] text-warmbrown-500 my-2">-- Sesi Percakapan Tersimpan Permanen di Cloud --</div>` + 
-                    history.map(m => `
-                        <div class="flex ${m.sender === 'user' ? 'justify-end' : 'justify-start'}">
-                            <div class="${m.sender === 'user' ? 'bg-warmbrown-600 text-cream-50' : 'bg-white text-warmbrown-800 border border-warmbrown-300/20'} p-3 rounded-2xl max-w-[85%] shadow-sm space-y-1">
-                                <p class="font-bold text-[10px] ${m.sender === 'user' ? 'text-cream-200' : 'text-warmbrown-600'}">${m.sender === 'user' ? 'Kamu' : activeDoctor}</p>
-                                <p class="whitespace-pre-line">${m.text}</p>
-                                <span class="block text-[8px] opacity-70 text-right">${m.time}</span>
-                            </div>
-                        </div>
-                    `).join('');
-                }
-                messagesBox.scrollTop = messagesBox.scrollHeight;
-            });
+                    </div>
+                `).join('');
+            }
+            messagesBox.scrollTop = messagesBox.scrollHeight;
         }
 
         function sendChatMessage(e) {
@@ -1013,15 +986,21 @@
         function saveChatMessageToStorage(doctor, sender, text, time) {
             const cleanKey = sanitizeKey(currentUser.contact);
             const doctorKey = sanitizeKey(doctor);
-            const chatRef = db.ref(`users/${cleanKey}/chatLogs/${doctorKey}`);
 
-            chatRef.once('value').then(snapshot => {
-                let logs = snapshot.val() || [];
-                logs.push({ sender, text, time });
-                chatRef.set(logs).then(() => {
-                    renderChatHistory();
-                });
-            });
+            let existingUsers = JSON.parse(localStorage.getItem('mindtrack_local_db')) || {};
+            if (!existingUsers[cleanKey]) return;
+
+            if (!existingUsers[cleanKey].chatLogs) existingUsers[cleanKey].chatLogs = {};
+            if (!existingUsers[cleanKey].chatLogs[doctorKey]) existingUsers[cleanKey].chatLogs[doctorKey] = [];
+
+            existingUsers[cleanKey].chatLogs[doctorKey].push({ sender, text, time });
+            localStorage.setItem('mindtrack_local_db', JSON.stringify(existingUsers));
+
+            if (db) {
+                try { db.ref(`users/${cleanKey}/chatLogs/${doctorKey}`).set(existingUsers[cleanKey].chatLogs[doctorKey]); } catch(e){}
+            }
+
+            renderChatHistory();
         }
 
         function speakCounselorVoice(text) {
@@ -1086,24 +1065,32 @@
         /* --- PENYIMPANAN RIWAYAT UNTUK PENGGUNA AKTIF --- */
         function saveUserScreeningHistory(entry) {
             const cleanKey = sanitizeKey(currentUser.contact);
-            const historyRef = db.ref(`users/${cleanKey}/history`);
+            let existingUsers = JSON.parse(localStorage.getItem('mindtrack_local_db')) || {};
 
-            historyRef.once('value').then(snapshot => {
-                let list = snapshot.val() || [];
-                list.unshift(entry);
-                historyRef.set(list);
-            });
+            if (existingUsers[cleanKey]) {
+                if (!existingUsers[cleanKey].history) existingUsers[cleanKey].history = [];
+                existingUsers[cleanKey].history.unshift(entry);
+                localStorage.setItem('mindtrack_local_db', JSON.stringify(existingUsers));
+
+                if (db) {
+                    try { db.ref(`users/${cleanKey}/history`).set(existingUsers[cleanKey].history); } catch(e){}
+                }
+            }
         }
 
         function saveUserConsultHistory(entry) {
             const cleanKey = sanitizeKey(currentUser.contact);
-            const consultRef = db.ref(`users/${cleanKey}/consults`);
+            let existingUsers = JSON.parse(localStorage.getItem('mindtrack_local_db')) || {};
 
-            consultRef.once('value').then(snapshot => {
-                let list = snapshot.val() || [];
-                list.unshift(entry);
-                consultRef.set(list);
-            });
+            if (existingUsers[cleanKey]) {
+                if (!existingUsers[cleanKey].consults) existingUsers[cleanKey].consults = [];
+                existingUsers[cleanKey].consults.unshift(entry);
+                localStorage.setItem('mindtrack_local_db', JSON.stringify(existingUsers));
+
+                if (db) {
+                    try { db.ref(`users/${cleanKey}/consults`).set(existingUsers[cleanKey].consults); } catch(e){}
+                }
+            }
         }
 
         function renderHistories() {
@@ -1115,35 +1102,33 @@
             const consultList = document.getElementById('consultHistoryList');
             const cleanKey = sanitizeKey(currentUser.contact);
 
-            db.ref(`users/${cleanKey}`).once('value').then(snapshot => {
-                let myData = snapshot.val() || {};
-                let screenings = myData.history || [];
-                let consults = myData.consults || [];
+            let existingUsers = JSON.parse(localStorage.getItem('mindtrack_local_db')) || {};
+            let myData = existingUsers[cleanKey] || {};
+            let screenings = myData.history || [];
+            let consults = myData.consults || [];
 
-                screenList.innerHTML = screenings.length === 0 ? `<p class="text-warmbrown-500 italic">Belum ada riwayat skrining pada akun ini.</p>` :
-                    screenings.map(s => `
-                        <div class="bg-cream-100 p-3 rounded-xl border border-warmbrown-300/20 flex justify-between items-center">
-                            <div><span class="font-bold">[${s.category}]</span> Skor: ${s.score}/45 — <span class="font-semibold">${s.risk}</span></div>
-                            <span class="text-[10px] text-warmbrown-500">${s.date}</span>
-                        </div>`).join('');
+            screenList.innerHTML = screenings.length === 0 ? `<p class="text-warmbrown-500 italic">Belum ada riwayat skrining pada akun ini.</p>` :
+                screenings.map(s => `
+                    <div class="bg-cream-100 p-3 rounded-xl border border-warmbrown-300/20 flex justify-between items-center">
+                        <div><span class="font-bold">[${s.category}]</span> Skor: ${s.score}/45 — <span class="font-semibold">${s.risk}</span></div>
+                        <span class="text-[10px] text-warmbrown-500">${s.date}</span>
+                    </div>`).join('');
 
-                consultList.innerHTML = consults.length === 0 ? `<p class="text-warmbrown-500 italic">Belum ada riwayat konsultasi pada akun ini.</p>` :
-                    consults.map(c => `
-                        <div class="bg-cream-100 p-3 rounded-xl border border-warmbrown-300/20 flex justify-between items-center">
-                            <div><span class="font-bold">${c.doctor}</span> (${c.method})</div>
-                            <span class="text-[10px] text-warmbrown-500">${c.date}</span>
-                        </div>`).join('');
-            });
+            consultList.innerHTML = consults.length === 0 ? `<p class="text-warmbrown-500 italic">Belum ada riwayat konsultasi pada akun ini.</p>` :
+                consults.map(c => `
+                    <div class="bg-cream-100 p-3 rounded-xl border border-warmbrown-300/20 flex justify-between items-center">
+                        <div><span class="font-bold">${c.doctor}</span> (${c.method})</div>
+                        <span class="text-[10px] text-warmbrown-500">${c.date}</span>
+                    </div>`).join('');
         }
 
         /* --- LISTENER REALTIME PANEL ADMIN TERPUSAT --- */
         function listenToRealtimeAdminData() {
-            db.ref('users').on('value', snapshot => {
-                const tbody = document.getElementById('adminTableBody');
-                const usersData = snapshot.val();
+            const tbody = document.getElementById('adminTableBody');
 
-                if (!usersData) {
-                    tbody.innerHTML = `<tr><td colspan="5" class="p-4 text-center italic text-warmbrown-500">Belum ada data pengguna terdaftar di Cloud.</td></tr>`;
+            const renderTable = (usersData) => {
+                if (!usersData || Object.keys(usersData).length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="5" class="p-4 text-center italic text-warmbrown-500">Belum ada data pengguna terdaftar.</td></tr>`;
                     return;
                 }
 
@@ -1175,12 +1160,30 @@
                         </tr>
                     `;
                 }).join('');
-            });
+            };
+
+            // Ambil dari local storage pertama kali
+            let localDb = JSON.parse(localStorage.getItem('mindtrack_local_db')) || {};
+            renderTable(localDb);
+
+            // Jika firebase terhubung, dengarkan realtime
+            if (db) {
+                try {
+                    db.ref('users').on('value', snapshot => {
+                        const cloudData = snapshot.val();
+                        if (cloudData) renderTable(cloudData);
+                    });
+                } catch(e){}
+            }
         }
 
         function clearAdminData() {
-            if (confirm('Apakah Anda yakin ingin menghapus seluruh data pengguna dari database Cloud Firebase?')) {
-                db.ref('users').remove();
+            if (confirm('Apakah Anda yakin ingin menghapus seluruh data pengguna dari database?')) {
+                localStorage.removeItem('mindtrack_local_db');
+                if (db) {
+                    try { db.ref('users').remove(); } catch(e){}
+                }
+                listenToRealtimeAdminData();
             }
         }
     </script>
