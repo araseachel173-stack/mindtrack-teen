@@ -3,14 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MindTrack Teen - Pahami Perasaanmu</title>
-    <!-- Google Fonts: Plus Jakarta Sans -->
+    <title>MindTrack Teen - Platform Kesehatan Mental Remaja</title>
+    <!-- Google Fonts & Tailwind CDN -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
     <script>
         tailwind.config = {
@@ -27,12 +25,14 @@
     </script>
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #FAF7F2; color: #5C3D2E; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
     </style>
 </head>
-<body class="bg-cream-100 text-warmbrown-700 antialiased selection:bg-warmbrown-100 selection:text-warmbrown-800">
+<body class="bg-cream-100 text-warmbrown-700 antialiased min-h-screen flex flex-col justify-between">
 
     <!-- NAVBAR -->
-    <header class="sticky top-0 z-50 bg-cream-100/80 backdrop-blur-md border-b border-warmbrown-300/20">
+    <header class="sticky top-0 z-50 bg-cream-100/90 backdrop-blur-md border-b border-warmbrown-300/20">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-20">
                 <a href="#" class="flex items-center gap-3">
@@ -41,322 +41,459 @@
                     </div>
                     <span class="font-bold text-xl text-warmbrown-800">MindTrack <span class="text-warmbrown-500 font-semibold">Teen</span></span>
                 </a>
-                <nav class="hidden md:flex items-center gap-6 text-sm font-semibold text-warmbrown-700">
-                    <a href="#fitur-tracker" class="hover:text-warmbrown-500 transition-colors">Input Mood</a>
-                    <a href="#ringkasan" class="hover:text-warmbrown-500 transition-colors">Ringkasan</a>
-                    <a href="#grafik" class="hover:text-warmbrown-500 transition-colors">Pantau Tren</a>
-                    <a href="#tips" class="hover:text-warmbrown-500 transition-colors">Tips Relaksasi</a>
+
+                <!-- Nav Menu (Aktif setelah Login) -->
+                <nav id="mainNav" class="hidden md:flex items-center gap-6 text-sm font-semibold text-warmbrown-700">
+                    <button onclick="switchTab('profilView')" class="hover:text-warmbrown-500">Profil Saya</button>
+                    <button onclick="switchTab('skriningView')" class="hover:text-warmbrown-500">Skrining Mental</button>
+                    <button onclick="switchTab('riwayatView')" class="hover:text-warmbrown-500">Riwayat & Perkembangan</button>
+                    <button onclick="switchTab('connectView')" class="hover:text-warmbrown-500 text-warmbrown-600 font-bold">Professional Connect</button>
                 </nav>
-                <a href="#fitur-tracker" class="px-5 py-2.5 rounded-full bg-warmbrown-600 text-cream-50 font-semibold text-sm hover:bg-warmbrown-700 transition-all">
-                    Coba Sekarang
-                </a>
+
+                <div id="userBadge" class="hidden items-center gap-3">
+                    <span id="navUserName" class="text-xs font-bold text-warmbrown-800 bg-cream-200 px-3 py-1.5 rounded-full"></span>
+                    <button onclick="logout()" class="text-xs text-red-600 font-semibold hover:underline">Keluar</button>
+                </div>
             </div>
         </div>
     </header>
 
-    <!-- HERO SECTION + INPUT MOOD -->
-    <section id="fitur-tracker" class="relative pt-12 pb-16 overflow-hidden">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid lg:grid-cols-12 gap-12 items-center">
-                
-                <!-- Left Content -->
-                <div class="lg:col-span-6 space-y-6 text-center lg:text-left">
-                    <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cream-200/80 border border-warmbrown-300/30 text-warmbrown-600 text-xs sm:text-sm font-semibold">
-                        <i data-lucide="sparkles" class="w-4 h-4 text-warmbrown-500"></i>
-                        <span>Ruang Aman Digital untuk Remaja Indonesia</span>
+    <main class="max-w-4xl mx-auto px-4 py-8 w-full flex-1">
+
+        <!-- 1. MODUL REGISTRASI / LOGIN -->
+        <section id="authView" class="tab-content active">
+            <div class="max-w-md mx-auto bg-cream-50 p-8 rounded-3xl border border-warmbrown-300/30 shadow-xl space-y-6">
+                <div class="text-center space-y-2">
+                    <h2 class="text-2xl font-bold text-warmbrown-800">Selamat Datang</h2>
+                    <p class="text-xs text-warmbrown-600">Daftar atau masuk untuk memulai skrining kesehatan mental</p>
+                </div>
+
+                <form onsubmit="handleAuth(event)" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-semibold mb-1 text-warmbrown-800">Email atau Nomor Telepon</label>
+                        <input type="text" id="authContact" required placeholder="contoh@email.com / 08123456789" class="w-full px-4 py-3 text-sm rounded-xl border border-warmbrown-300/40 bg-cream-100 text-warmbrown-800 focus:outline-none focus:border-warmbrown-600">
                     </div>
-                    <h1 class="text-3xl sm:text-5xl font-extrabold text-warmbrown-800 leading-tight">
-                        Pahami Perasaanmu, Ambil Kendali atas Kesehatan Mentalmu
-                    </h1>
-                    <p class="text-base sm:text-lg text-warmbrown-700/80">
-                        Catat perasaanmu harian, pantau persentase emosimu, dan dapatkan tips khusus yang disesuaikan dengan kondisi mentalmu saat ini.
-                    </p>
+                    <div>
+                        <label class="block text-xs font-semibold mb-1 text-warmbrown-800">Kata Sandi</label>
+                        <input type="password" id="authPassword" required placeholder="••••••••" class="w-full px-4 py-3 text-sm rounded-xl border border-warmbrown-300/40 bg-cream-100 text-warmbrown-800 focus:outline-none focus:border-warmbrown-600">
+                    </div>
+                    <button type="submit" class="w-full py-3.5 rounded-xl bg-warmbrown-600 hover:bg-warmbrown-700 text-cream-50 font-bold text-sm transition-all shadow-md">
+                        Masuk / Daftar Akun
+                    </button>
+                </form>
+            </div>
+        </section>
+
+        <!-- 2. MODUL KELENGKAPAN PROFIL -->
+        <section id="profilView" class="tab-content">
+            <div class="bg-cream-50 p-6 sm:p-8 rounded-3xl border border-warmbrown-300/30 shadow-xl space-y-6">
+                <div class="border-b border-warmbrown-300/20 pb-4">
+                    <h2 class="text-xl font-bold text-warmbrown-800">Lengkapi Profil Pengguna</h2>
+                    <p class="text-xs text-warmbrown-600">Informasi ini membantu kami menganalisis hasil skrining secara akurat.</p>
                 </div>
 
-                <!-- Right Form Input -->
-                <div class="lg:col-span-6">
-                    <div class="bg-gradient-to-br from-cream-50 to-cream-200 p-6 sm:p-8 rounded-3xl border border-warmbrown-300/30 shadow-xl space-y-6">
-                        
-                        <div class="flex items-center justify-between border-b border-warmbrown-300/20 pb-4">
-                            <div class="flex items-center gap-3">
-                                <div class="w-10 h-10 rounded-full bg-warmbrown-500/20 flex items-center justify-center text-warmbrown-600">
-                                    <i data-lucide="smile" class="w-6 h-6"></i>
-                                </div>
-                                <div>
-                                    <div class="text-xs text-warmbrown-600 font-medium">Jurnal Harian</div>
-                                    <div class="text-sm font-bold text-warmbrown-800">Bagaimana perasaanmu saat ini?</div>
-                                </div>
-                            </div>
-                            <span class="text-xs px-2.5 py-1 rounded-full bg-warmbrown-100 text-warmbrown-700 font-semibold">Input Data</span>
-                        </div>
+                <form onsubmit="saveProfile(event)" class="grid sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold mb-1">Nama Lengkap</label>
+                        <input type="text" id="profNama" required class="w-full px-4 py-2.5 text-sm rounded-xl border border-warmbrown-300/40 bg-cream-100">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold mb-1">Usia (Tahun)</label>
+                        <input type="number" id="profUsia" required min="10" max="25" class="w-full px-4 py-2.5 text-sm rounded-xl border border-warmbrown-300/40 bg-cream-100">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold mb-1">Jenis Kelamin</label>
+                        <select id="profGender" required class="w-full px-4 py-2.5 text-sm rounded-xl border border-warmbrown-300/40 bg-cream-100">
+                            <option value="">Pilih...</option>
+                            <option value="Laki-laki">Laki-laki</option>
+                            <option value="Perempuan">Perempuan</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold mb-1">Tingkat Pendidikan</label>
+                        <select id="profPendidikan" required class="w-full px-4 py-2.5 text-sm rounded-xl border border-warmbrown-300/40 bg-cream-100">
+                            <option value="">Pilih...</option>
+                            <option value="SMP">SMP / Sederajat</option>
+                            <option value="SMA">SMA / SMK / Sederajat</option>
+                            <option value="Perguruan Tinggi">Perguruan Tinggi</option>
+                        </select>
+                    </div>
+                    <div class="sm:col-span-2">
+                        <label class="block text-xs font-semibold mb-1">Informasi Pendukung / Keluhan Utama</label>
+                        <textarea id="profInfo" rows="2" placeholder="Sampaikan kendala psikologis yang paling sering kamu rasakan..." class="w-full px-4 py-2.5 text-sm rounded-xl border border-warmbrown-300/40 bg-cream-100"></textarea>
+                    </div>
+                    <div class="sm:col-span-2">
+                        <button type="submit" class="w-full py-3 rounded-xl bg-warmbrown-600 text-cream-50 font-bold text-sm hover:bg-warmbrown-700 transition-all">
+                            Simpan Profil & Lanjut ke Skrining
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </section>
 
-                        <!-- Mood Selector -->
-                        <div class="grid grid-cols-4 gap-3">
-                            <button onclick="selectMood('Senang', '😊')" class="mood-btn bg-cream-50 p-3 rounded-2xl border border-warmbrown-300/20 text-center hover:border-warmbrown-500 transition-all">
-                                <div class="text-3xl mb-1">😊</div>
-                                <div class="text-xs font-bold text-warmbrown-700">Senang</div>
-                            </button>
-                            <button onclick="selectMood('Tenang', '😌')" class="mood-btn bg-cream-50 p-3 rounded-2xl border border-warmbrown-300/20 text-center hover:border-warmbrown-500 transition-all">
-                                <div class="text-3xl mb-1">😌</div>
-                                <div class="text-xs font-bold text-warmbrown-700">Tenang</div>
-                            </button>
-                            <button onclick="selectMood('Sedih', '😔')" class="mood-btn bg-cream-50 p-3 rounded-2xl border border-warmbrown-300/20 text-center hover:border-warmbrown-500 transition-all">
-                                <div class="text-3xl mb-1">😔</div>
-                                <div class="text-xs font-bold text-warmbrown-700">Sedih</div>
-                            </button>
-                            <button onclick="selectMood('Cemas', '🤯')" class="mood-btn bg-cream-50 p-3 rounded-2xl border border-warmbrown-300/20 text-center hover:border-warmbrown-500 transition-all">
-                                <div class="text-3xl mb-1">🤯</div>
-                                <div class="text-xs font-bold text-warmbrown-700">Cemas</div>
-                            </button>
-                        </div>
+        <!-- 3. MODUL SKRINING KESEHATAN MENTAL (PHQ-9 & GAD-7 COMBINED) -->
+        <section id="skriningView" class="tab-content">
+            <div class="bg-cream-50 p-6 sm:p-8 rounded-3xl border border-warmbrown-300/30 shadow-xl space-y-6">
+                <div class="border-b border-warmbrown-300/20 pb-4">
+                    <span class="text-xs px-2.5 py-1 rounded-full bg-warmbrown-100 text-warmbrown-700 font-semibold">Instrumen Tervalidasi</span>
+                    <h2 class="text-xl font-bold text-warmbrown-800 mt-2">Skrining Stres, Kecemasan, & Depresi</h2>
+                    <p class="text-xs text-warmbrown-600">Dalam 2 minggu terakhir, seberapa sering kamu terganggu oleh masalah berikut?</p>
+                </div>
 
-                        <!-- Form Input -->
-                        <div class="space-y-3">
-                            <textarea id="noteInput" rows="2" placeholder="Tulis hal yang membuatmu merasa begitu hari ini..." class="w-full px-4 py-3 text-sm rounded-xl border border-warmbrown-300/40 bg-cream-50 text-warmbrown-800 focus:outline-none focus:border-warmbrown-600 resize-none"></textarea>
-                            <button onclick="saveMood()" class="w-full py-3.5 rounded-xl bg-warmbrown-600 hover:bg-warmbrown-700 text-cream-50 font-bold text-sm transition-all shadow-md">
-                                Simpan Emosi Hari Ini
-                            </button>
+                <form onsubmit="calculateScreening(event)" class="space-y-6">
+                    <!-- Pertanyaan 1 -->
+                    <div class="space-y-2">
+                        <p class="text-sm font-semibold text-warmbrown-800">1. Kurang berminat atau tidak menikmati melakukan berbagai hal?</p>
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
+                            <label class="p-3 bg-cream-100 rounded-xl border cursor-pointer hover:border-warmbrown-500"><input type="radio" name="q1" value="0" required> Tidak pernah</label>
+                            <label class="p-3 bg-cream-100 rounded-xl border cursor-pointer hover:border-warmbrown-500"><input type="radio" name="q1" value="1"> Beberapa hari</label>
+                            <label class="p-3 bg-cream-100 rounded-xl border cursor-pointer hover:border-warmbrown-500"><input type="radio" name="q1" value="2"> > Separuh hari</label>
+                            <label class="p-3 bg-cream-100 rounded-xl border cursor-pointer hover:border-warmbrown-500"><input type="radio" name="q1" value="3"> Hampir tiap hari</label>
                         </div>
+                    </div>
 
+                    <!-- Pertanyaan 2 -->
+                    <div class="space-y-2">
+                        <p class="text-sm font-semibold text-warmbrown-800">2. Merasa murung, muram, atau putus asa?</p>
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
+                            <label class="p-3 bg-cream-100 rounded-xl border cursor-pointer hover:border-warmbrown-500"><input type="radio" name="q2" value="0" required> Tidak pernah</label>
+                            <label class="p-3 bg-cream-100 rounded-xl border cursor-pointer hover:border-warmbrown-500"><input type="radio" name="q2" value="1"> Beberapa hari</label>
+                            <label class="p-3 bg-cream-100 rounded-xl border cursor-pointer hover:border-warmbrown-500"><input type="radio" name="q2" value="2"> > Separuh hari</label>
+                            <label class="p-3 bg-cream-100 rounded-xl border cursor-pointer hover:border-warmbrown-500"><input type="radio" name="q2" value="3"> Hampir tiap hari</label>
+                        </div>
+                    </div>
+
+                    <!-- Pertanyaan 3 -->
+                    <div class="space-y-2">
+                        <p class="text-sm font-semibold text-warmbrown-800">3. Merasa gugup, cemas, atau gelisah berlebihan?</p>
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
+                            <label class="p-3 bg-cream-100 rounded-xl border cursor-pointer hover:border-warmbrown-500"><input type="radio" name="q3" value="0" required> Tidak pernah</label>
+                            <label class="p-3 bg-cream-100 rounded-xl border cursor-pointer hover:border-warmbrown-500"><input type="radio" name="q3" value="1"> Beberapa hari</label>
+                            <label class="p-3 bg-cream-100 rounded-xl border cursor-pointer hover:border-warmbrown-500"><input type="radio" name="q3" value="2"> > Separuh hari</label>
+                            <label class="p-3 bg-cream-100 rounded-xl border cursor-pointer hover:border-warmbrown-500"><input type="radio" name="q3" value="3"> Hampir tiap hari</label>
+                        </div>
+                    </div>
+
+                    <!-- Pertanyaan 4 -->
+                    <div class="space-y-2">
+                        <p class="text-sm font-semibold text-warmbrown-800">4. Sulit menghentikan atau mengendalikan rasa khawatir?</p>
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
+                            <label class="p-3 bg-cream-100 rounded-xl border cursor-pointer hover:border-warmbrown-500"><input type="radio" name="q4" value="0" required> Tidak pernah</label>
+                            <label class="p-3 bg-cream-100 rounded-xl border cursor-pointer hover:border-warmbrown-500"><input type="radio" name="q4" value="1"> Beberapa hari</label>
+                            <label class="p-3 bg-cream-100 rounded-xl border cursor-pointer hover:border-warmbrown-500"><input type="radio" name="q4" value="2"> > Separuh hari</label>
+                            <label class="p-3 bg-cream-100 rounded-xl border cursor-pointer hover:border-warmbrown-500"><input type="radio" name="q4" value="3"> Hampir tiap hari</label>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="w-full py-3.5 rounded-xl bg-warmbrown-600 text-cream-50 font-bold text-sm hover:bg-warmbrown-700 transition-all shadow-md">
+                        Proses Hasil Skrining Saya
+                    </button>
+                </form>
+            </div>
+        </section>
+
+        <!-- 4. HASIL SKRINING & NOTIFIKASI TINGKAT RISIKO -->
+        <section id="hasilView" class="tab-content">
+            <div id="riskCard" class="p-6 sm:p-8 rounded-3xl border shadow-xl space-y-6">
+                <div class="flex items-center justify-between border-b pb-4">
+                    <div>
+                        <span class="text-xs font-bold uppercase tracking-wider text-warmbrown-600">Hasil Interpretasi Otomatis</span>
+                        <h2 id="riskTitle" class="text-2xl font-black mt-1">--</h2>
+                    </div>
+                    <div id="scoreBadge" class="text-2xl font-black px-4 py-2 rounded-2xl bg-white shadow-sm">
+                        Skor: <span id="scoreNum">0</span>
                     </div>
                 </div>
 
-            </div>
-        </div>
-    </section>
+                <p id="riskDesc" class="text-sm leading-relaxed">--</p>
 
-    <!-- RINGKASAN & STATISTIK REAL-TIME -->
-    <section id="ringkasan" class="py-12 bg-cream-200/50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 class="text-2xl font-bold text-warmbrown-800 mb-6 flex items-center gap-2">
-                <i data-lucide="bar-chart-2" class="w-6 h-6 text-warmbrown-600"></i> Ringkasan Emosi Kamu
-            </h2>
+                <!-- Notifikasi Tindakan Berdasarkan Risiko -->
+                <div id="riskActionBox" class="p-5 rounded-2xl space-y-3">
+                    <!-- Diisi lewat JS -->
+                </div>
 
-            <div class="grid md:grid-cols-3 gap-6">
-                <!-- Stat Card 1 -->
-                <div class="bg-cream-50 p-6 rounded-2xl border border-warmbrown-300/20 shadow-sm">
-                    <div class="text-xs text-warmbrown-600 font-semibold">Total Catatan Emosi</div>
-                    <div id="statTotal" class="text-3xl font-extrabold text-warmbrown-800 mt-2">0</div>
-                    <p class="text-xs text-warmbrown-700/70 mt-1">Sesi tercatat di peramban ini</p>
-                </div>
-                <!-- Stat Card 2 -->
-                <div class="bg-cream-50 p-6 rounded-2xl border border-warmbrown-300/20 shadow-sm">
-                    <div class="text-xs text-warmbrown-600 font-semibold">Emosi Dominan</div>
-                    <div id="statDominant" class="text-3xl font-extrabold text-warmbrown-800 mt-2">-</div>
-                    <p class="text-xs text-warmbrown-700/70 mt-1">Perasaan yang paling sering dirasakan</p>
-                </div>
-                <!-- Stat Card 3 -->
-                <div class="bg-cream-50 p-6 rounded-2xl border border-warmbrown-300/20 shadow-sm">
-                    <div class="text-xs text-warmbrown-600 font-semibold">Tingkat Stabilitas</div>
-                    <div id="statStability" class="text-3xl font-extrabold text-warmbrown-800 mt-2">0%</div>
-                    <p class="text-xs text-warmbrown-700/70 mt-1">Rasio perasaan positif (Senang & Tenang)</p>
+                <div class="flex gap-4">
+                    <button onclick="switchTab('riwayatView')" class="w-full py-3 rounded-xl border border-warmbrown-600 text-warmbrown-800 font-bold text-xs hover:bg-cream-200">
+                        Lihat Riwayat & Perkembangan
+                    </button>
+                    <button onclick="switchTab('connectView')" class="w-full py-3 rounded-xl bg-warmbrown-600 text-cream-50 font-bold text-xs hover:bg-warmbrown-700">
+                        Buka Professional Connect
+                    </button>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- RIWAYAT & PANTAU TREN -->
-    <section id="grafik" class="py-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
-            <div class="flex items-center justify-between">
+        <!-- 5. FITUR PROFESSIONAL CONNECT (CHAT, VOICE, VIDEO CALL) -->
+        <section id="connectView" class="tab-content">
+            <div class="bg-cream-50 p-6 sm:p-8 rounded-3xl border border-warmbrown-300/30 shadow-xl space-y-6">
                 <div>
-                    <h2 class="text-2xl font-bold text-warmbrown-800">Pantau Riwayat Emosi</h2>
-                    <p class="text-sm text-warmbrown-600">Daftar seluruh jurnal emosi yang kamu masukkan</p>
+                    <h2 class="text-xl font-bold text-warmbrown-800">Professional Connect</h2>
+                    <p class="text-xs text-warmbrown-600">Konsultasi langsung dengan Psikolog dan Konselor Profesional terlisensi.</p>
                 </div>
-                <button onclick="clearHistory()" class="px-4 py-2 rounded-lg text-xs font-semibold text-red-600 bg-red-50 hover:bg-red-100 transition-colors">
-                    Hapus Semua Data
-                </button>
+
+                <div class="grid sm:grid-cols-2 gap-4">
+                    <!-- Dokter 1 -->
+                    <div class="bg-cream-100 p-4 rounded-2xl border border-warmbrown-300/20 flex flex-col justify-between space-y-3">
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 rounded-full bg-warmbrown-300 flex items-center justify-center font-bold text-warmbrown-800">PS</div>
+                            <div>
+                                <h4 class="font-bold text-sm text-warmbrown-800">Siti Rahma, M.Psi., Psikolog</h4>
+                                <p class="text-[11px] text-warmbrown-600">Spesialis Remaja & Kecemasan</p>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-3 gap-2">
+                            <button onclick="startConsult('Chat', 'Siti Rahma, M.Psi.')" class="py-2 bg-cream-50 hover:bg-warmbrown-600 hover:text-white rounded-lg text-xs font-semibold border border-warmbrown-300/30 flex justify-center items-center gap-1">
+                                <i data-lucide="message-square" class="w-3.5 h-3.5"></i> Chat
+                            </button>
+                            <button onclick="startConsult('Voice Call', 'Siti Rahma, M.Psi.')" class="py-2 bg-cream-50 hover:bg-warmbrown-600 hover:text-white rounded-lg text-xs font-semibold border border-warmbrown-300/30 flex justify-center items-center gap-1">
+                                <i data-lucide="phone" class="w-3.5 h-3.5"></i> Voice
+                            </button>
+                            <button onclick="startConsult('Video Call', 'Siti Rahma, M.Psi.')" class="py-2 bg-cream-50 hover:bg-warmbrown-600 hover:text-white rounded-lg text-xs font-semibold border border-warmbrown-300/30 flex justify-center items-center gap-1">
+                                <i data-lucide="video" class="w-3.5 h-3.5"></i> Video
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Dokter 2 -->
+                    <div class="bg-cream-100 p-4 rounded-2xl border border-warmbrown-300/20 flex flex-col justify-between space-y-3">
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 rounded-full bg-warmbrown-300 flex items-center justify-center font-bold text-warmbrown-800">AH</div>
+                            <div>
+                                <h4 class="font-bold text-sm text-warmbrown-800">Ahmad Hidayat, S.Psi.</h4>
+                                <p class="text-[11px] text-warmbrown-600">Konselor Bimbingan Remaja</p>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-3 gap-2">
+                            <button onclick="startConsult('Chat', 'Ahmad Hidayat, S.Psi.')" class="py-2 bg-cream-50 hover:bg-warmbrown-600 hover:text-white rounded-lg text-xs font-semibold border border-warmbrown-300/30 flex justify-center items-center gap-1">
+                                <i data-lucide="message-square" class="w-3.5 h-3.5"></i> Chat
+                            </button>
+                            <button onclick="startConsult('Voice Call', 'Ahmad Hidayat, S.Psi.')" class="py-2 bg-cream-50 hover:bg-warmbrown-600 hover:text-white rounded-lg text-xs font-semibold border border-warmbrown-300/30 flex justify-center items-center gap-1">
+                                <i data-lucide="phone" class="w-3.5 h-3.5"></i> Voice
+                            </button>
+                            <button onclick="startConsult('Video Call', 'Ahmad Hidayat, S.Psi.')" class="py-2 bg-cream-50 hover:bg-warmbrown-600 hover:text-white rounded-lg text-xs font-semibold border border-warmbrown-300/30 flex justify-center items-center gap-1">
+                                <i data-lucide="video" class="w-3.5 h-3.5"></i> Video
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
+        </section>
 
-            <!-- List Catatan -->
-            <div id="historyList" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                <!-- Data akan dimuat otomatis lewat JavaScript -->
+        <!-- 6. RIWAYAT & MONITORING PERKEMBANGAN -->
+        <section id="riwayatView" class="tab-content">
+            <div class="bg-cream-50 p-6 sm:p-8 rounded-3xl border border-warmbrown-300/30 shadow-xl space-y-6">
+                <div>
+                    <h2 class="text-xl font-bold text-warmbrown-800">Riwayat Skrining & Konsultasi</h2>
+                    <p class="text-xs text-warmbrown-600">Pantau perkembangan kesehatan mentalmu yang tersimpan secara aman.</p>
+                </div>
+
+                <div class="space-y-4">
+                    <h3 class="text-sm font-bold text-warmbrown-800 border-b pb-2">Catatan Skrining Berkala</h3>
+                    <div id="screeningHistoryList" class="space-y-2 text-xs">
+                        <!-- Dimuat lewat JS -->
+                    </div>
+
+                    <h3 class="text-sm font-bold text-warmbrown-800 border-b pb-2 pt-4">Riwayat Sesi Konsultasi</h3>
+                    <div id="consultHistoryList" class="space-y-2 text-xs">
+                        <!-- Dimuat lewat JS -->
+                    </div>
+                </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- TIPS RELAKSASI DINAMIS -->
-    <section id="tips" class="py-12 bg-cream-200/50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
-            <h2 class="text-2xl font-bold text-warmbrown-800 flex items-center gap-2">
-                <i data-lucide="lightbulb" class="w-6 h-6 text-warmbrown-600"></i> Rekomendasi & Tips Hari Ini
-            </h2>
+    </main>
 
-            <div id="recommendationBox" class="bg-cream-50 p-6 rounded-2xl border border-warmbrown-300/30 shadow-sm">
-                <p class="text-sm text-warmbrown-700">Pilih dan simpan emosimu hari ini untuk mendapatkan saran relaksasi yang pas!</p>
-            </div>
-        </div>
-    </section>
+    <footer class="text-center py-6 text-xs text-warmbrown-600 border-t border-warmbrown-300/20">
+        © 2026 MindTrack Teen — Sistem Pemantauan Kesehatan Mental Remaja Indonesia
+    </footer>
 
-    <!-- JAVASCRIPT DINAMIS -->
+    <!-- LOGIKA APLIKASI LENGKAP -->
     <script>
         lucide.createIcons();
 
-        let selectedMoodData = { name: '', emoji: '' };
+        // System State
+        let currentUser = JSON.parse(localStorage.getItem('mindtrack_user')) || null;
 
-        // 1. Fungsi Pilih Mood
-        function selectMood(name, emoji) {
-            selectedMoodData = { name, emoji };
-            document.querySelectorAll('.mood-btn').forEach(btn => {
-                btn.classList.remove('border-2', 'border-warmbrown-600', 'bg-cream-200');
-            });
-            event.currentTarget.classList.add('border-2', 'border-warmbrown-600', 'bg-cream-200');
+        // Init App On Load
+        window.onload = function() {
+            if (currentUser) {
+                document.getElementById('mainNav').classList.remove('hidden');
+                document.getElementById('userBadge').classList.remove('hidden');
+                document.getElementById('userBadge').classList.add('flex');
+                document.getElementById('navUserName').innerText = currentUser.name || currentUser.contact;
+                switchTab('profilView');
+                loadProfileData();
+                renderHistories();
+            } else {
+                switchTab('authView');
+            }
+        };
+
+        // Navigation Switcher
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
         }
 
-        // 2. Simpan Data ke LocalStorage
-        function saveMood() {
-            const note = document.getElementById('noteInput').value;
+        // 1. Auth Handler
+        function handleAuth(e) {
+            e.preventDefault();
+            const contact = document.getElementById('authContact').value;
+            currentUser = { contact: contact, name: '' };
+            localStorage.setItem('mindtrack_user', JSON.stringify(currentUser));
+            
+            document.getElementById('mainNav').classList.remove('hidden');
+            document.getElementById('userBadge').classList.remove('hidden');
+            document.getElementById('userBadge').classList.add('flex');
+            document.getElementById('navUserName').innerText = contact;
+            
+            switchTab('profilView');
+        }
 
-            if (!selectedMoodData.name) {
-                alert('Silakan pilih salah satu emoji emosi terlebih dahulu!');
-                return;
+        function logout() {
+            localStorage.removeItem('mindtrack_user');
+            location.reload();
+        }
+
+        // 2. Profile Handler
+        function saveProfile(e) {
+            e.preventDefault();
+            currentUser.name = document.getElementById('profNama').value;
+            currentUser.age = document.getElementById('profUsia').value;
+            currentUser.gender = document.getElementById('profGender').value;
+            currentUser.education = document.getElementById('profPendidikan').value;
+            currentUser.info = document.getElementById('profInfo').value;
+
+            localStorage.setItem('mindtrack_user', JSON.stringify(currentUser));
+            document.getElementById('navUserName').innerText = currentUser.name;
+            alert('Profil berhasil diperbarui!');
+            switchTab('skriningView');
+        }
+
+        function loadProfileData() {
+            if (currentUser.name) document.getElementById('profNama').value = currentUser.name;
+            if (currentUser.age) document.getElementById('profUsia').value = currentUser.age;
+            if (currentUser.gender) document.getElementById('profGender').value = currentUser.gender;
+            if (currentUser.education) document.getElementById('profPendidikan').value = currentUser.education;
+            if (currentUser.info) document.getElementById('profInfo').value = currentUser.info;
+        }
+
+        // 3. Screening Handler
+        function calculateScreening(e) {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            let score = 0;
+            for (let value of formData.values()) {
+                score += parseInt(value);
             }
 
-            const newEntry = {
-                id: Date.now(),
-                mood: selectedMoodData.name,
-                emoji: selectedMoodData.emoji,
-                note: note || 'Tanpa catatan tambahan',
-                date: new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })
-            };
+            let riskLevel = '';
+            let riskTitle = '';
+            let riskDesc = '';
+            let actionHtml = '';
+            let bgClass = '';
 
-            let history = JSON.parse(localStorage.getItem('mindtrack_full_data')) || [];
-            history.unshift(newEntry);
-            localStorage.setItem('mindtrack_full_data', JSON.stringify(history));
-
-            // Reset Input
-            document.getElementById('noteInput').value = '';
-            selectedMoodData = { name: '', emoji: '' };
-            document.querySelectorAll('.mood-btn').forEach(btn => btn.classList.remove('border-2', 'border-warmbrown-600', 'bg-cream-200'));
-
-            // Update UI
-            refreshApp();
-        }
-
-        // 3. Render Riwayat
-        function renderHistory(history) {
-            const historyList = document.getElementById('historyList');
-
-            if (history.length === 0) {
-                historyList.innerHTML = `
-                    <div class="col-span-full text-center py-8 text-warmbrown-600 italic text-sm">
-                        Belum ada riwayat emosi. Mulai isi jurnal emosi kamu di atas!
+            if (score <= 4) {
+                riskLevel = 'Rendah';
+                riskTitle = 'Risiko Rendah / Kondisi Stabil';
+                riskDesc = 'Kondisi psikologis kamu tergolong baik dan stabil. Pertahankan pola hidup sehat dan pola pikir positif.';
+                bgClass = 'bg-green-50 border-green-200 text-green-800';
+                actionHtml = `<div class="bg-green-100/60 p-3 rounded-xl text-xs"><strong>Rekomendasi:</strong> Lakukan refleksi mandiri secara berkala.</div>`;
+            } else if (score <= 8) {
+                riskLevel = 'Sedang';
+                riskTitle = 'Risiko Sedang (Stres / Kecemasan Ringan)';
+                riskDesc = 'Kamu menunjukkan gejala stres atau kecemasan tingkat sedang yang berpotensi mengganggu aktivitas harian.';
+                bgClass = 'bg-yellow-50 border-yellow-200 text-yellow-800';
+                actionHtml = `
+                    <div class="bg-yellow-100 p-4 rounded-xl text-xs space-y-2">
+                        <strong class="block text-yellow-900">⚠️ Notifikasi Rekomendasi:</strong>
+                        <p>Sistem menyarankan kamu untuk menjadwalkan konsultasi dengan konselor atau psikolog melalui fitur <strong>Professional Connect</strong> untuk mencegah kondisi semakin memburuk.</p>
                     </div>
-                `;
-                return;
-            }
-
-            historyList.innerHTML = history.map(item => `
-                <div class="bg-cream-50 p-5 rounded-2xl border border-warmbrown-300/20 shadow-sm flex flex-col justify-between space-y-3">
-                    <div class="flex justify-between items-start">
-                        <div class="flex items-center gap-3">
-                            <span class="text-3xl">${item.emoji}</span>
-                            <div>
-                                <h4 class="font-bold text-warmbrown-800 text-base">${item.mood}</h4>
-                                <span class="text-[11px] text-warmbrown-500">${item.date}</span>
-                            </div>
-                        </div>
-                        <button onclick="deleteSingle(${item.id})" class="text-warmbrown-300 hover:text-red-500 transition-colors">
-                            <i data-lucide="trash-2" class="w-4 h-4"></i>
-                        </button>
-                    </div>
-                    <p class="text-xs text-warmbrown-700 bg-cream-100/60 p-3 rounded-xl border border-warmbrown-300/10">
-                        "${item.note}"
-                    </p>
-                </div>
-            `).join('');
-
-            lucide.createIcons();
-        }
-
-        // 4. Update Statistik (Ringkasan)
-        function updateStats(history) {
-            const total = history.length;
-            document.getElementById('statTotal').innerText = total;
-
-            if (total === 0) {
-                document.getElementById('statDominant').innerText = '-';
-                document.getElementById('statStability').innerText = '0%';
-                return;
-            }
-
-            // Hitung emosi dominan
-            const counts = {};
-            let positiveCount = 0;
-
-            history.forEach(item => {
-                counts[item.mood] = (counts[item.mood] || 0) + 1;
-                if (item.mood === 'Senang' || item.mood === 'Tenang') {
-                    positiveCount++;
-                }
-            });
-
-            let dominant = Object.keys(counts).reduce((a, b) => counts[a] > counts[b] ? a : b);
-            document.getElementById('statDominant').innerText = dominant;
-
-            // Hitung persentase stabilitas
-            const stabilityRate = Math.round((positiveCount / total) * 100);
-            document.getElementById('statStability').innerText = `${stabilityRate}%`;
-        }
-
-        // 5. Update Rekomendasi / Tips
-        function updateTips(history) {
-            const box = document.getElementById('recommendationBox');
-
-            if (history.length === 0) {
-                box.innerHTML = `<p class="text-sm text-warmbrown-700">Pilih dan simpan emosimu hari ini untuk mendapatkan saran relaksasi yang pas!</p>`;
-                return;
-            }
-
-            const latestMood = history[0].mood;
-
-            if (latestMood === 'Cemas') {
-                box.innerHTML = `
-                    <h3 class="font-bold text-warmbrown-800 text-base mb-2">💡 Tips saat merasa Cemas:</h3>
-                    <p class="text-sm text-warmbrown-700">Coba teknik pernapasan 4-7-8: Hirup nafas selama 4 detik, tahan selama 7 detik, lalu hembuskan perlahan selama 8 detik. Ulangi 3 kali untuk menenangkan pikiran.</p>
-                `;
-            } else if (latestMood === 'Sedih') {
-                box.innerHTML = `
-                    <h3 class="font-bold text-warmbrown-800 text-base mb-2">💡 Tips saat merasa Sedih:</h3>
-                    <p class="text-sm text-warmbrown-700">Tidak apa-apa untuk merasa sedih. Ambil jeda istirahat, dengarkan lagu favoritmu, atau ceritakan perasaan ini kepada teman dekat/keluarga yang kamu percayai.</p>
-                `;
-            } else if (latestMood === 'Senang') {
-                box.innerHTML = `
-                    <h3 class="font-bold text-warmbrown-800 text-base mb-2">🌟 Tips saat merasa Senang:</h3>
-                    <p class="text-sm text-warmbrown-700">Bagikan energi positif ini! Tuliskan 3 hal yang paling kamu syukuri hari ini di dalam jurnalmu agar rasa bahagia ini bertahan lama.</p>
                 `;
             } else {
-                box.innerHTML = `
-                    <h3 class="font-bold text-warmbrown-800 text-base mb-2">🌿 Tips untuk Menjaga Ketenangan:</h3>
-                    <p class="text-sm text-warmbrown-700">Pertahankan pikiran jernih ini dengan minum air putih yang cukup dan melakukan peretangan singkat selama 5 menit.</p>
+                riskLevel = 'Tinggi';
+                riskTitle = 'Risiko Tinggi (Membutuhkan Penanganan Segera)';
+                riskDesc = 'Tingkat indikasi kecemasan/depresi kamu cukup tinggi. Sangat disarankan untuk segera terhubung dengan ahli medis/psikolog.';
+                bgClass = 'bg-red-50 border-red-200 text-red-800';
+                actionHtml = `
+                    <div class="bg-red-100 p-4 rounded-xl text-xs space-y-2 border border-red-300">
+                        <strong class="block text-red-900 text-sm">🚨 PERINGATAN RISIKO TINGGI:</strong>
+                        <p>Segera hubungi psikolog/ahli terapi melalui fitur Chat, Voice Call, atau Video Call di platform ini.</p>
+                        <p class="font-bold">Rujukan Faskes: Jika dalam keadaan darurat, segera kunjungi Puskemas atau Rumah Sakit terdekat.</p>
+                    </div>
                 `;
             }
+
+            // Render Card Hasil
+            const card = document.getElementById('riskCard');
+            card.className = `p-6 sm:p-8 rounded-3xl border shadow-xl space-y-6 ${bgClass}`;
+            document.getElementById('riskTitle').innerText = riskTitle;
+            document.getElementById('scoreNum').innerText = score;
+            document.getElementById('riskDesc').innerText = riskDesc;
+            document.getElementById('riskActionBox').innerHTML = actionHtml;
+
+            // Simpan Riwayat Skrining
+            let history = JSON.parse(localStorage.getItem('mindtrack_screenings')) || [];
+            history.unshift({
+                date: new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }),
+                score: score,
+                risk: riskLevel
+            });
+            localStorage.setItem('mindtrack_screenings', JSON.stringify(history));
+
+            renderHistories();
+            switchTab('hasilView');
         }
 
-        // 6. Hapus Data Tunggal / Semua
-        function deleteSingle(id) {
-            let history = JSON.parse(localStorage.getItem('mindtrack_full_data')) || [];
-            history = history.filter(item => item.id !== id);
-            localStorage.setItem('mindtrack_full_data', JSON.stringify(history));
-            refreshApp();
+        // 4. Consultation Handler
+        function startConsult(type, doctorName) {
+            alert(`Memulai sesi ${type} dengan ${doctorName}...\n(Sistem akan menghubungkan ke ruang panggilan/chat aman)`);
+            
+            let consultHistory = JSON.parse(localStorage.getItem('mindtrack_consults')) || [];
+            consultHistory.unshift({
+                date: new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }),
+                doctor: doctorName,
+                method: type
+            });
+            localStorage.setItem('mindtrack_consults', JSON.stringify(consultHistory));
+            
+            renderHistories();
         }
 
-        function clearHistory() {
-            if (confirm('Apakah kamu yakin ingin menghapus seluruh data catatan emosi?')) {
-                localStorage.removeItem('mindtrack_full_data');
-                refreshApp();
+        // 5. Render History Lists
+        function renderHistories() {
+            const screenList = document.getElementById('screeningHistoryList');
+            const consultList = document.getElementById('consultHistoryList');
+
+            let screenings = JSON.parse(localStorage.getItem('mindtrack_screenings')) || [];
+            let consults = JSON.parse(localStorage.getItem('mindtrack_consults')) || [];
+
+            if (screenings.length === 0) {
+                screenList.innerHTML = `<p class="text-warmbrown-500 italic">Belum ada riwayat skrining.</p>`;
+            } else {
+                screenList.innerHTML = screenings.map(s => `
+                    <div class="bg-cream-100 p-3 rounded-xl border border-warmbrown-300/20 flex justify-between items-center">
+                        <div>
+                            <span class="font-bold">Skor: ${s.score}</span> — Status: <span class="font-semibold">${s.risk}</span>
+                        </div>
+                        <span class="text-[10px] text-warmbrown-500">${s.date}</span>
+                    </div>
+                `).join('');
+            }
+
+            if (consults.length === 0) {
+                consultList.innerHTML = `<p class="text-warmbrown-500 italic">Belum ada riwayat konsultasi.</p>`;
+            } else {
+                consultList.innerHTML = consults.map(c => `
+                    <div class="bg-cream-100 p-3 rounded-xl border border-warmbrown-300/20 flex justify-between items-center">
+                        <div>
+                            <span class="font-bold">${c.doctor}</span> (${c.method})
+                        </div>
+                        <span class="text-[10px] text-warmbrown-500">${c.date}</span>
+                    </div>
+                `).join('');
             }
         }
-
-        // Jalankan Semuanya
-        function refreshApp() {
-            const history = JSON.parse(localStorage.getItem('mindtrack_full_data')) || [];
-            renderHistory(history);
-            updateStats(history);
-            updateTips(history);
-        }
-
-        refreshApp();
     </script>
 </body>
 </html>
