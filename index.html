@@ -30,6 +30,10 @@
         .avatar-option { transition: all 0.2s ease-in-out; }
         .avatar-option.selected { border-color: #8B5A2B; background-color: #F5EFE6; transform: scale(1.08); }
     </style>
+
+    <!-- FIREBASE SDK (COMPAT VERSION) -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
 </head>
 <body class="bg-cream-100 text-warmbrown-700 antialiased min-h-screen flex flex-col justify-between">
 
@@ -52,7 +56,7 @@
                     <button onclick="protectedNavigate('riwayatView')" class="hover:text-warmbrown-500">Riwayat & Perkembangan</button>
                     <button onclick="protectedNavigate('connectView')" class="hover:text-warmbrown-500 text-warmbrown-600 font-bold">Professional Connect</button>
                     
-                    <button id="adminNavBtn" onclick="accessAdminPanel()" class="hidden text-xs bg-red-100 text-red-700 border border-red-300 font-bold px-3 py-1.5 rounded-lg hover:bg-red-200">Panel Admin</button>
+                    <button id="adminNavBtn" onclick="accessAdminPanel()" class="hidden text-xs bg-red-100 text-red-700 border border-red-300 font-bold px-3 py-1.5 rounded-lg hover:bg-red-200">Panel Admin (Real-time)</button>
                 </nav>
 
                 <div id="authNavContainer">
@@ -74,7 +78,7 @@
             <div class="text-center space-y-4 max-w-2xl mx-auto py-8">
                 <span class="text-xs px-3 py-1 rounded-full bg-warmbrown-100 text-warmbrown-800 font-bold tracking-wide uppercase">Ruang Aman Remaja</span>
                 <h1 class="text-3xl sm:text-4xl font-extrabold text-warmbrown-800 leading-tight">Pantau dan Jaga Kesehatan Mentalmu Sejak Dini</h1>
-                <p class="text-sm text-warmbrown-600 leading-relaxed">MindTrack Teen mendeteksi keluhan psikologis secara otomatis melalui instrumen terarah yang tersambung langsung dengan konselor.</p>
+                <p class="text-sm text-warmbrown-600 leading-relaxed">MindTrack Teen mendeteksi keluhan psikologis secara otomatis melalui instrumen terarah yang tersambung langsung dengan Bot Konselor AI cerdas.</p>
                 <div class="pt-4 flex justify-center gap-4">
                     <button onclick="startAutoScreening()" class="px-6 py-3.5 rounded-2xl bg-warmbrown-600 text-cream-50 font-bold text-sm shadow-lg hover:bg-warmbrown-700 transition-all">Mulai Skrining Sekarang</button>
                     <button onclick="switchTab('authView')" class="px-6 py-3.5 rounded-2xl border border-warmbrown-600 text-warmbrown-800 font-bold text-sm hover:bg-cream-200 transition-all">Daftar Akun</button>
@@ -84,13 +88,13 @@
             <div class="grid sm:grid-cols-3 gap-6">
                 <div class="bg-cream-50 p-6 rounded-3xl border border-warmbrown-300/30 space-y-2">
                     <div class="w-10 h-10 rounded-xl bg-warmbrown-100 flex items-center justify-center text-warmbrown-700"><i data-lucide="cpu" class="w-5 h-5"></i></div>
-                    <h3 class="font-bold text-base text-warmbrown-800">Deteksi Keluhan Otomatis</h3>
-                    <p class="text-xs text-warmbrown-600">Sistem menganalisis keluhan di profilmu untuk menentukan instrumen skrining secara cerdas.</p>
+                    <h3 class="font-bold text-base text-warmbrown-800">Bot Konselor Cerdas</h3>
+                    <p class="text-xs text-warmbrown-600">Menganalisis keluhanmu dan merespons otomatis dengan solusi kontekstual yang sesuai masalahmu.</p>
                 </div>
                 <div class="bg-cream-50 p-6 rounded-3xl border border-warmbrown-300/30 space-y-2">
-                    <div class="w-10 h-10 rounded-xl bg-warmbrown-100 flex items-center justify-center text-warmbrown-700"><i data-lucide="user-check" class="w-5 h-5"></i></div>
-                    <h3 class="font-bold text-base text-warmbrown-800">Professional Connect</h3>
-                    <p class="text-xs text-warmbrown-600">Terhubung langsung melalui Roomchat, Voice Call, atau Video Call dengan suara instruksi konselor.</p>
+                    <div class="w-10 h-10 rounded-xl bg-warmbrown-100 flex items-center justify-center text-warmbrown-700"><i data-lucide="cloud" class="w-5 h-5"></i></div>
+                    <h3 class="font-bold text-base text-warmbrown-800">Pemantauan Admin Cloud</h3>
+                    <p class="text-xs text-warmbrown-600">Akses dari perangkat, lokasi, atau peramban manapun otomatis tersinkronisasi ke database cloud pusat.</p>
                 </div>
                 <div class="bg-cream-50 p-6 rounded-3xl border border-warmbrown-300/30 space-y-2">
                     <div class="w-10 h-10 rounded-xl bg-warmbrown-100 flex items-center justify-center text-warmbrown-700"><i data-lucide="line-chart" class="w-5 h-5"></i></div>
@@ -165,7 +169,7 @@
                     </div>
                     <div class="sm:col-span-2">
                         <label class="block text-xs font-semibold mb-1">Keluhan Utama / Apa yang Sedang Kamu Rasakan?</label>
-                        <textarea id="profInfo" rows="3" required placeholder="Contoh: Sering cemas berlebih kalau mau ujian, sedih tanpa alasan jelas, atau sering stres karena tugas bertumpuk..." class="w-full px-4 py-2.5 text-sm rounded-xl border border-warmbrown-300/40 bg-cream-100"></textarea>
+                        <textarea id="profInfo" rows="3" required placeholder="Contoh: Sering cemas berlebih kalau mau ujian, sedih tanpa alasan jelas, atau sering stres karena masalah keluarga..." class="w-full px-4 py-2.5 text-sm rounded-xl border border-warmbrown-300/40 bg-cream-100"></textarea>
                     </div>
                     <div class="sm:col-span-2 pt-2">
                         <button type="submit" class="w-full py-3.5 rounded-xl bg-warmbrown-600 text-cream-50 font-bold text-sm hover:bg-warmbrown-700 transition-all shadow-md">
@@ -225,8 +229,8 @@
         <section id="connectView" class="tab-content">
             <div class="bg-cream-50 p-6 sm:p-8 rounded-3xl border border-warmbrown-300/30 shadow-xl space-y-6">
                 <div>
-                    <h2 class="text-xl font-bold text-warmbrown-800">Professional Connect</h2>
-                    <p class="text-xs text-warmbrown-600">Konsultasi langsung dengan Psikolog dan Konselor Terlisensi melalui Roomchat, Telepon, atau Panggilan Video.</p>
+                    <h2 class="text-xl font-bold text-warmbrown-800">Professional Connect (AI Chatbot)</h2>
+                    <p class="text-xs text-warmbrown-600">Konsultasi langsung dengan Konselor Terlisensi melalui Bot AI interaktif, Telepon, atau Panggilan Video.</p>
                 </div>
 
                 <div class="grid sm:grid-cols-2 gap-4">
@@ -293,18 +297,18 @@
             </div>
         </section>
 
-        <!-- 8. PANEL ADMIN -->
+        <!-- 8. PANEL ADMIN MONITORING MULTI PERANGKAT -->
         <section id="adminView" class="tab-content">
             <div class="bg-cream-50 p-6 sm:p-8 rounded-3xl border border-warmbrown-300/30 shadow-xl space-y-6">
                 <div class="flex justify-between items-center border-b pb-4">
                     <div>
                         <div class="flex items-center gap-2">
-                            <span class="bg-red-600 text-white text-[10px] font-extrabold px-2 py-0.5 rounded-full">PANEL KELOLA</span>
-                            <h2 class="text-xl font-bold text-warmbrown-800">Panel Pemantauan Admin Web</h2>
+                            <span class="bg-red-600 text-white text-[10px] font-extrabold px-2 py-0.5 rounded-full">PANEL KELOLA CLOUD</span>
+                            <h2 class="text-xl font-bold text-warmbrown-800">Panel Pemantauan Admin Web (Lintas Perangkat)</h2>
                         </div>
-                        <p class="text-xs text-warmbrown-600 mt-1">Daftar pengguna terdaftar, profil, keluhan, riwayat skrining, serta log perangkat mengakses.</p>
+                        <p class="text-xs text-warmbrown-600 mt-1">Sistem merekam seluruh akun dari semua perangkat/HP yang berbeda secara terpusat dan *real-time* via Firebase Cloud Database.</p>
                     </div>
-                    <button onclick="clearAdminData()" class="text-xs px-3 py-1.5 bg-red-100 text-red-700 font-bold rounded-lg hover:bg-red-200">Reset Seluruh Data</button>
+                    <button onclick="clearAdminData()" class="text-xs px-3 py-1.5 bg-red-100 text-red-700 font-bold rounded-lg hover:bg-red-200">Reset Seluruh Data Cloud</button>
                 </div>
 
                 <div class="overflow-x-auto">
@@ -312,7 +316,7 @@
                         <thead>
                             <tr class="bg-cream-200 text-warmbrown-800 font-bold">
                                 <th class="p-3 border">Akun Pengguna</th>
-                                <th class="p-3 border">Perangkat & Browser Mengakses</th>
+                                <th class="p-3 border">Perangkat & Lokasi Akses</th>
                                 <th class="p-3 border">Data Profil & Keluhan Utama</th>
                                 <th class="p-3 border">Hasil Skrining Terakhir</th>
                                 <th class="p-3 border">Seluruh Riwayat Skrining</th>
@@ -326,7 +330,7 @@
 
     </main>
 
-    <!-- MODAL ROOMCHAT INTERAKTIF -->
+    <!-- MODAL ROOMCHAT BOT INTERAKTIF -->
     <div id="chatModal" class="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm hidden flex items-center justify-center p-4">
         <div class="bg-cream-50 w-full max-w-lg rounded-3xl border border-warmbrown-300/30 shadow-2xl flex flex-col h-[550px] overflow-hidden">
             <!-- Header Chat -->
@@ -334,8 +338,8 @@
                 <div class="flex items-center gap-3">
                     <div class="w-10 h-10 rounded-full bg-warmbrown-500 flex items-center justify-center font-bold text-white text-sm">💬</div>
                     <div>
-                        <h3 id="chatDoctorName" class="font-bold text-sm">Konselor</h3>
-                        <p class="text-[10px] text-cream-200 flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-green-400 inline-block"></span> Online | Roomchat Tersimpan</p>
+                        <h3 id="chatDoctorName" class="font-bold text-sm">Konselor AI</h3>
+                        <p class="text-[10px] text-cream-200 flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-green-400 inline-block"></span> Bot Otomatis Active | Cloud Sync</p>
                     </div>
                 </div>
                 <button onclick="closeChatModal()" class="text-cream-200 hover:text-white"><i data-lucide="x" class="w-6 h-6"></i></button>
@@ -354,7 +358,7 @@
         </div>
     </div>
 
-    <!-- MODAL TELEPON / PANGGILAN VIDEO (DENGAN VOICE RESPONSE) -->
+    <!-- MODAL TELEPON / PANGGILAN VIDEO (SUARA KONSELOR) -->
     <div id="callModal" class="fixed inset-0 z-50 bg-slate-900/90 backdrop-blur-md hidden flex items-center justify-center p-4">
         <div class="bg-slate-800 text-white w-full max-w-md rounded-3xl shadow-2xl p-8 text-center space-y-6 border border-slate-700 relative overflow-hidden">
             <div id="videoPlaceholder" class="hidden absolute inset-0 bg-slate-950 flex items-center justify-center">
@@ -388,9 +392,29 @@
         © 2026 MindTrack Teen — Platform Pemantauan Kesehatan Mental Remaja
     </footer>
 
-    <!-- LOGIKA SISTEM INTEGRATED -->
+    <!-- LOGIKA SISTEM INTEGRATED (FIREBASE CLOUD REAL-TIME) -->
     <script>
         lucide.createIcons();
+
+        /* -------------------------------------------------------------
+           KONFIGURASI FIREBASE REALTIME DATABASE (CLOUD PUSAT)
+           Ganti nilai di bawah ini dengan konfigurasi Firebase kamu sendiri
+           ------------------------------------------------------------- */
+        const firebaseConfig = {
+            apiKey: "AIzaSyDummyApiKeyMindTrack2026",
+            authDomain: "mindtrack-teen.firebaseapp.com",
+            databaseURL: "https://mindtrack-teen-default-rtdb.firebaseio.com",
+            projectId: "mindtrack-teen",
+            storageBucket: "mindtrack-teen.appspot.com",
+            messagingSenderId: "1234567890",
+            appId: "1:1234567890:web:abc123def456"
+        };
+
+        // Inisialisasi Firebase
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        const db = firebase.database();
 
         const avatarIcons = ['🐱', '🐶', '🐼', '🦊', '🐰', '🐻', '🐨', '🦁', '🐯', '🐸', '🦄', '🐣'];
         let selectedAvatar = '🐱';
@@ -476,7 +500,12 @@
             renderAvatarPicker();
             updateAuthUI();
             switchTab('homeView');
+            listenToRealtimeAdminData(); // Aktifkan listener real-time admin
         };
+
+        function sanitizeKey(key) {
+            return key.replace(/[.#$\[\]]/g, "_");
+        }
 
         function renderAvatarPicker() {
             const picker = document.getElementById('avatarPicker');
@@ -512,36 +541,36 @@
 
         function accessAdminPanel() {
             if (currentUser && currentUser.role === 'admin') {
-                renderAdminDashboard();
                 switchTab('adminView');
             } else {
                 alert('Akses Ditolak! Hanya Admin yang dapat mengakses halaman ini.');
             }
         }
 
-        /* --- SENSING INFORMASI PERANGKAT & BROWSER --- */
-        function getDeviceType() {
+        function getDeviceDetails() {
             const ua = navigator.userAgent;
-            let device = "Desktop / PC";
-            if (/mobile/i.test(ua)) device = "Smartphone (Mobile)";
-            else if (/ipad|tablet/i.test(ua)) device = "Tablet";
+            let deviceType = "Desktop/PC";
+            if (/mobile/i.test(ua)) deviceType = "HP (Mobile)";
+            else if (/ipad|tablet/i.test(ua)) deviceType = "Tablet";
 
             let browser = "Browser Umum";
-            if (ua.includes("Chrome")) browser = "Google Chrome";
-            else if (ua.includes("Safari")) browser = "Safari";
+            if (ua.includes("Chrome") && !ua.includes("Edg")) browser = "Google Chrome";
+            else if (ua.includes("Safari") && !ua.includes("Chrome")) browser = "Safari";
             else if (ua.includes("Firefox")) browser = "Firefox";
             else if (ua.includes("Edg")) browser = "Microsoft Edge";
 
-            return `${device} - ${browser}`;
+            const loginTime = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+            return `${deviceType} via ${browser} (${loginTime})`;
         }
 
+        /* --- SINKRONISASI LOGIN KE DATABASE CLOUD FIREBASE --- */
         function handleAuth(e) {
             e.preventDefault();
             const contact = document.getElementById('authContact').value.trim();
             const password = document.getElementById('authPassword').value.trim();
-            const deviceInfo = getDeviceType();
+            const currentDevice = getDeviceDetails();
 
-            // Kredensial Khusus Admin
+            // Admin Login
             if ((contact === 'admin' || contact === 'admin@mindtrack.com') && password === 'admin123') {
                 currentUser = { contact: 'admin', name: 'Pemilik Web (Admin)', avatar: '🔑', role: 'admin' };
                 localStorage.setItem('mindtrack_user', JSON.stringify(currentUser));
@@ -551,50 +580,54 @@
                 return;
             }
 
-            // Pengguna Biasa -> Catat Akun & Perangkat
-            let adminUsers = JSON.parse(localStorage.getItem('mindtrack_all_users')) || [];
-            let existingUser = adminUsers.find(u => u.contact === contact);
+            const cleanKey = sanitizeKey(contact);
+            const userRef = db.ref('users/' + cleanKey);
 
-            if (existingUser) {
-                if (!existingUser.devices) existingUser.devices = [];
-                if (!existingUser.devices.includes(deviceInfo)) existingUser.devices.push(deviceInfo);
+            userRef.once('value').then(snapshot => {
+                let existingData = snapshot.val();
 
-                currentUser = {
-                    contact: contact,
-                    name: existingUser.profile?.name || contact,
-                    age: existingUser.profile?.age || '',
-                    gender: existingUser.profile?.gender || '',
-                    education: existingUser.profile?.education || '',
-                    info: existingUser.profile?.info || '',
-                    avatar: existingUser.profile?.avatar || '🐱',
-                    role: 'user'
-                };
-            } else {
-                currentUser = {
-                    contact: contact,
-                    name: contact,
-                    age: '',
-                    gender: '',
-                    education: '',
-                    info: '',
-                    avatar: '🐱',
-                    role: 'user'
-                };
-                adminUsers.push({
-                    contact: contact,
-                    profile: currentUser,
-                    history: [],
-                    consults: [],
-                    chatLogs: {},
-                    devices: [deviceInfo]
-                });
-            }
+                if (existingData) {
+                    let devices = existingData.devices || [];
+                    devices.unshift(currentDevice);
+                    userRef.child('devices').set(devices);
 
-            localStorage.setItem('mindtrack_all_users', JSON.stringify(adminUsers));
-            localStorage.setItem('mindtrack_user', JSON.stringify(currentUser));
-            updateAuthUI();
-            alert('Berhasil masuk!');
-            protectedNavigate('profilView');
+                    currentUser = {
+                        contact: contact,
+                        name: existingData.profile?.name || contact,
+                        age: existingData.profile?.age || '',
+                        gender: existingData.profile?.gender || '',
+                        education: existingData.profile?.education || '',
+                        info: existingData.profile?.info || '',
+                        avatar: existingData.profile?.avatar || '🐱',
+                        role: 'user'
+                    };
+                } else {
+                    currentUser = {
+                        contact: contact,
+                        name: contact,
+                        age: '',
+                        gender: '',
+                        education: '',
+                        info: '',
+                        avatar: '🐱',
+                        role: 'user'
+                    };
+
+                    userRef.set({
+                        contact: contact,
+                        profile: currentUser,
+                        history: [],
+                        consults: [],
+                        chatLogs: {},
+                        devices: [currentDevice]
+                    });
+                }
+
+                localStorage.setItem('mindtrack_user', JSON.stringify(currentUser));
+                updateAuthUI();
+                alert(`Berhasil masuk! Data Anda dari perangkat (${currentDevice}) telah tersinkronisasi ke Cloud Database.`);
+                protectedNavigate('profilView');
+            });
         }
 
         function logout() {
@@ -636,10 +669,12 @@
             currentUser.avatar = selectedAvatar;
 
             localStorage.setItem('mindtrack_user', JSON.stringify(currentUser));
-            syncUserDataToAdmin();
+            
+            const cleanKey = sanitizeKey(currentUser.contact);
+            db.ref('users/' + cleanKey + '/profile').set(currentUser);
 
             updateAuthUI();
-            alert('Profil berhasil diperbarui!');
+            alert('Profil berhasil diperbarui dan tersimpan di Cloud!');
         }
 
         function loadProfileData() {
@@ -743,31 +778,34 @@
             switchTab('hasilView');
         }
 
-        /* --- ENGINE PEMBALAS CERDAS KONSELOR (NYAMBUNG & SOLUTIF) --- */
+        /* --- BOT AI KONSELOR KERTA KELUHAN KONTEKSTUAL & SOLUTIF --- */
         function generateSmartCounselorResponse(userMsg) {
             const msg = userMsg.toLowerCase();
             const name = currentUser?.name || 'Teman';
 
             if (msg.includes('cemas') || msg.includes('takut') || msg.includes('panik') || msg.includes('gugup')) {
-                return `Halo ${name}, wajar sekali merasa cemas atau takut saat menghadapi tekanan. Solusi praktis yang bisa kamu coba sekarang adalah teknik grounding 5-4-3-2-1 atau latihan pernapasan perut (tarik 4 detik, tahan 4 detik, hembuskan 6 detik). Coba tuliskan apa hal terbesar yang memicu rasa cemasmu saat ini?`;
+                return `Halo ${name}, saya memahami betapa tidak nyamannya rasa cemas atau takut itu. Solusi yang bisa kamu praktikkan sekarang: lakukan teknik grounding 5-4-3-2-1 atau tarik napas 4 detik, tahan 4 detik, dan hembuskan pelan 6 detik. Coba tuliskan, apa faktor terbesar yang memicu rasa cemasmu saat ini?`;
             } 
             if (msg.includes('stres') || msg.includes('tugas') || msg.includes('sekolah') || msg.includes('kuliah') || msg.includes('ujian') || msg.includes('pusing')) {
-                return `Memang tekanan akademik sering membuat kewalahan, ${name}. Solusi langkah kecilnya: bagi tugas besar menjadi bagian-bagian kecil (Teknik Pomodoro 25 menit belajar, 5 menit rehat). Jangan paksakan menyelesaikan semua sekaligus. Apa tugas yang paling memberatkanmu hari ini?`;
+                return `Tekanan tugas dan akademik memang sering membuat pikiran penuh, ${name}. Solusi terdekat: gunakan Teknik Pomodoro (fokus 25 menit, rehat 5 menit) dan pilah tugas dari yang paling mudah. Jangan ragu mencicilnya satu per satu. Tugas apa yang sedang terasa paling menumpuk?`;
             }
-            if (msg.includes('sedih') || msg.includes('sepi') || msg.includes('menangis') || msg.includes('hampa') || msg.includes('kecewa')) {
-                return `Terima kasih sudah berani mengungkapkan rasa sedihmu, ${name}. Perasaanmu sangat valid. Solusi terbaik saat ini adalah berikan dirimu waktu untuk beristirahat tanpa menghakimi diri sendiri. Cobalah minum air hangat dan cerita lebih lanjut, apa yang baru saja terjadi?`;
+            if (msg.includes('sedih') || msg.includes('sepi') || msg.includes('menangis') || msg.includes('hampa') || msg.includes('kecewa') || msg.includes('depresi')) {
+                return `Terima kasih sudah membagikan perasaanmu, ${name}. Perasaan sedih itu valid. Solusinya: jangan paksakan dirimu berpura-pura baik-baik saja. Beristirahatlah sejenak, minum air hangat, dan jika berkenan, ceritakan lebih detil apa yang membuat hatimu berat hari ini.`;
+            }
+            if (msg.includes('keluarga') || msg.includes('orang tua') || msg.includes('rumah') || msg.includes('marah')) {
+                return `Menghadapi konflik di rumah atau ekspetasi keluarga memang menguras emosi, ${name}. Solusi awal: cari ruang tenang untuk menetralkan emosi terlebih dahulu. Hindari merespons saat emosi puncak. Apakah ada perkataan atau situasi spesifik yang bikin kamu kecewa?`;
             }
             if (msg.includes('tidur') || msg.includes('insomnia') || msg.includes('begadang')) {
-                return `Kualitas tidur sangat berpengaruh ke emosimu, ${name}. Cobalah solusi 'sleep hygiene': matikan layar HP 30 menit sebelum tidur, redupkan lampu, dan hindari kafein di sore hari. Apakah ada pikiran berulang yang mengganggumu saat mau tidur?`;
+                return `Kualitas tidur berdampak besar pada kesehatan mentalmu, ${name}. Solusi tidur nyenyak: matikan layar ponsel 30 menit sebelum tidur, redupkan lampu kamar, dan hindari kafein. Pikiran apa yang sering terlintas saat kamu mencoba memejamkan mata?`;
             }
             if (msg.includes('halo') || msg.includes('hai') || msg.includes('pagi') || msg.includes('siang') || msg.includes('malam')) {
-                return `Halo ${name}! Terima kasih sudah menyapa. Saya di sini siap mendengarkan cerita dan membantumu mencari solusi. Apa yang sedang kamu pikirkan atau rasakan saat ini?`;
+                return `Halo ${name}! Terima kasih sudah menyapa. Saya konselor AI siap mendengarkan cerita dan membantumu mencari solusi. Apa yang sedang mengganggu pikiranmu hari ini?`;
             }
 
-            return `Terima kasih sudah menceritakan hal itu, ${name}. Mengutarakan apa yang ada di pikiranmu adalah langkah awal yang sangat baik. Mari kita urai bersama: menurutmu, langkah kecil apa yang paling bisa membuat perasaanmu sedikit lebih lega saat ini?`;
+            return `Terima kasih sudah menceritakan hal ini, ${name}. Mengutarakan apa yang kamu rasakan adalah langkah awal yang sangat baik. Menurutmu, langkah kecil apa yang paling bisa membuat perasaanmu sedikit lebih tenang saat ini?`;
         }
 
-        /* --- FITUR ROOMCHAT DENGAN RIWAYAT PERMANEN --- */
+        /* --- ROOMCHAT BOT AI + HISTORI CLOUD PERMANEN --- */
         function openChatModal(doctorName) {
             if (!currentUser) {
                 alert('Silakan login terlebih dahulu.');
@@ -775,7 +813,7 @@
                 return;
             }
             activeDoctor = doctorName;
-            document.getElementById('chatDoctorName').innerText = doctorName;
+            document.getElementById('chatDoctorName').innerText = doctorName + " (AI Bot)";
             
             renderChatHistory();
             document.getElementById('chatModal').classList.remove('hidden');
@@ -787,33 +825,34 @@
 
         function renderChatHistory() {
             const messagesBox = document.getElementById('chatMessages');
-            let adminUsers = JSON.parse(localStorage.getItem('mindtrack_all_users')) || [];
-            let myData = adminUsers.find(u => u.contact === currentUser.contact);
+            const cleanKey = sanitizeKey(currentUser.contact);
+            const doctorKey = sanitizeKey(activeDoctor);
 
-            if (!myData.chatLogs) myData.chatLogs = {};
-            let history = myData.chatLogs[activeDoctor] || [];
+            db.ref(`users/${cleanKey}/chatLogs/${doctorKey}`).once('value').then(snapshot => {
+                let history = snapshot.val() || [];
 
-            if (history.length === 0) {
-                messagesBox.innerHTML = `
-                    <div class="text-center text-[10px] text-warmbrown-500 my-2">-- Sesi Roomchat Dimulai dengan ${activeDoctor} --</div>
-                    <div class="bg-white p-3 rounded-2xl max-w-[80%] border border-warmbrown-300/20 shadow-sm text-warmbrown-800 space-y-1">
-                        <p class="font-bold text-[11px] text-warmbrown-600">${activeDoctor}</p>
-                        <p>Halo ${currentUser.name || 'Teman MindTrack'}! Ada yang ingin kamu ceritakan atau konsultasikan hari ini? Aku siap mendengarkan dan mencari solusi bersama.</p>
-                    </div>
-                `;
-            } else {
-                messagesBox.innerHTML = `<div class="text-center text-[10px] text-warmbrown-500 my-2">-- Riwayat Chat Tersimpan Permanen --</div>` + 
-                history.map(m => `
-                    <div class="flex ${m.sender === 'user' ? 'justify-end' : 'justify-start'}">
-                        <div class="${m.sender === 'user' ? 'bg-warmbrown-600 text-cream-50' : 'bg-white text-warmbrown-800 border border-warmbrown-300/20'} p-3 rounded-2xl max-w-[80%] shadow-sm space-y-1">
-                            <p class="font-bold text-[10px] ${m.sender === 'user' ? 'text-cream-200' : 'text-warmbrown-600'}">${m.sender === 'user' ? 'Kamu' : activeDoctor}</p>
-                            <p>${m.text}</p>
-                            <span class="block text-[8px] opacity-70 text-right">${m.time}</span>
+                if (history.length === 0) {
+                    messagesBox.innerHTML = `
+                        <div class="text-center text-[10px] text-warmbrown-500 my-2">-- Sesi Konsultasi Bot AI dengan ${activeDoctor} --</div>
+                        <div class="bg-white p-3 rounded-2xl max-w-[80%] border border-warmbrown-300/20 shadow-sm text-warmbrown-800 space-y-1">
+                            <p class="font-bold text-[11px] text-warmbrown-600">${activeDoctor}</p>
+                            <p>Halo ${currentUser.name || 'Teman MindTrack'}! Ada yang ingin kamu ceritakan hari ini? Ceritakan saja, saya akan memberikan jawaban dan solusi yang sesuai dengan masalahmu.</p>
                         </div>
-                    </div>
-                `).join('');
-            }
-            messagesBox.scrollTop = messagesBox.scrollHeight;
+                    `;
+                } else {
+                    messagesBox.innerHTML = `<div class="text-center text-[10px] text-warmbrown-500 my-2">-- Riwayat Konsultasi Tersimpan Cloud --</div>` + 
+                    history.map(m => `
+                        <div class="flex ${m.sender === 'user' ? 'justify-end' : 'justify-start'}">
+                            <div class="${m.sender === 'user' ? 'bg-warmbrown-600 text-cream-50' : 'bg-white text-warmbrown-800 border border-warmbrown-300/20'} p-3 rounded-2xl max-w-[80%] shadow-sm space-y-1">
+                                <p class="font-bold text-[10px] ${m.sender === 'user' ? 'text-cream-200' : 'text-warmbrown-600'}">${m.sender === 'user' ? 'Kamu' : activeDoctor}</p>
+                                <p>${m.text}</p>
+                                <span class="block text-[8px] opacity-70 text-right">${m.time}</span>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+                messagesBox.scrollTop = messagesBox.scrollHeight;
+            });
         }
 
         function sendChatMessage(e) {
@@ -825,42 +864,38 @@
             const timeStr = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
 
             saveChatMessageToStorage(activeDoctor, 'user', message, timeStr);
-            renderChatHistory();
-
             input.value = '';
 
-            // Catat Sesi Konsultasi
             saveUserConsultHistory({
                 date: new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }),
                 doctor: activeDoctor,
-                method: 'Roomchat'
+                method: 'Roomchat (Bot AI)'
             });
 
-            // Auto-Reply Cerdas Konselor
             setTimeout(() => {
                 const smartReply = generateSmartCounselorResponse(message);
                 saveChatMessageToStorage(activeDoctor, 'doctor', smartReply, new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }));
-                renderChatHistory();
-            }, 1000);
+            }, 800);
         }
 
         function saveChatMessageToStorage(doctor, sender, text, time) {
-            let adminUsers = JSON.parse(localStorage.getItem('mindtrack_all_users')) || [];
-            let idx = adminUsers.findIndex(u => u.contact === currentUser.contact);
+            const cleanKey = sanitizeKey(currentUser.contact);
+            const doctorKey = sanitizeKey(doctor);
+            const chatRef = db.ref(`users/${cleanKey}/chatLogs/${doctorKey}`);
 
-            if (idx !== -1) {
-                if (!adminUsers[idx].chatLogs) adminUsers[idx].chatLogs = {};
-                if (!adminUsers[idx].chatLogs[doctor]) adminUsers[idx].chatLogs[doctor] = [];
-                
-                adminUsers[idx].chatLogs[doctor].push({ sender, text, time });
-                localStorage.setItem('mindtrack_all_users', JSON.stringify(adminUsers));
-            }
+            chatRef.once('value').then(snapshot => {
+                let logs = snapshot.val() || [];
+                logs.push({ sender, text, time });
+                chatRef.set(logs).then(() => {
+                    renderChatHistory();
+                });
+            });
         }
 
-        /* --- FITUR PANGGILAN TELEPON / VIDEO DENGAN SUARA JAWABAN KONSELOR --- */
+        /* --- FITUR VOICE RESPONSE SINTESIS SPESIFIK --- */
         function speakCounselorVoice(text) {
             if ('speechSynthesis' in window) {
-                window.speechSynthesis.cancel(); // Hentikan suara sebelumnya
+                window.speechSynthesis.cancel();
                 const utterance = new SpeechSynthesisUtterance(text);
                 utterance.lang = 'id-ID';
                 utterance.rate = 0.9;
@@ -888,7 +923,6 @@
 
             document.getElementById('callModal').classList.remove('hidden');
 
-            // Timer Panggilan
             callSeconds = 0;
             clearInterval(callTimerInterval);
             callTimerInterval = setInterval(() => {
@@ -898,9 +932,8 @@
                 document.getElementById('callTimer').innerText = `${mins}:${secs}`;
             }, 1000);
 
-            // Konselor Menjawab Secara Lisan / Suara
-            const voiceSpeech = `Halo ${currentUser.name || 'Teman'}, saya ${doctorName}. Sambungan ${type} telah terhubung. Silakan ceritakan masalahmu, saya siap mendengarkan.`;
-            document.getElementById('callStatusSub').innerText = "🔊 Konselor sedang berbicara...";
+            const voiceSpeech = `Halo ${currentUser.name || 'Teman'}, saya ${doctorName}. Sambungan ${type} telah terhubung. Silakan ceritakan masalahmu, saya siap memberikan bantuan solusi.`;
+            document.getElementById('callStatusSub').innerText = "🔊 Suara Konselor AI berbicara...";
             speakCounselorVoice(voiceSpeech);
 
             saveUserConsultHistory({
@@ -916,37 +949,30 @@
             }
             clearInterval(callTimerInterval);
             document.getElementById('callModal').classList.add('hidden');
-            alert(`Sesi panggilan dengan ${activeDoctor} telah diakhiri dan dicatat ke riwayat.`);
+            alert(`Sesi panggilan dengan ${activeDoctor} telah selesai.`);
         }
 
-        /* --- SIMPAN RIWAYAT TANPA BATAS & SYNC ADMIN --- */
+        /* --- PEMBARUAN HISTORI & REKAMAN PERANGKAT KE CLOUD --- */
         function saveUserScreeningHistory(entry) {
-            let adminUsers = JSON.parse(localStorage.getItem('mindtrack_all_users')) || [];
-            let idx = adminUsers.findIndex(u => u.contact === currentUser.contact);
-            if (idx !== -1) {
-                if (!adminUsers[idx].history) adminUsers[idx].history = [];
-                adminUsers[idx].history.unshift(entry);
-                localStorage.setItem('mindtrack_all_users', JSON.stringify(adminUsers));
-            }
+            const cleanKey = sanitizeKey(currentUser.contact);
+            const historyRef = db.ref(`users/${cleanKey}/history`);
+
+            historyRef.once('value').then(snapshot => {
+                let list = snapshot.val() || [];
+                list.unshift(entry);
+                historyRef.set(list);
+            });
         }
 
         function saveUserConsultHistory(entry) {
-            let adminUsers = JSON.parse(localStorage.getItem('mindtrack_all_users')) || [];
-            let idx = adminUsers.findIndex(u => u.contact === currentUser.contact);
-            if (idx !== -1) {
-                if (!adminUsers[idx].consults) adminUsers[idx].consults = [];
-                adminUsers[idx].consults.unshift(entry);
-                localStorage.setItem('mindtrack_all_users', JSON.stringify(adminUsers));
-            }
-        }
+            const cleanKey = sanitizeKey(currentUser.contact);
+            const consultRef = db.ref(`users/${cleanKey}/consults`);
 
-        function syncUserDataToAdmin() {
-            let adminUsers = JSON.parse(localStorage.getItem('mindtrack_all_users')) || [];
-            let idx = adminUsers.findIndex(u => u.contact === currentUser.contact);
-            if (idx !== -1) {
-                adminUsers[idx].profile = currentUser;
-                localStorage.setItem('mindtrack_all_users', JSON.stringify(adminUsers));
-            }
+            consultRef.once('value').then(snapshot => {
+                let list = snapshot.val() || [];
+                list.unshift(entry);
+                consultRef.set(list);
+            });
         }
 
         function renderHistories() {
@@ -956,68 +982,74 @@
 
             const screenList = document.getElementById('screeningHistoryList');
             const consultList = document.getElementById('consultHistoryList');
+            const cleanKey = sanitizeKey(currentUser.contact);
 
-            let adminUsers = JSON.parse(localStorage.getItem('mindtrack_all_users')) || [];
-            let myData = adminUsers.find(u => u.contact === currentUser.contact) || {};
+            db.ref(`users/${cleanKey}`).once('value').then(snapshot => {
+                let myData = snapshot.val() || {};
+                let screenings = myData.history || [];
+                let consults = myData.consults || [];
 
-            let screenings = myData.history || [];
-            let consults = myData.consults || [];
+                screenList.innerHTML = screenings.length === 0 ? `<p class="text-warmbrown-500 italic">Belum ada riwayat skrining pada akun ini.</p>` :
+                    screenings.map(s => `
+                        <div class="bg-cream-100 p-3 rounded-xl border border-warmbrown-300/20 flex justify-between items-center">
+                            <div><span class="font-bold">[${s.category}]</span> Skor: ${s.score}/45 — <span class="font-semibold">${s.risk}</span></div>
+                            <span class="text-[10px] text-warmbrown-500">${s.date}</span>
+                        </div>`).join('');
 
-            screenList.innerHTML = screenings.length === 0 ? `<p class="text-warmbrown-500 italic">Belum ada riwayat skrining pada akun ini.</p>` :
-                screenings.map(s => `
-                    <div class="bg-cream-100 p-3 rounded-xl border border-warmbrown-300/20 flex justify-between items-center">
-                        <div><span class="font-bold">[${s.category}]</span> Skor: ${s.score}/45 — <span class="font-semibold">${s.risk}</span></div>
-                        <span class="text-[10px] text-warmbrown-500">${s.date}</span>
-                    </div>`).join('');
-
-            consultList.innerHTML = consults.length === 0 ? `<p class="text-warmbrown-500 italic">Belum ada riwayat konsultasi pada akun ini.</p>` :
-                consults.map(c => `
-                    <div class="bg-cream-100 p-3 rounded-xl border border-warmbrown-300/20 flex justify-between items-center">
-                        <div><span class="font-bold">${c.doctor}</span> (${c.method})</div>
-                        <span class="text-[10px] text-warmbrown-500">${c.date}</span>
-                    </div>`).join('');
+                consultList.innerHTML = consults.length === 0 ? `<p class="text-warmbrown-500 italic">Belum ada riwayat konsultasi pada akun ini.</p>` :
+                    consults.map(c => `
+                        <div class="bg-cream-100 p-3 rounded-xl border border-warmbrown-300/20 flex justify-between items-center">
+                            <div><span class="font-bold">${c.doctor}</span> (${c.method})</div>
+                            <span class="text-[10px] text-warmbrown-500">${c.date}</span>
+                        </div>`).join('');
+            });
         }
 
-        function renderAdminDashboard() {
-            const tbody = document.getElementById('adminTableBody');
-            let adminUsers = JSON.parse(localStorage.getItem('mindtrack_all_users')) || [];
+        /* --- LISTENER REALTIME PANEL ADMIN DARI CLOUD --- */
+        function listenToRealtimeAdminData() {
+            db.ref('users').on('value', snapshot => {
+                const tbody = document.getElementById('adminTableBody');
+                const usersData = snapshot.val();
 
-            if (adminUsers.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="5" class="p-4 text-center italic text-warmbrown-500">Belum ada data pengguna yang terdaftar di platform.</td></tr>`;
-                return;
-            }
+                if (!usersData) {
+                    tbody.innerHTML = `<tr><td colspan="5" class="p-4 text-center italic text-warmbrown-500">Belum ada data pengguna terdaftar di Cloud.</td></tr>`;
+                    return;
+                }
 
-            tbody.innerHTML = adminUsers.map(u => {
-                const p = u.profile || {};
-                const lastScreening = u.history && u.history.length > 0 ? u.history[0] : null;
-                const devicesList = u.devices && u.devices.length > 0 ? u.devices.join('<br>• ') : 'Perangkat Tidak Terdeteksi';
+                tbody.innerHTML = Object.keys(usersData).map(key => {
+                    const u = usersData[key];
+                    const p = u.profile || {};
+                    const lastScreening = u.history && u.history.length > 0 ? u.history[0] : null;
 
-                return `
-                    <tr class="border-b hover:bg-cream-100">
-                        <td class="p-3 font-semibold text-warmbrown-800">
-                            <span class="text-lg mr-1">${p.avatar || '👤'}</span> ${u.contact}
-                        </td>
-                        <td class="p-3 text-[11px] text-warmbrown-700">
-                            • ${devicesList}
-                        </td>
-                        <td class="p-3">
-                            ${p.name ? `<strong>Nama:</strong> ${p.name}<br><strong>Usia:</strong> ${p.age || '-'} thn | <strong>Gender:</strong> ${p.gender || '-'}<br><strong>Keluhan:</strong> <em>"${p.info || '-'}"</em>` : '<span class="text-warmbrown-400 italic">Profil belum diisi</span>'}
-                        </td>
-                        <td class="p-3">
-                            ${lastScreening ? `<span class="font-bold">${lastScreening.risk}</span> (Skor: ${lastScreening.score}/45)<br><span class="text-[10px] text-warmbrown-500">${lastScreening.category} - ${lastScreening.date}</span>` : '<span class="text-warmbrown-400 italic">Belum skrining</span>'}
-                        </td>
-                        <td class="p-3">
-                            ${u.history && u.history.length > 0 ? u.history.map(h => `• ${h.date}: ${h.category} (${h.score}/45, ${h.risk})`).join('<br>') : '-'}
-                        </td>
-                    </tr>
-                `;
-            }).join('');
+                    let uniqueDevices = u.devices ? [...new Set(u.devices)] : ['Perangkat Tidak Terdeteksi'];
+                    let devicesHtml = uniqueDevices.map(d => `• ${d}`).join('<br>');
+
+                    return `
+                        <tr class="border-b hover:bg-cream-100">
+                            <td class="p-3 font-semibold text-warmbrown-800">
+                                <span class="text-lg mr-1">${p.avatar || '👤'}</span> ${u.contact}
+                            </td>
+                            <td class="p-3 text-[11px] text-warmbrown-700">
+                                ${devicesHtml}
+                            </td>
+                            <td class="p-3">
+                                ${p.name ? `<strong>Nama:</strong> ${p.name}<br><strong>Usia:</strong> ${p.age || '-'} thn | <strong>Gender:</strong> ${p.gender || '-'}<br><strong>Keluhan:</strong> <em>"${p.info || '-'}"</em>` : '<span class="text-warmbrown-400 italic">Profil belum diisi</span>'}
+                            </td>
+                            <td class="p-3">
+                                ${lastScreening ? `<span class="font-bold">${lastScreening.risk}</span> (Skor: ${lastScreening.score}/45)<br><span class="text-[10px] text-warmbrown-500">${lastScreening.category} - ${lastScreening.date}</span>` : '<span class="text-warmbrown-400 italic">Belum skrining</span>'}
+                            </td>
+                            <td class="p-3">
+                                ${u.history && u.history.length > 0 ? u.history.map(h => `• ${h.date}: ${h.category} (${h.score}/45, ${h.risk})`).join('<br>') : '-'}
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
+            });
         }
 
         function clearAdminData() {
-            if (confirm('Apakah Anda yakin ingin menghapus seluruh data pengguna di panel admin?')) {
-                localStorage.removeItem('mindtrack_all_users');
-                renderAdminDashboard();
+            if (confirm('Apakah Anda yakin ingin menghapus seluruh data pengguna dari database Cloud Firebase?')) {
+                db.ref('users').remove();
             }
         }
     </script>
