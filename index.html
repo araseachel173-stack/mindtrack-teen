@@ -53,7 +53,7 @@
                     <button onclick="switchTab('homeView')" class="hover:text-warmbrown-500">Beranda</button>
                     <button onclick="protectedNavigate('profilView')" class="hover:text-warmbrown-500">Profil Saya</button>
                     <button onclick="startAutoScreening()" class="hover:text-warmbrown-500">Skrining Mental</button>
-                    <button onclick="protectedNavigate('riwayatView')" class="hover:text-warmbrown-500">Riwayat & Perkembangan</button>
+                    <button onclick="protectedNavigate('riwayatView')" class="hover:text-warmbrown-500">Riwayat Saya</button>
                     <button onclick="protectedNavigate('connectView')" class="hover:text-warmbrown-500 text-warmbrown-600 font-bold">Professional Connect</button>
                     
                     <button id="adminNavBtn" onclick="accessAdminPanel()" class="hidden text-xs bg-red-100 text-red-700 border border-red-300 font-bold px-3 py-1.5 rounded-lg hover:bg-red-200">Panel Admin (Real-time)</button>
@@ -88,38 +88,44 @@
             <div class="grid sm:grid-cols-3 gap-6">
                 <div class="bg-cream-50 p-6 rounded-3xl border border-warmbrown-300/30 space-y-2">
                     <div class="w-10 h-10 rounded-xl bg-warmbrown-100 flex items-center justify-center text-warmbrown-700"><i data-lucide="cpu" class="w-5 h-5"></i></div>
-                    <h3 class="font-bold text-base text-warmbrown-800">Bot Konselor Cerdas</h3>
-                    <p class="text-xs text-warmbrown-600">Menganalisis keluhanmu dan merespons otomatis dengan solusi kontekstual yang sesuai masalahmu.</p>
+                    <h3 class="font-bold text-base text-warmbrown-800">Konselor AI Solutif</h3>
+                    <p class="text-xs text-warmbrown-600">Memberikan solusi dan langkah praktis sesuai keluhanmu serta menyimpan seluruh riwayat chat.</p>
                 </div>
                 <div class="bg-cream-50 p-6 rounded-3xl border border-warmbrown-300/30 space-y-2">
                     <div class="w-10 h-10 rounded-xl bg-warmbrown-100 flex items-center justify-center text-warmbrown-700"><i data-lucide="cloud" class="w-5 h-5"></i></div>
-                    <h3 class="font-bold text-base text-warmbrown-800">Pemantauan Admin Cloud</h3>
-                    <p class="text-xs text-warmbrown-600">Akses dari perangkat, lokasi, atau peramban manapun otomatis tersinkronisasi ke database cloud pusat.</p>
+                    <h3 class="font-bold text-base text-warmbrown-800">Sinkronisasi Cloud Admin</h3>
+                    <p class="text-xs text-warmbrown-600">Seluruh riwayat pengguna dari berbagai perangkat terekam terpusat di Panel Pemantauan Admin.</p>
                 </div>
                 <div class="bg-cream-50 p-6 rounded-3xl border border-warmbrown-300/30 space-y-2">
-                    <div class="w-10 h-10 rounded-xl bg-warmbrown-100 flex items-center justify-center text-warmbrown-700"><i data-lucide="line-chart" class="w-5 h-5"></i></div>
-                    <h3 class="font-bold text-base text-warmbrown-800">Riwayat Tak Terbatas</h3>
-                    <p class="text-xs text-warmbrown-600">Simpan seluruh riwayat perkembangan, sesi chat, serta akses perangkat secara permanen.</p>
+                    <div class="w-10 h-10 rounded-xl bg-warmbrown-100 flex items-center justify-center text-warmbrown-700"><i data-lucide="shield-check" class="w-5 h-5"></i></div>
+                    <h3 class="font-bold text-base text-warmbrown-800">Privasi Riwayat Terjaga</h3>
+                    <p class="text-xs text-warmbrown-600">Riwayat skrining dan konsultasi bersifat privat dan hanya dapat diakses oleh pemilik akun.</p>
                 </div>
             </div>
         </section>
 
-        <!-- 2. LOGIN / REGISTRASI -->
+        <!-- 2. LOGIN / REGISTRASI (FITUR LIHAT PASSWORD & AUTOFILL KERDA KREDENSIAL) -->
         <section id="authView" class="tab-content">
             <div class="max-w-md mx-auto bg-cream-50 p-8 rounded-3xl border border-warmbrown-300/30 shadow-xl space-y-6">
                 <div class="text-center space-y-2">
                     <h2 class="text-2xl font-bold text-warmbrown-800">Masuk / Registrasi</h2>
-                    <p class="text-xs text-warmbrown-600">Masukkan Email atau Username untuk melanjutkan</p>
+                    <p class="text-xs text-warmbrown-600">Kredensial tersimpan otomatis untuk kemudahan login berikutnya.</p>
                 </div>
 
                 <form onsubmit="handleAuth(event)" class="space-y-4">
                     <div>
-                        <label class="block text-xs font-semibold mb-1 text-warmbrown-800">Email / Username</label>
+                        <label class="block text-xs font-semibold mb-1 text-warmbrown-800">Username / Email</label>
                         <input type="text" id="authContact" required placeholder="Masukkan nama/email" class="w-full px-4 py-3 text-sm rounded-xl border border-warmbrown-300/40 bg-cream-100 text-warmbrown-800 focus:outline-none focus:border-warmbrown-600">
                     </div>
                     <div>
                         <label class="block text-xs font-semibold mb-1 text-warmbrown-800">Kata Sandi</label>
-                        <input type="password" id="authPassword" required placeholder="••••••••" class="w-full px-4 py-3 text-sm rounded-xl border border-warmbrown-300/40 bg-cream-100 text-warmbrown-800 focus:outline-none focus:border-warmbrown-600">
+                        <div class="relative">
+                            <input type="password" id="authPassword" required placeholder="••••••••" class="w-full pl-4 pr-10 py-3 text-sm rounded-xl border border-warmbrown-300/40 bg-cream-100 text-warmbrown-800 focus:outline-none focus:border-warmbrown-600">
+                            <button type="button" onclick="togglePasswordVisibility()" class="absolute right-3 top-1/2 -translate-y-1/2 text-warmbrown-500 hover:text-warmbrown-800">
+                                <i id="eyeIcon" data-lucide="eye" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                        <p class="text-[10px] text-warmbrown-500 mt-1">Klik ikon mata untuk memeriksa kecocokan kata sandi.</p>
                     </div>
                     <button type="submit" class="w-full py-3.5 rounded-xl bg-warmbrown-600 hover:bg-warmbrown-700 text-cream-50 font-bold text-sm transition-all shadow-md">
                         Masuk / Daftar Akun
@@ -216,7 +222,7 @@
 
                 <div class="flex flex-col sm:flex-row gap-4 pt-2">
                     <button onclick="switchTab('riwayatView')" class="w-full py-3 rounded-xl border border-warmbrown-600 text-warmbrown-800 font-bold text-xs hover:bg-cream-200">
-                        Lihat Riwayat & Perkembangan Saya
+                        Lihat Riwayat Saya
                     </button>
                     <button onclick="switchTab('connectView')" class="w-full py-3 rounded-xl bg-warmbrown-600 text-cream-50 font-bold text-xs hover:bg-warmbrown-700">
                         Buka Professional Connect
@@ -229,8 +235,8 @@
         <section id="connectView" class="tab-content">
             <div class="bg-cream-50 p-6 sm:p-8 rounded-3xl border border-warmbrown-300/30 shadow-xl space-y-6">
                 <div>
-                    <h2 class="text-xl font-bold text-warmbrown-800">Professional Connect (AI Chatbot)</h2>
-                    <p class="text-xs text-warmbrown-600">Konsultasi langsung dengan Konselor Terlisensi melalui Bot AI interaktif, Telepon, atau Panggilan Video.</p>
+                    <h2 class="text-xl font-bold text-warmbrown-800">Professional Connect (AI Chatbot & Konselor)</h2>
+                    <p class="text-xs text-warmbrown-600">Konsultasi interaktif yang memberikan saran langkah konkret dan menyimpan riwayat percakapan secara permanen.</p>
                 </div>
 
                 <div class="grid sm:grid-cols-2 gap-4">
@@ -279,16 +285,16 @@
             </div>
         </section>
 
-        <!-- 7. RIWAYAT TANPA BATAS -->
+        <!-- 7. RIWAYAT KHUSUS PENGGUNA AKTIF (PRIVAT) -->
         <section id="riwayatView" class="tab-content">
             <div class="bg-cream-50 p-6 sm:p-8 rounded-3xl border border-warmbrown-300/30 shadow-xl space-y-6">
                 <div>
-                    <h2 class="text-xl font-bold text-warmbrown-800">Riwayat & Perkembangan Saya</h2>
-                    <p class="text-xs text-warmbrown-600">Catatan khusus dari akun yang sedang aktif (<span id="historyAccountLabel" class="font-bold">--</span>). Seluruh riwayat tersimpan tanpa batas.</p>
+                    <h2 class="text-xl font-bold text-warmbrown-800">Riwayat Saya</h2>
+                    <p class="text-xs text-warmbrown-600">Catatan eksklusif milik akun (<span id="historyAccountLabel" class="font-bold">--</span>). Pengguna lain tidak dapat melihat riwayat ini.</p>
                 </div>
 
                 <div class="space-y-4">
-                    <h3 class="text-sm font-bold text-warmbrown-800 border-b pb-2">Catatan Skrining Mandiri</h3>
+                    <h3 class="text-sm font-bold text-warmbrown-800 border-b pb-2">Hasil Skrining Psikologis Saya</h3>
                     <div id="screeningHistoryList" class="space-y-2 text-xs"></div>
 
                     <h3 class="text-sm font-bold text-warmbrown-800 border-b pb-2 pt-4">Riwayat Sesi Konsultasi & Panggilan</h3>
@@ -297,7 +303,7 @@
             </div>
         </section>
 
-        <!-- 8. PANEL ADMIN MONITORING MULTI PERANGKAT -->
+        <!-- 8. PANEL ADMIN MONITORING LINTAS PERANGKAT -->
         <section id="adminView" class="tab-content">
             <div class="bg-cream-50 p-6 sm:p-8 rounded-3xl border border-warmbrown-300/30 shadow-xl space-y-6">
                 <div class="flex justify-between items-center border-b pb-4">
@@ -306,7 +312,7 @@
                             <span class="bg-red-600 text-white text-[10px] font-extrabold px-2 py-0.5 rounded-full">PANEL KELOLA CLOUD</span>
                             <h2 class="text-xl font-bold text-warmbrown-800">Panel Pemantauan Admin Web (Lintas Perangkat)</h2>
                         </div>
-                        <p class="text-xs text-warmbrown-600 mt-1">Sistem merekam seluruh akun dari semua perangkat/HP yang berbeda secara terpusat dan *real-time* via Firebase Cloud Database.</p>
+                        <p class="text-xs text-warmbrown-600 mt-1">Sistem merekam seluruh akun dari perangkat manapun secara terpusat via Firebase Cloud Database.</p>
                     </div>
                     <button onclick="clearAdminData()" class="text-xs px-3 py-1.5 bg-red-100 text-red-700 font-bold rounded-lg hover:bg-red-200">Reset Seluruh Data Cloud</button>
                 </div>
@@ -317,9 +323,9 @@
                             <tr class="bg-cream-200 text-warmbrown-800 font-bold">
                                 <th class="p-3 border">Akun Pengguna</th>
                                 <th class="p-3 border">Perangkat & Lokasi Akses</th>
-                                <th class="p-3 border">Data Profil & Keluhan Utama</th>
+                                <th class="p-3 border">Data Profil & Keluhan</th>
                                 <th class="p-3 border">Hasil Skrining Terakhir</th>
-                                <th class="p-3 border">Seluruh Riwayat Skrining</th>
+                                <th class="p-3 border">Semua Riwayat Skrining</th>
                             </tr>
                         </thead>
                         <tbody id="adminTableBody"></tbody>
@@ -330,27 +336,27 @@
 
     </main>
 
-    <!-- MODAL ROOMCHAT BOT INTERAKTIF -->
+    <!-- MODAL ROOMCHAT BOT INTERAKTIF DENGAN SOLUSI & PENYIMPANAN CHAT PERMANEN -->
     <div id="chatModal" class="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm hidden flex items-center justify-center p-4">
-        <div class="bg-cream-50 w-full max-w-lg rounded-3xl border border-warmbrown-300/30 shadow-2xl flex flex-col h-[550px] overflow-hidden">
+        <div class="bg-cream-50 w-full max-w-lg rounded-3xl border border-warmbrown-300/30 shadow-2xl flex flex-col h-[580px] overflow-hidden">
             <!-- Header Chat -->
             <div class="bg-warmbrown-600 text-cream-50 p-4 flex justify-between items-center">
                 <div class="flex items-center gap-3">
                     <div class="w-10 h-10 rounded-full bg-warmbrown-500 flex items-center justify-center font-bold text-white text-sm">💬</div>
                     <div>
                         <h3 id="chatDoctorName" class="font-bold text-sm">Konselor AI</h3>
-                        <p class="text-[10px] text-cream-200 flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-green-400 inline-block"></span> Bot Otomatis Active | Cloud Sync</p>
+                        <p class="text-[10px] text-cream-200 flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-green-400 inline-block"></span> Terhubung | Riwayat Chat Tersimpan Cloud</p>
                     </div>
                 </div>
                 <button onclick="closeChatModal()" class="text-cream-200 hover:text-white"><i data-lucide="x" class="w-6 h-6"></i></button>
             </div>
 
-            <!-- Area Pesan -->
+            <!-- Area Pesan Chat -->
             <div id="chatMessages" class="flex-1 p-4 overflow-y-auto space-y-3 bg-cream-100 text-xs"></div>
 
             <!-- Input Pesan -->
             <form onsubmit="sendChatMessage(event)" class="p-3 bg-cream-50 border-t border-warmbrown-300/20 flex gap-2">
-                <input type="text" id="chatInput" placeholder="Tulis masalah atau pertanyaanmu di sini..." required class="flex-1 px-4 py-2.5 rounded-xl border border-warmbrown-300/40 bg-cream-100 text-xs focus:outline-none focus:border-warmbrown-600">
+                <input type="text" id="chatInput" placeholder="Sampaikan keluhanmu, konselor siap memberikan solusi..." required class="flex-1 px-4 py-2.5 rounded-xl border border-warmbrown-300/40 bg-cream-100 text-xs focus:outline-none focus:border-warmbrown-600">
                 <button type="submit" class="px-4 py-2.5 rounded-xl bg-warmbrown-600 text-cream-50 font-bold text-xs hover:bg-warmbrown-700 flex items-center gap-1">
                     Kirim <i data-lucide="send" class="w-3.5 h-3.5"></i>
                 </button>
@@ -358,7 +364,7 @@
         </div>
     </div>
 
-    <!-- MODAL TELEPON / PANGGILAN VIDEO (SUARA KONSELOR) -->
+    <!-- MODAL TELEPON / PANGGILAN VIDEO -->
     <div id="callModal" class="fixed inset-0 z-50 bg-slate-900/90 backdrop-blur-md hidden flex items-center justify-center p-4">
         <div class="bg-slate-800 text-white w-full max-w-md rounded-3xl shadow-2xl p-8 text-center space-y-6 border border-slate-700 relative overflow-hidden">
             <div id="videoPlaceholder" class="hidden absolute inset-0 bg-slate-950 flex items-center justify-center">
@@ -392,14 +398,11 @@
         © 2026 MindTrack Teen — Platform Pemantauan Kesehatan Mental Remaja
     </footer>
 
-    <!-- LOGIKA SISTEM INTEGRATED (FIREBASE CLOUD REAL-TIME) -->
+    <!-- LOGIKA SISTEM INTEGRATED -->
     <script>
         lucide.createIcons();
 
-        /* -------------------------------------------------------------
-           KONFIGURASI FIREBASE REALTIME DATABASE (CLOUD PUSAT)
-           Ganti nilai di bawah ini dengan konfigurasi Firebase kamu sendiri
-           ------------------------------------------------------------- */
+        /* CONFIG FIREBASE CLOUD DATABASE */
         const firebaseConfig = {
             apiKey: "AIzaSyDummyApiKeyMindTrack2026",
             authDomain: "mindtrack-teen.firebaseapp.com",
@@ -410,7 +413,6 @@
             appId: "1:1234567890:web:abc123def456"
         };
 
-        // Inisialisasi Firebase
         if (!firebase.apps.length) {
             firebase.initializeApp(firebaseConfig);
         }
@@ -499,12 +501,36 @@
         window.onload = function() {
             renderAvatarPicker();
             updateAuthUI();
+            checkSavedCredentials(); // Autofill login jika kredensial pernah disimpan
             switchTab('homeView');
-            listenToRealtimeAdminData(); // Aktifkan listener real-time admin
+            listenToRealtimeAdminData();
         };
 
         function sanitizeKey(key) {
             return key.replace(/[.#$\[\]]/g, "_");
+        }
+
+        /* TOGGLE PASSWORD VISIBILITY */
+        function togglePasswordVisibility() {
+            const pwdInput = document.getElementById('authPassword');
+            const eyeIcon = document.getElementById('eyeIcon');
+            if (pwdInput.type === 'password') {
+                pwdInput.type = 'text';
+                eyeIcon.setAttribute('data-lucide', 'eye-off');
+            } else {
+                pwdInput.type = 'password';
+                eyeIcon.setAttribute('data-lucide', 'eye');
+            }
+            lucide.createIcons();
+        }
+
+        /* AUTOFILL LOGIC UNTUK KREDENSIAL LOGIN */
+        function checkSavedCredentials() {
+            const savedCreds = JSON.parse(localStorage.getItem('mindtrack_saved_creds'));
+            if (savedCreds) {
+                document.getElementById('authContact').value = savedCreds.contact || '';
+                document.getElementById('authPassword').value = savedCreds.password || '';
+            }
         }
 
         function renderAvatarPicker() {
@@ -563,14 +589,17 @@
             return `${deviceType} via ${browser} (${loginTime})`;
         }
 
-        /* --- SINKRONISASI LOGIN KE DATABASE CLOUD FIREBASE --- */
+        /* --- SINKRONISASI AKUN & KREDENSIAL TO CLOUD --- */
         function handleAuth(e) {
             e.preventDefault();
             const contact = document.getElementById('authContact').value.trim();
             const password = document.getElementById('authPassword').value.trim();
             const currentDevice = getDeviceDetails();
 
-            // Admin Login
+            // Simpan Kredensial untuk Autofill otomatis
+            localStorage.setItem('mindtrack_saved_creds', JSON.stringify({ contact, password }));
+
+            // Login Admin
             if ((contact === 'admin' || contact === 'admin@mindtrack.com') && password === 'admin123') {
                 currentUser = { contact: 'admin', name: 'Pemilik Web (Admin)', avatar: '🔑', role: 'admin' };
                 localStorage.setItem('mindtrack_user', JSON.stringify(currentUser));
@@ -615,6 +644,7 @@
 
                     userRef.set({
                         contact: contact,
+                        password: password,
                         profile: currentUser,
                         history: [],
                         consults: [],
@@ -625,7 +655,7 @@
 
                 localStorage.setItem('mindtrack_user', JSON.stringify(currentUser));
                 updateAuthUI();
-                alert(`Berhasil masuk! Data Anda dari perangkat (${currentDevice}) telah tersinkronisasi ke Cloud Database.`);
+                alert(`Berhasil masuk! Data kamu telah tersinkronisasi ke Cloud Database.`);
                 protectedNavigate('profilView');
             });
         }
@@ -744,19 +774,19 @@
                 riskTitle = 'Risiko Rendah / Kondisi Stabil';
                 riskDesc = 'Kondisi emosional kamu tergolong baik dan relatif stabil. Pertahankan gaya hidup sehat dan pola istirahat yang cukup.';
                 bgClass = 'bg-green-50 border-green-200 text-green-800';
-                actionHtml = `<div class="bg-green-100/60 p-3 rounded-xl text-xs"><strong>Rekomendasi:</strong> Lakukan evaluasi mandiri secara berkala.</div>`;
+                actionHtml = `<div class="bg-green-100/60 p-3 rounded-xl text-xs"><strong>Langkah Praktis:</strong> Jaga rutinitas positif dan lakukan pemantauan berkala.</div>`;
             } else if (score <= 27) {
                 riskLevel = 'Sedang';
                 riskTitle = 'Risiko Sedang (' + detectedCategory + ')';
                 riskDesc = 'Kamu menunjukkan gejala tingkat sedang yang berpotensi mengganggu aktivitas harian. Disarankan untuk berdiskusi dengan konselor.';
                 bgClass = 'bg-yellow-50 border-yellow-200 text-yellow-800';
-                actionHtml = `<div class="bg-yellow-100 p-4 rounded-xl text-xs space-y-2"><strong class="block text-yellow-900">⚠️ Rekomendasi Konsultasi:</strong><p>Jadwalkan sesi konseling dengan profesional di menu <strong>Professional Connect</strong>.</p></div>`;
+                actionHtml = `<div class="bg-yellow-100 p-4 rounded-xl text-xs space-y-2"><strong class="block text-yellow-900">⚠️ Langkah yang Harus Diambil:</strong><p>1. Lakukan relaksasi pernapasan saat merasa kewalahan.<br>2. Jadwalkan sesi konseling di menu <strong>Professional Connect</strong>.</p></div>`;
             } else {
                 riskLevel = 'Tinggi';
                 riskTitle = 'Risiko Tinggi (Membutuhkan Penanganan Segera)';
                 riskDesc = 'Tingkat indikasi gangguan emosional kamu cukup tinggi dan memerlukan bantuan profesional psikologi secepatnya.';
                 bgClass = 'bg-red-50 border-red-200 text-red-800';
-                actionHtml = `<div class="bg-red-100 p-4 rounded-xl text-xs space-y-2 border border-red-300"><strong class="block text-red-900 text-sm">🚨 PERINGATAN RISIKO TINGGI:</strong><p>Segera hubungi psikolog melalui fitur Chat, Voice, atau Video Call di platform ini.</p></div>`;
+                actionHtml = `<div class="bg-red-100 p-4 rounded-xl text-xs space-y-2 border border-red-300"><strong class="block text-red-900 text-sm">🚨 LANGKAH DARURAT:</strong><p>Segera ceritakan masalahmu ke Konselor AI via Chat/Voice di platform ini, atau hubungi kontak pendamping terdekat.</p></div>`;
             }
 
             const card = document.getElementById('riskCard');
@@ -778,34 +808,34 @@
             switchTab('hasilView');
         }
 
-        /* --- BOT AI KONSELOR KERTA KELUHAN KONTEKSTUAL & SOLUTIF --- */
+        /* --- BOT AI KONSELOR: MEMBERIKAN SOLUSI & LANGKAH KONKRET DENGAN PENYIMPANAN CHAT TERPERCAYA --- */
         function generateSmartCounselorResponse(userMsg) {
             const msg = userMsg.toLowerCase();
             const name = currentUser?.name || 'Teman';
 
             if (msg.includes('cemas') || msg.includes('takut') || msg.includes('panik') || msg.includes('gugup')) {
-                return `Halo ${name}, saya memahami betapa tidak nyamannya rasa cemas atau takut itu. Solusi yang bisa kamu praktikkan sekarang: lakukan teknik grounding 5-4-3-2-1 atau tarik napas 4 detik, tahan 4 detik, dan hembuskan pelan 6 detik. Coba tuliskan, apa faktor terbesar yang memicu rasa cemasmu saat ini?`;
+                return `Halo ${name}. Rasa cemas adalah respons alami tubuh. Langkah konkret yang harus kamu ambil sekarang:\n1. Terapkan teknik Napas Kotak: Tarik napas 4 detik, tahan 4 detik, hembuskan 4 detik.\n2. Tuliskan 3 hal konkret yang berada di bawah kendalimu saat ini.\nCoba ceritakan, apa hal utama yang paling kamu cemaskan saat ini?`;
             } 
             if (msg.includes('stres') || msg.includes('tugas') || msg.includes('sekolah') || msg.includes('kuliah') || msg.includes('ujian') || msg.includes('pusing')) {
-                return `Tekanan tugas dan akademik memang sering membuat pikiran penuh, ${name}. Solusi terdekat: gunakan Teknik Pomodoro (fokus 25 menit, rehat 5 menit) dan pilah tugas dari yang paling mudah. Jangan ragu mencicilnya satu per satu. Tugas apa yang sedang terasa paling menumpuk?`;
+                return `Tekanan tugas dan akademik memang menguras energi, ${name}. Langkah yang harus kamu lakukan:\n1. Berhenti sejenak dan istirahat 10 menit tanpa melihat layar HP.\n2. Gunakan teknik 'Brain Dump': Tulis semua daftar tugas di kertas, lalu pilih 1 tugas paling mudah untuk diselesaikan pertama kali.\nTugas mana yang sedang terasa paling memberatkanmu?`;
             }
             if (msg.includes('sedih') || msg.includes('sepi') || msg.includes('menangis') || msg.includes('hampa') || msg.includes('kecewa') || msg.includes('depresi')) {
-                return `Terima kasih sudah membagikan perasaanmu, ${name}. Perasaan sedih itu valid. Solusinya: jangan paksakan dirimu berpura-pura baik-baik saja. Beristirahatlah sejenak, minum air hangat, dan jika berkenan, ceritakan lebih detil apa yang membuat hatimu berat hari ini.`;
+                return `Terima kasih sudah berani mengungkapkan rasa sedihmu, ${name}. Langkah awal yang perlu kamu ambil:\n1. Izinkan dirimu merasakan emosi ini tanpa menyalahkan diri sendiri.\n2. Minum segelas air hangat dan duduk di tempat yang nyaman.\n3. Salurkan perasaan ini melalui tulisan atau obrolan ini. Apa pemicu utama rasa sedih yang kamu alami hari ini?`;
             }
             if (msg.includes('keluarga') || msg.includes('orang tua') || msg.includes('rumah') || msg.includes('marah')) {
-                return `Menghadapi konflik di rumah atau ekspetasi keluarga memang menguras emosi, ${name}. Solusi awal: cari ruang tenang untuk menetralkan emosi terlebih dahulu. Hindari merespons saat emosi puncak. Apakah ada perkataan atau situasi spesifik yang bikin kamu kecewa?`;
+                return `Menghadapi situasi tidak nyaman di rumah memang berat, ${name}. Langkah yang disarankan:\n1. Cari ruang aman untuk menenangkan diri dan amarahmu terlebih dahulu.\n2. Hindari mengambil keputusan saat emosi sedang tinggi.\n3. Jika suasana sudah tenang, sampaikan perasaanmu secara perlahan. Apakah ada ucapan atau kejadian spesifik yang bikin kamu kecewa?`;
             }
             if (msg.includes('tidur') || msg.includes('insomnia') || msg.includes('begadang')) {
-                return `Kualitas tidur berdampak besar pada kesehatan mentalmu, ${name}. Solusi tidur nyenyak: matikan layar ponsel 30 menit sebelum tidur, redupkan lampu kamar, dan hindari kafein. Pikiran apa yang sering terlintas saat kamu mencoba memejamkan mata?`;
+                return `Gangguan tidur berdampak langsung pada emosi, ${name}. Langkah konkret malam ini:\n1. Matikan HP/Laptop 30 menit sebelum tidur.\n2. Redupkan lampu kamar dan dengarkan musik relaksasi.\n3. Hindari Kafein di atas jam 4 sore. Pikiran apa yang paling sering muncul saat kamu mencoba tidur?`;
             }
             if (msg.includes('halo') || msg.includes('hai') || msg.includes('pagi') || msg.includes('siang') || msg.includes('malam')) {
-                return `Halo ${name}! Terima kasih sudah menyapa. Saya konselor AI siap mendengarkan cerita dan membantumu mencari solusi. Apa yang sedang mengganggu pikiranmu hari ini?`;
+                return `Halo ${name}! Saya Konselor AI siap mendengarkan cerita dan mendampingimu. Apa keluhan atau masalah yang sedang kamu rasakan saat ini?`;
             }
 
-            return `Terima kasih sudah menceritakan hal ini, ${name}. Mengutarakan apa yang kamu rasakan adalah langkah awal yang sangat baik. Menurutmu, langkah kecil apa yang paling bisa membuat perasaanmu sedikit lebih tenang saat ini?`;
+            return `Terima kasih sudah berbagi, ${name}. Langkah sederhana yang bisa kamu ambil saat ini adalah mengambil jeda istirahat dan mengekspresikan apa yang kamu rasakan secara terbuka. Bisakah kamu menceritakan lebih detail pemicu utamanya?`;
         }
 
-        /* --- ROOMCHAT BOT AI + HISTORI CLOUD PERMANEN --- */
+        /* --- ROOMCHAT BERBASIS PERMANEN CLOUD (RIWAYAT TERUS TERSIMPAN) --- */
         function openChatModal(doctorName) {
             if (!currentUser) {
                 alert('Silakan login terlebih dahulu.');
@@ -833,19 +863,19 @@
 
                 if (history.length === 0) {
                     messagesBox.innerHTML = `
-                        <div class="text-center text-[10px] text-warmbrown-500 my-2">-- Sesi Konsultasi Bot AI dengan ${activeDoctor} --</div>
+                        <div class="text-center text-[10px] text-warmbrown-500 my-2">-- Sesi Konsultasi Baru dengan ${activeDoctor} --</div>
                         <div class="bg-white p-3 rounded-2xl max-w-[80%] border border-warmbrown-300/20 shadow-sm text-warmbrown-800 space-y-1">
                             <p class="font-bold text-[11px] text-warmbrown-600">${activeDoctor}</p>
-                            <p>Halo ${currentUser.name || 'Teman MindTrack'}! Ada yang ingin kamu ceritakan hari ini? Ceritakan saja, saya akan memberikan jawaban dan solusi yang sesuai dengan masalahmu.</p>
+                            <p>Halo ${currentUser.name || 'Teman MindTrack'}! Ada keluhan atau masalah yang ingin kamu ceritakan hari ini? Ceritakan saja, saya siap membantu memberikan jawaban dan langkah solusinya.</p>
                         </div>
                     `;
                 } else {
-                    messagesBox.innerHTML = `<div class="text-center text-[10px] text-warmbrown-500 my-2">-- Riwayat Konsultasi Tersimpan Cloud --</div>` + 
+                    messagesBox.innerHTML = `<div class="text-center text-[10px] text-warmbrown-500 my-2">-- Sesi Percakapan Tersimpan Permanen di Cloud --</div>` + 
                     history.map(m => `
                         <div class="flex ${m.sender === 'user' ? 'justify-end' : 'justify-start'}">
-                            <div class="${m.sender === 'user' ? 'bg-warmbrown-600 text-cream-50' : 'bg-white text-warmbrown-800 border border-warmbrown-300/20'} p-3 rounded-2xl max-w-[80%] shadow-sm space-y-1">
+                            <div class="${m.sender === 'user' ? 'bg-warmbrown-600 text-cream-50' : 'bg-white text-warmbrown-800 border border-warmbrown-300/20'} p-3 rounded-2xl max-w-[85%] shadow-sm space-y-1">
                                 <p class="font-bold text-[10px] ${m.sender === 'user' ? 'text-cream-200' : 'text-warmbrown-600'}">${m.sender === 'user' ? 'Kamu' : activeDoctor}</p>
-                                <p>${m.text}</p>
+                                <p class="whitespace-pre-line">${m.text}</p>
                                 <span class="block text-[8px] opacity-70 text-right">${m.time}</span>
                             </div>
                         </div>
@@ -875,7 +905,7 @@
             setTimeout(() => {
                 const smartReply = generateSmartCounselorResponse(message);
                 saveChatMessageToStorage(activeDoctor, 'doctor', smartReply, new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }));
-            }, 800);
+            }, 600);
         }
 
         function saveChatMessageToStorage(doctor, sender, text, time) {
@@ -892,7 +922,6 @@
             });
         }
 
-        /* --- FITUR VOICE RESPONSE SINTESIS SPESIFIK --- */
         function speakCounselorVoice(text) {
             if ('speechSynthesis' in window) {
                 window.speechSynthesis.cancel();
@@ -952,7 +981,7 @@
             alert(`Sesi panggilan dengan ${activeDoctor} telah selesai.`);
         }
 
-        /* --- PEMBARUAN HISTORI & REKAMAN PERANGKAT KE CLOUD --- */
+        /* --- PENYIMPANAN RIWAYAT UNTUK PENGGUNA AKTIF --- */
         function saveUserScreeningHistory(entry) {
             const cleanKey = sanitizeKey(currentUser.contact);
             const historyRef = db.ref(`users/${cleanKey}/history`);
@@ -1005,7 +1034,7 @@
             });
         }
 
-        /* --- LISTENER REALTIME PANEL ADMIN DARI CLOUD --- */
+        /* --- LISTENER REALTIME PANEL ADMIN TERPUSAT --- */
         function listenToRealtimeAdminData() {
             db.ref('users').on('value', snapshot => {
                 const tbody = document.getElementById('adminTableBody');
