@@ -310,7 +310,7 @@
         <!-- 8. PANEL ADMIN MONITORING LINTAS PERANGKAT -->
         <section id="adminView" class="tab-content">
             <div class="bg-cream-50 p-6 sm:p-8 rounded-3xl border border-warmbrown-300/30 shadow-xl space-y-6">
-                <div class="flex justify-between items-center border-b pb-4">
+                <div class="flex justify-between items-center border-b pb-4 flex-wrap gap-4">
                     <div>
                         <div class="flex items-center gap-2">
                             <span class="bg-red-600 text-white text-[10px] font-extrabold px-2 py-0.5 rounded-full">REALTIME CLOUD PANEL</span>
@@ -330,6 +330,7 @@
                                 <th class="p-3 border">Data Profil & Keluhan Utama</th>
                                 <th class="p-3 border">Skrining Terakhir</th>
                                 <th class="p-3 border">Semua Riwayat Skrining</th>
+                                <th class="p-3 border text-center">Aksi Admin</th>
                             </tr>
                         </thead>
                         <tbody id="adminTableBody"></tbody>
@@ -398,6 +399,36 @@
         </div>
     </div>
 
+    <!-- MODAL KONFIRMASI / PERSETUJUAN HAPUS RIWAYAT -->
+    <div id="deleteConfirmModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-cream-50 w-full max-w-md rounded-3xl border border-warmbrown-300/40 shadow-2xl p-6 space-y-5">
+            <div class="flex items-center gap-3 text-red-600">
+                <div class="w-10 h-10 rounded-2xl bg-red-100 flex items-center justify-center font-bold">
+                    <i data-lucide="alert-triangle" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <h3 class="font-bold text-base text-warmbrown-800">Persetujuan Hapus Riwayat</h3>
+                    <p class="text-[11px] text-warmbrown-600">Tindakan ini membutuhkan konfirmasi admin</p>
+                </div>
+            </div>
+
+            <div class="bg-cream-100 p-4 rounded-2xl border border-warmbrown-300/30 space-y-2 text-xs text-warmbrown-700">
+                <p>Apakah Anda yakin menyetujui penghapusan seluruh riwayat skrining dan konsultasi milik akun:</p>
+                <p class="font-bold text-warmbrown-800 text-sm bg-cream-200 px-3 py-1.5 rounded-lg text-center" id="deleteTargetUser">--</p>
+                <p class="text-[11px] text-red-600 italic">*Catatan: Data profil dan akun pengguna tetap ada, namun seluruh riwayat skrining &amp; percakapan akan dihapus secara permanen dari Cloud Database.</p>
+            </div>
+
+            <div class="flex justify-end gap-3 pt-2">
+                <button onclick="closeDeleteModal()" class="px-4 py-2.5 rounded-xl border border-warmbrown-300 text-warmbrown-700 text-xs font-bold hover:bg-cream-200">
+                    Batal
+                </button>
+                <button id="btnConfirmDelete" onclick="executeDeleteUserHistory()" class="px-4 py-2.5 rounded-xl bg-red-600 text-white text-xs font-bold hover:bg-red-700 shadow-md">
+                    Setujui &amp; Hapus Permanen
+                </button>
+            </div>
+        </div>
+    </div>
+
     <footer class="text-center py-6 text-xs text-warmbrown-600 border-t border-warmbrown-300/20">
         © 2026 MindTrack Teen — Platform Pemantauan Kesehatan Mental Remaja
     </footer>
@@ -427,6 +458,7 @@
         let activeGender = 'female';
         let callTimerInterval = null;
         let callSeconds = 0;
+        let pendingDeleteUserKey = null;
 
         const questionBank = {
             "Indikasi Kecemasan": [
@@ -1077,13 +1109,13 @@
                     </div>`).join('');
         }
 
-        /* --- SINKRONISASI PEMANTAUAN ADMIN REALTIME --- */
+        /* --- SINKRONISASI PEMANTAUAN ADMIN REALTIME & HAPUS DATA --- */
         function listenToRealtimeAdminData() {
             const tbody = document.getElementById('adminTableBody');
 
             const renderTable = (usersData) => {
                 if (!usersData || Object.keys(usersData).length === 0) {
-                    tbody.innerHTML = `<tr><td colspan="5" class="p-4 text-center italic text-warmbrown-500">Belum ada data pengguna terdaftar dari perangkat lain.</td></tr>`;
+                    tbody.innerHTML = `<tr><td colspan="6" class="p-4 text-center italic text-warmbrown-500">Belum ada data pengguna terdaftar dari perangkat lain.</td></tr>`;
                     return;
                 }
 
@@ -1094,6 +1126,8 @@
 
                     let uniqueDevices = u.devices ? [...new Set(u.devices)] : ['Perangkat HP/PC'];
                     let devicesHtml = uniqueDevices.map(d => `• ${d}`).join('<br>');
+
+                    const userDisplayName = p.name ? `${p.name} (${u.contact})` : u.contact;
 
                     return `
                         <tr class="border-b hover:bg-cream-100">
@@ -1110,11 +1144,17 @@
                                 ${lastScreening ? `<span class="font-bold">${lastScreening.risk}</span> (Skor: ${lastScreening.score}/45)<br><span class="text-[10px] text-warmbrown-500">${lastScreening.category} - ${lastScreening.date}</span>` : '<span class="text-warmbrown-400 italic">Belum skrining</span>'}
                             </td>
                             <td class="p-3">
-                                ${u.history && u.history.length > 0 ? u.history.map(h => `• ${h.date}: ${h.category} (${h.score}/45, ${h.risk})`).join('<br>') : '-'}
+                                ${u.history && u.history.length > 0 ? u.history.map(h => `• ${h.date}: ${h.category} (${h.score}/45, ${h.risk})`).join('<br>') : '<span class="text-warmbrown-400 italic">Tidak ada riwayat</span>'}
+                            </td>
+                            <td class="p-3 text-center">
+                                <button onclick="openDeleteConfirmModal('${key}', '${userDisplayName.replace(/'/g, "\\'")}')" class="px-2.5 py-1.5 bg-red-100 text-red-700 font-bold text-[11px] rounded-lg hover:bg-red-200 border border-red-300 flex items-center gap-1 mx-auto">
+                                    <i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Hapus Riwayat
+                                </button>
                             </td>
                         </tr>
                     `;
                 }).join('');
+                lucide.createIcons();
             };
 
             let localDb = JSON.parse(localStorage.getItem('mindtrack_local_db')) || {};
@@ -1134,13 +1174,61 @@
             }
         }
 
+        /* --- FITUR MODAL PERSETUJUAN & EXECUTE HAPUS RIWAYAT PENGGUNA --- */
+        function openDeleteConfirmModal(userKey, userDisplayName) {
+            pendingDeleteUserKey = userKey;
+            document.getElementById('deleteTargetUser').innerText = userDisplayName;
+            document.getElementById('deleteConfirmModal').classList.remove('hidden');
+        }
+
+        function closeDeleteModal() {
+            pendingDeleteUserKey = null;
+            document.getElementById('deleteConfirmModal').classList.add('hidden');
+        }
+
+        function executeDeleteUserHistory() {
+            if (!pendingDeleteUserKey) return;
+
+            const targetKey = pendingDeleteUserKey;
+
+            // 1. Update di LocalStorage
+            let localDb = JSON.parse(localStorage.getItem('mindtrack_local_db')) || {};
+            if (localDb[targetKey]) {
+                localDb[targetKey].history = [];
+                localDb[targetKey].consults = [];
+                localDb[targetKey].chatLogs = {};
+                localStorage.setItem('mindtrack_local_db', JSON.stringify(localDb));
+            }
+
+            // 2. Update di Firebase Realtime Database
+            if (db) {
+                try {
+                    db.ref(`users/${targetKey}/history`).remove();
+                    db.ref(`users/${targetKey}/consults`).remove();
+                    db.ref(`users/${targetKey}/chatLogs`).remove();
+                } catch (e) {
+                    console.log("Gagal menghapus riwayat di Firebase:", e);
+                }
+            }
+
+            // Refreshes UI jika admin sedang menghapus akun yang sedang aktif
+            if (currentUser && sanitizeKey(currentUser.contact) === targetKey) {
+                renderHistories();
+            }
+
+            closeDeleteModal();
+            listenToRealtimeAdminData();
+            alert("Persetujuan dikonfirmasi: Seluruh riwayat skrining & konsultasi untuk pengguna tersebut telah berhasil dihapus!");
+        }
+
         function clearAdminData() {
-            if (confirm('Apakah Anda yakin ingin menghapus seluruh data pengguna dari database Cloud Realtime?')) {
+            if (confirm('Apakah Anda yakin menyetujui penghapusan SELURUH data pengguna dari database Cloud Realtime? Tindakan ini tidak dapat dibatalkan.')) {
                 localStorage.removeItem('mindtrack_local_db');
                 if (db) {
                     try { db.ref('users').remove(); } catch(e){}
                 }
                 listenToRealtimeAdminData();
+                alert('Seluruh data di Cloud Database berhasil di-reset.');
             }
         }
     </script>
