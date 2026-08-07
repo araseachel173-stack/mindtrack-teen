@@ -31,9 +31,8 @@
         .avatar-option.selected { border-color: #8B5A2B; background-color: #F5EFE6; transform: scale(1.08); }
     </style>
 
-    <!-- FIREBASE SDK (COMPAT VERSION) -->
+    <!-- FIREBASE REALTIME DATABASE SDK (COMPAT VERSION FOR GLOBAL SYNC) -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
 </head>
 <body class="bg-cream-100 text-warmbrown-700 antialiased min-h-screen flex flex-col justify-between">
@@ -57,7 +56,7 @@
                     <button onclick="protectedNavigate('riwayatView')" class="hover:text-warmbrown-500">Riwayat Saya</button>
                     <button onclick="protectedNavigate('connectView')" class="hover:text-warmbrown-500 text-warmbrown-600 font-bold">Professional Connect</button>
                     
-                    <button id="adminNavBtn" onclick="accessAdminPanel()" class="hidden text-xs bg-red-100 text-red-700 border border-red-300 font-bold px-3 py-1.5 rounded-lg hover:bg-red-200">Panel Admin (Real-time)</button>
+                    <button id="adminNavBtn" onclick="accessAdminPanel()" class="hidden text-xs bg-red-100 text-red-700 border border-red-300 font-bold px-3 py-1.5 rounded-lg hover:bg-red-200">Panel Admin (Real-time Cloud)</button>
                 </nav>
 
                 <div id="authNavContainer">
@@ -89,13 +88,13 @@
             <div class="grid sm:grid-cols-3 gap-6">
                 <div class="bg-cream-50 p-6 rounded-3xl border border-warmbrown-300/30 space-y-2">
                     <div class="w-10 h-10 rounded-xl bg-warmbrown-100 flex items-center justify-center text-warmbrown-700"><i data-lucide="phone-call" class="w-5 h-5"></i></div>
-                    <h3 class="font-bold text-base text-warmbrown-800">Dukungan Login Semua Akun</h3>
-                    <p class="text-xs text-warmbrown-600">Bisa masuk menggunakan email, username, maupun semua nomor HP dari perangkat manapun.</p>
+                    <h3 class="font-bold text-base text-warmbrown-800">Dukungan Login Semua HP/PC</h3>
+                    <p class="text-xs text-warmbrown-600">Bisa masuk menggunakan email, username, maupun semua nomor HP dari perangkat manapun dan tersimpan ke Cloud Admin.</p>
                 </div>
                 <div class="bg-cream-50 p-6 rounded-3xl border border-warmbrown-300/30 space-y-2">
                     <div class="w-10 h-10 rounded-xl bg-warmbrown-100 flex items-center justify-center text-warmbrown-700"><i data-lucide="cpu" class="w-5 h-5"></i></div>
-                    <h3 class="font-bold text-base text-warmbrown-800">Konselor AI Solutif</h3>
-                    <p class="text-xs text-warmbrown-600">Memberikan solusi dan langkah praktis sesuai keluhanmu serta menyimpan seluruh riwayat chat.</p>
+                    <h3 class="font-bold text-base text-warmbrown-800">Konselor AI Laki & Perempuan</h3>
+                    <p class="text-xs text-warmbrown-600">Dilengkapi suara spesifik konselor Laki-Laki & Perempuan serta solusi berbasis pendekatan psikologi teruji.</p>
                 </div>
                 <div class="bg-cream-50 p-6 rounded-3xl border border-warmbrown-300/30 space-y-2">
                     <div class="w-10 h-10 rounded-xl bg-warmbrown-100 flex items-center justify-center text-warmbrown-700"><i data-lucide="shield-check" class="w-5 h-5"></i></div>
@@ -110,10 +109,9 @@
             <div class="max-w-md mx-auto bg-cream-50 p-8 rounded-3xl border border-warmbrown-300/30 shadow-xl space-y-6">
                 <div class="text-center space-y-2">
                     <h2 class="text-2xl font-bold text-warmbrown-800">Masuk / Registrasi Akun</h2>
-                    <p class="text-xs text-warmbrown-600">Bisa gunakan Username, Email, atau Nomor HP dari perangkat manapun.</p>
+                    <p class="text-xs text-warmbrown-600">Gunakan Username, Email, atau Nomor HP dari perangkat manapun.</p>
                 </div>
 
-                <!-- Form Login Utama -->
                 <form id="authMainForm" onsubmit="handleAuthSubmit(event)" class="space-y-4">
                     <div>
                         <label class="block text-xs font-semibold mb-1 text-warmbrown-800">Username / Email / Nomor HP</label>
@@ -130,30 +128,9 @@
                         </div>
                     </div>
 
-                    <!-- Recaptcha Container untuk Verifikasi SMS -->
-                    <div id="recaptcha-container" class="flex justify-center"></div>
-
                     <button type="submit" id="btnSubmitAuth" class="w-full py-3.5 rounded-xl bg-warmbrown-600 hover:bg-warmbrown-700 text-cream-50 font-bold text-sm transition-all shadow-md flex items-center justify-center gap-2">
                         <span>Masuk / Daftar Sekarang</span>
                         <i data-lucide="arrow-right" class="w-4 h-4"></i>
-                    </button>
-                </form>
-
-                <!-- Form Input OTP SMS (Opsional) -->
-                <form id="otpForm" onsubmit="handleVerifyOTP(event)" class="hidden space-y-4 border-t border-warmbrown-300/30 pt-4">
-                    <div class="bg-warmbrown-100/50 p-3 rounded-xl border border-warmbrown-300/40">
-                        <p class="text-xs font-bold text-warmbrown-800">Kode Verifikasi Dikirim!</p>
-                        <p class="text-[11px] text-warmbrown-600">Masukkan kode OTP atau tekan verifikasi untuk langsung masuk.</p>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold mb-1 text-warmbrown-800">Kode Verifikasi (OTP)</label>
-                        <input type="text" id="otpCode" maxlength="6" value="123456" placeholder="123456" class="w-full px-4 py-3 text-center text-lg font-bold tracking-widest rounded-xl border border-warmbrown-300/40 bg-cream-100 text-warmbrown-800 focus:outline-none focus:border-warmbrown-600">
-                    </div>
-                    <button type="submit" class="w-full py-3.5 rounded-xl bg-green-600 hover:bg-green-700 text-white font-bold text-sm transition-all shadow-md">
-                        Verifikasi & Masuk
-                    </button>
-                    <button type="button" onclick="resetAuthView()" class="w-full py-2 text-xs text-warmbrown-600 hover:underline">
-                        Batal & Gunakan Akun Lain
                     </button>
                 </form>
             </div>
@@ -164,11 +141,11 @@
             <div class="bg-cream-50 p-6 sm:p-8 rounded-3xl border border-warmbrown-300/30 shadow-xl space-y-8 max-w-2xl mx-auto">
                 <div class="border-b border-warmbrown-300/20 pb-4 text-center sm:text-left">
                     <h2 class="text-2xl font-bold text-warmbrown-800">Profil Saya</h2>
-                    <p class="text-xs text-warmbrown-600">Kelola identitas, foto profil lucu, dan deskripsi keluhan utama kamu.</p>
+                    <p class="text-xs text-warmbrown-600">Kelola identitas, foto profil, dan deskripsi keluhan utama kamu.</p>
                 </div>
 
                 <div class="space-y-3">
-                    <label class="block text-xs font-bold text-warmbrown-800">Pilih Icon Gambar Profil (12 Avatar Lucu):</label>
+                    <label class="block text-xs font-bold text-warmbrown-800">Pilih Icon Gambar Profil:</label>
                     <div id="avatarPicker" class="grid grid-cols-4 sm:grid-cols-6 gap-3"></div>
                 </div>
 
@@ -261,47 +238,49 @@
             <div class="bg-cream-50 p-6 sm:p-8 rounded-3xl border border-warmbrown-300/30 shadow-xl space-y-6">
                 <div>
                     <h2 class="text-xl font-bold text-warmbrown-800">Professional Connect (AI Chatbot & Konselor)</h2>
-                    <p class="text-xs text-warmbrown-600">Konsultasi interaktif yang memberikan saran langkah konkret dan menyimpan riwayat percakapan secara permanen.</p>
+                    <p class="text-xs text-warmbrown-600">Konsultasi interaktif dengan pilihan konselor suara Laki-Laki & Perempuan berdasarkan rekomendasi klinis psikologi.</p>
                 </div>
 
                 <div class="grid sm:grid-cols-2 gap-4">
+                    <!-- KONSULOR PEREMPUAN -->
                     <div class="bg-cream-100 p-4 rounded-2xl border border-warmbrown-300/20 flex flex-col justify-between space-y-3">
                         <div class="flex items-center gap-3">
-                            <div class="w-12 h-12 rounded-full bg-warmbrown-300 flex items-center justify-center font-bold text-warmbrown-800">PS</div>
+                            <div class="w-12 h-12 rounded-full bg-pink-200 text-pink-800 flex items-center justify-center font-bold">👩‍⚕️</div>
                             <div>
                                 <h4 class="font-bold text-sm text-warmbrown-800">Siti Rahma, M.Psi., Psikolog</h4>
-                                <p class="text-[11px] text-warmbrown-600">Spesialis Remaja & Kecemasan</p>
+                                <p class="text-[11px] text-pink-700 font-semibold">Spesialis Remaja (Suara Perempuan 👩)</p>
                             </div>
                         </div>
                         <div class="grid grid-cols-3 gap-2">
-                            <button onclick="openChatModal('Siti Rahma, M.Psi., Psikolog')" class="py-2 bg-cream-50 hover:bg-warmbrown-600 hover:text-white rounded-lg text-xs font-semibold border border-warmbrown-300/30 flex justify-center items-center gap-1">
+                            <button onclick="openChatModal('Siti Rahma, M.Psi., Psikolog', 'female')" class="py-2 bg-cream-50 hover:bg-warmbrown-600 hover:text-white rounded-lg text-xs font-semibold border border-warmbrown-300/30 flex justify-center items-center gap-1">
                                 <i data-lucide="message-square" class="w-3.5 h-3.5"></i> Chat
                             </button>
-                            <button onclick="startCallModal('Siti Rahma, M.Psi., Psikolog', 'Telepon')" class="py-2 bg-cream-50 hover:bg-warmbrown-600 hover:text-white rounded-lg text-xs font-semibold border border-warmbrown-300/30 flex justify-center items-center gap-1">
+                            <button onclick="startCallModal('Siti Rahma, M.Psi., Psikolog', 'Telepon', 'female')" class="py-2 bg-cream-50 hover:bg-warmbrown-600 hover:text-white rounded-lg text-xs font-semibold border border-warmbrown-300/30 flex justify-center items-center gap-1">
                                 <i data-lucide="phone" class="w-3.5 h-3.5"></i> Voice
                             </button>
-                            <button onclick="startCallModal('Siti Rahma, M.Psi., Psikolog', 'Panggilan Video')" class="py-2 bg-cream-50 hover:bg-warmbrown-600 hover:text-white rounded-lg text-xs font-semibold border border-warmbrown-300/30 flex justify-center items-center gap-1">
+                            <button onclick="startCallModal('Siti Rahma, M.Psi., Psikolog', 'Panggilan Video', 'female')" class="py-2 bg-cream-50 hover:bg-warmbrown-600 hover:text-white rounded-lg text-xs font-semibold border border-warmbrown-300/30 flex justify-center items-center gap-1">
                                 <i data-lucide="video" class="w-3.5 h-3.5"></i> Video
                             </button>
                         </div>
                     </div>
 
+                    <!-- KONSULOR LAKI-LAKI -->
                     <div class="bg-cream-100 p-4 rounded-2xl border border-warmbrown-300/20 flex flex-col justify-between space-y-3">
                         <div class="flex items-center gap-3">
-                            <div class="w-12 h-12 rounded-full bg-warmbrown-300 flex items-center justify-center font-bold text-warmbrown-800">AH</div>
+                            <div class="w-12 h-12 rounded-full bg-blue-200 text-blue-800 flex items-center justify-center font-bold">👨‍⚕️</div>
                             <div>
                                 <h4 class="font-bold text-sm text-warmbrown-800">Ahmad Hidayat, S.Psi.</h4>
-                                <p class="text-[11px] text-warmbrown-600">Konselor Bimbingan Remaja</p>
+                                <p class="text-[11px] text-blue-700 font-semibold">Konselor Bimbingan (Suara Laki-Laki 👨)</p>
                             </div>
                         </div>
                         <div class="grid grid-cols-3 gap-2">
-                            <button onclick="openChatModal('Ahmad Hidayat, S.Psi.')" class="py-2 bg-cream-50 hover:bg-warmbrown-600 hover:text-white rounded-lg text-xs font-semibold border border-warmbrown-300/30 flex justify-center items-center gap-1">
+                            <button onclick="openChatModal('Ahmad Hidayat, S.Psi.', 'male')" class="py-2 bg-cream-50 hover:bg-warmbrown-600 hover:text-white rounded-lg text-xs font-semibold border border-warmbrown-300/30 flex justify-center items-center gap-1">
                                 <i data-lucide="message-square" class="w-3.5 h-3.5"></i> Chat
                             </button>
-                            <button onclick="startCallModal('Ahmad Hidayat, S.Psi.', 'Telepon')" class="py-2 bg-cream-50 hover:bg-warmbrown-600 hover:text-white rounded-lg text-xs font-semibold border border-warmbrown-300/30 flex justify-center items-center gap-1">
+                            <button onclick="startCallModal('Ahmad Hidayat, S.Psi.', 'Telepon', 'male')" class="py-2 bg-cream-50 hover:bg-warmbrown-600 hover:text-white rounded-lg text-xs font-semibold border border-warmbrown-300/30 flex justify-center items-center gap-1">
                                 <i data-lucide="phone" class="w-3.5 h-3.5"></i> Voice
                             </button>
-                            <button onclick="startCallModal('Ahmad Hidayat, S.Psi.', 'Panggilan Video')" class="py-2 bg-cream-50 hover:bg-warmbrown-600 hover:text-white rounded-lg text-xs font-semibold border border-warmbrown-300/30 flex justify-center items-center gap-1">
+                            <button onclick="startCallModal('Ahmad Hidayat, S.Psi.', 'Panggilan Video', 'male')" class="py-2 bg-cream-50 hover:bg-warmbrown-600 hover:text-white rounded-lg text-xs font-semibold border border-warmbrown-300/30 flex justify-center items-center gap-1">
                                 <i data-lucide="video" class="w-3.5 h-3.5"></i> Video
                             </button>
                         </div>
@@ -315,7 +294,7 @@
             <div class="bg-cream-50 p-6 sm:p-8 rounded-3xl border border-warmbrown-300/30 shadow-xl space-y-6">
                 <div>
                     <h2 class="text-xl font-bold text-warmbrown-800">Riwayat Saya</h2>
-                    <p class="text-xs text-warmbrown-600">Catatan eksklusif milik akun (<span id="historyAccountLabel" class="font-bold">--</span>). Pengguna lain tidak dapat melihat riwayat ini.</p>
+                    <p class="text-xs text-warmbrown-600">Catatan eksklusif milik akun (<span id="historyAccountLabel" class="font-bold">--</span>).</p>
                 </div>
 
                 <div class="space-y-4">
@@ -334,10 +313,10 @@
                 <div class="flex justify-between items-center border-b pb-4">
                     <div>
                         <div class="flex items-center gap-2">
-                            <span class="bg-red-600 text-white text-[10px] font-extrabold px-2 py-0.5 rounded-full">PANEL KELOLA CLOUD</span>
-                            <h2 class="text-xl font-bold text-warmbrown-800">Panel Pemantauan Admin Web (Lintas Perangkat)</h2>
+                            <span class="bg-red-600 text-white text-[10px] font-extrabold px-2 py-0.5 rounded-full">REALTIME CLOUD PANEL</span>
+                            <h2 class="text-xl font-bold text-warmbrown-800">Panel Pemantauan Admin (Semua Perangkat HP/PC)</h2>
                         </div>
-                        <p class="text-xs text-warmbrown-600 mt-1">Sistem merekam seluruh akun & nomor telp/email dari perangkat manapun secara terpusat via Firebase Cloud Database.</p>
+                        <p class="text-xs text-warmbrown-600 mt-1">Setiap akun baru yang mendaftar atau login dari HP/PC manapun langsung terekam otomatis di bawah ini secara online.</p>
                     </div>
                     <button onclick="clearAdminData()" class="text-xs px-3 py-1.5 bg-red-100 text-red-700 font-bold rounded-lg hover:bg-red-200">Reset Seluruh Data Cloud</button>
                 </div>
@@ -346,10 +325,10 @@
                     <table class="w-full text-left text-xs border-collapse">
                         <thead>
                             <tr class="bg-cream-200 text-warmbrown-800 font-bold">
-                                <th class="p-3 border">Akun Pengguna / Nomor HP</th>
-                                <th class="p-3 border">Perangkat & Lokasi Akses</th>
-                                <th class="p-3 border">Data Profil & Keluhan</th>
-                                <th class="p-3 border">Hasil Skrining Terakhir</th>
+                                <th class="p-3 border">Akun / Email / Nomor HP</th>
+                                <th class="p-3 border">Perangkat & Waktu Akses</th>
+                                <th class="p-3 border">Data Profil & Keluhan Utama</th>
+                                <th class="p-3 border">Skrining Terakhir</th>
                                 <th class="p-3 border">Semua Riwayat Skrining</th>
                             </tr>
                         </thead>
@@ -367,10 +346,10 @@
             <!-- Header Chat -->
             <div class="bg-warmbrown-600 text-cream-50 p-4 flex justify-between items-center">
                 <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-full bg-warmbrown-500 flex items-center justify-center font-bold text-white text-sm">💬</div>
+                    <div id="chatDoctorAvatar" class="w-10 h-10 rounded-full bg-warmbrown-500 flex items-center justify-center font-bold text-white text-sm">💬</div>
                     <div>
                         <h3 id="chatDoctorName" class="font-bold text-sm">Konselor AI</h3>
-                        <p class="text-[10px] text-cream-200 flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-green-400 inline-block"></span> Terhubung | Riwayat Chat Tersimpan Cloud</p>
+                        <p id="chatDoctorVoiceLabel" class="text-[10px] text-cream-200 flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-green-400 inline-block"></span> Terhubung | Responsif Ilmiah</p>
                     </div>
                 </div>
                 <button onclick="closeChatModal()" class="text-cream-200 hover:text-white"><i data-lucide="x" class="w-6 h-6"></i></button>
@@ -381,7 +360,7 @@
 
             <!-- Input Pesan -->
             <form onsubmit="sendChatMessage(event)" class="p-3 bg-cream-50 border-t border-warmbrown-300/20 flex gap-2">
-                <input type="text" id="chatInput" placeholder="Sampaikan keluhanmu, konselor siap memberikan solusi..." required class="flex-1 px-4 py-2.5 rounded-xl border border-warmbrown-300/40 bg-cream-100 text-xs focus:outline-none focus:border-warmbrown-600">
+                <input type="text" id="chatInput" placeholder="Sampaikan keluhanmu, konselor siap memberikan solusi ilmiah..." required class="flex-1 px-4 py-2.5 rounded-xl border border-warmbrown-300/40 bg-cream-100 text-xs focus:outline-none focus:border-warmbrown-600">
                 <button type="submit" class="px-4 py-2.5 rounded-xl bg-warmbrown-600 text-cream-50 font-bold text-xs hover:bg-warmbrown-700 flex items-center gap-1">
                     Kirim <i data-lucide="send" class="w-3.5 h-3.5"></i>
                 </button>
@@ -400,7 +379,7 @@
             </div>
 
             <div class="relative z-10 space-y-4">
-                <div class="w-24 h-24 rounded-full bg-warmbrown-600 border-4 border-slate-700 mx-auto flex items-center justify-center text-3xl font-bold shadow-lg">
+                <div id="callAvatarIcon" class="w-24 h-24 rounded-full bg-warmbrown-600 border-4 border-slate-700 mx-auto flex items-center justify-center text-3xl font-bold shadow-lg">
                     👨‍⚕️
                 </div>
                 <div>
@@ -427,34 +406,25 @@
     <script>
         lucide.createIcons();
 
-        /* CONFIG FIREBASE CLOUD DATABASE & AUTHENTICATION */
+        /* FIREBASE CONFIGURATION DENGAN PUBLIC OPEN ENDPOINT UNTUK REALTIME SYNC LINTAS HP/PERANGKAT */
         const firebaseConfig = {
-            apiKey: "AIzaSyDummyApiKeyMindTrack2026",
-            authDomain: "mindtrack-teen.firebaseapp.com",
-            databaseURL: "https://mindtrack-teen-default-rtdb.firebaseio.com",
-            projectId: "mindtrack-teen",
-            storageBucket: "mindtrack-teen.appspot.com",
-            messagingSenderId: "1234567890",
-            appId: "1:1234567890:web:abc123def456"
+            databaseURL: "https://mindtrack-teen-default-rtdb.asia-southeast1.firebasedatabase.app/"
         };
 
         let db = null;
-        let auth = null;
-
         try {
             if (!firebase.apps.length) {
                 firebase.initializeApp(firebaseConfig);
             }
             db = firebase.database();
-            auth = firebase.auth();
         } catch (err) {
-            console.log("Database Mode: Local Fallback Active");
+            console.log("Firebase Database Init Fallback Active");
         }
 
-        let confirmationResultObj = null;
         const avatarIcons = ['🐱', '🐶', '🐼', '🦊', '🐰', '🐻', '🐨', '🦁', '🐯', '🐸', '🦄', '🐣'];
         let selectedAvatar = '🐱';
         let activeDoctor = '';
+        let activeGender = 'female';
         let callTimerInterval = null;
         let callSeconds = 0;
 
@@ -538,28 +508,12 @@
             checkSavedCredentials();
             switchTab('homeView');
             listenToRealtimeAdminData();
-            initRecaptcha();
         };
 
         function sanitizeKey(key) {
             return String(key).replace(/[.#$\[\]]/g, "_");
         }
 
-        /* INITIALIZE RECAPTCHA UNTUK VERIFIKASI PHONE OTP */
-        function initRecaptcha() {
-            try {
-                if (auth && document.getElementById('recaptcha-container')) {
-                    window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
-                        'size': 'invisible',
-                        'callback': (response) => {}
-                    });
-                }
-            } catch (e) {
-                console.log("Recaptcha Init Ignored");
-            }
-        }
-
-        /* TOGGLE PASSWORD VISIBILITY */
         function togglePasswordVisibility() {
             const pwdInput = document.getElementById('authPassword');
             const eyeIcon = document.getElementById('eyeIcon');
@@ -573,7 +527,6 @@
             lucide.createIcons();
         }
 
-        /* AUTOFILL LOGIC UNTUK KREDENSIAL LOGIN */
         function checkSavedCredentials() {
             const savedCreds = JSON.parse(localStorage.getItem('mindtrack_saved_creds'));
             if (savedCreds) {
@@ -628,17 +581,16 @@
             if (/mobile/i.test(ua)) deviceType = "HP (Mobile)";
             else if (/ipad|tablet/i.test(ua)) deviceType = "Tablet";
 
-            let browser = "Browser Umum";
-            if (ua.includes("Chrome") && !ua.includes("Edg")) browser = "Google Chrome";
-            else if (ua.includes("Safari") && !ua.includes("Chrome")) browser = "Safari";
+            let browser = "Browser";
+            if (ua.includes("Chrome")) browser = "Chrome";
+            else if (ua.includes("Safari")) browser = "Safari";
             else if (ua.includes("Firefox")) browser = "Firefox";
-            else if (ua.includes("Edg")) browser = "Microsoft Edge";
 
             const loginTime = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
             return `${deviceType} via ${browser} (${loginTime})`;
         }
 
-        /* PENANGANAN LOGIN & VERIFIKASI KONTAN */
+        /* PERINGATAN LOGGING AKUN TERINTEGRASI REALTIME DATABASE */
         function handleAuthSubmit(e) {
             e.preventDefault();
             const contactInput = document.getElementById('authContact').value.trim();
@@ -651,7 +603,7 @@
 
             localStorage.setItem('mindtrack_saved_creds', JSON.stringify({ contact: contactInput, password: passwordInput }));
 
-            // 1. Akses Khusus Admin
+            // Akun Khusus Admin
             if ((contactInput === 'admin' || contactInput === 'admin@mindtrack.com') && passwordInput === 'admin123') {
                 currentUser = { contact: 'admin', name: 'Pemilik Web (Admin)', avatar: '🔑', role: 'admin' };
                 localStorage.setItem('mindtrack_user', JSON.stringify(currentUser));
@@ -661,20 +613,7 @@
                 return;
             }
 
-            // 2. Langsung Proses Login Semua Akun
             processUserLogin(contactInput, passwordInput);
-        }
-
-        /* PROSES KODE OTP JIKA DIGUNAKAN */
-        function handleVerifyOTP(e) {
-            e.preventDefault();
-            const contactInput = document.getElementById('authContact').value.trim();
-            processUserLogin(contactInput, 'VERIFIED_OTP');
-        }
-
-        function resetAuthView() {
-            document.getElementById('authMainForm').classList.remove('hidden');
-            document.getElementById('otpForm').classList.add('hidden');
         }
 
         function processUserLogin(contact, password) {
@@ -705,17 +644,20 @@
                 userData.devices.unshift(currentDevice);
             }
 
+            // Simpan Ke Penyimpanan Lokal
             existingUsers[cleanKey] = userData;
             localStorage.setItem('mindtrack_local_db', JSON.stringify(existingUsers));
 
             currentUser = userData.profile;
             localStorage.setItem('mindtrack_user', JSON.stringify(currentUser));
 
-            // Simpan Sync Ke Firebase Jika Aktif
+            // SIMPAN / SINKRONISASI KE FIREBASE CLOUD REALTIME DATABASE
             if (db) {
                 try {
                     db.ref('users/' + cleanKey).set(userData);
-                } catch(e){}
+                } catch(e) {
+                    console.log("Database Sync Error:", e);
+                }
             }
 
             updateAuthUI();
@@ -727,7 +669,6 @@
             localStorage.removeItem('mindtrack_user');
             currentUser = null;
             updateAuthUI();
-            resetAuthView();
             switchTab('homeView');
         }
 
@@ -766,20 +707,19 @@
             
             const cleanKey = sanitizeKey(currentUser.contact);
             
-            // Simpan Lokal
             let existingUsers = JSON.parse(localStorage.getItem('mindtrack_local_db')) || {};
             if (existingUsers[cleanKey]) {
                 existingUsers[cleanKey].profile = currentUser;
                 localStorage.setItem('mindtrack_local_db', JSON.stringify(existingUsers));
             }
 
-            // Simpan Cloud
+            // Sync Cloud Profile
             if (db) {
                 try { db.ref('users/' + cleanKey + '/profile').set(currentUser); } catch(e){}
             }
 
             updateAuthUI();
-            alert('Profil berhasil diperbarui dan tersimpan!');
+            alert('Profil berhasil diperbarui dan tersimpan ke cloud!');
         }
 
         function loadProfileData() {
@@ -884,48 +824,80 @@
             switchTab('hasilView');
         }
 
-        /* --- BOT AI KONSELOR & SMART RESPONSE --- */
+        /* --- BOT AI KONSELOR BERDASARKAN PENDEKATAN KLINIS DAN ILMIAH (TANPA SEBUT NAMA AHLI) --- */
         function generateSmartCounselorResponse(userMsg) {
             const msg = userMsg.toLowerCase();
             const name = currentUser?.name || 'Teman';
 
             if (msg.includes('cemas') || msg.includes('takut') || msg.includes('panik') || msg.includes('gugup')) {
-                return `Halo ${name}. Rasa cemas adalah respons alami tubuh. Langkah konkret yang harus kamu ambil sekarang:\n1. Terapkan teknik Napas Kotak: Tarik napas 4 detik, tahan 4 detik, hembuskan 4 detik.\n2. Tuliskan 3 hal konkret yang berada di bawah kendalimu saat ini.\nCoba ceritakan, apa hal utama yang paling kamu cemaskan saat ini?`;
+                return `Halo ${name}. Berdasarkan prinsip Terapi Kognitif Perilaku (CBT), rasa cemas berlebihan muncul dari siklus pikiran otomatis yang memprediksi hal buruk. Berikut langkah ilmiah penanganannya:\n\n1. Respon Fisik (Relaksasi Diagfragma): Tarik napas dalam 4 detik, tahan 4 detik, dan hembuskan perlahan 6 detik untuk menurunkan aktivitas sistem saraf simpatis.\n2. Restrukturisasi Kognitif: Tuliskan ketakutanmu, lalu tanyakan pada diri sendiri: 'Apakah ada bukti nyata hal ini pasti terjadi?'\n3. Grounding 5-4-3-2-1: Sebutkan 5 benda yang kamu lihat dan 4 benda yang bisa kamu sentuh untuk membawa pikiran kembali ke masa kini.\n\nApa hal spesifik yang paling memicu rasa cemasmu saat ini?`;
             } 
             if (msg.includes('stres') || msg.includes('tugas') || msg.includes('sekolah') || msg.includes('kuliah') || msg.includes('ujian') || msg.includes('pusing')) {
-                return `Tekanan tugas dan akademik memang menguras energi, ${name}. Langkah yang harus kamu lakukan:\n1. Berhenti sejenak dan istirahat 10 menit tanpa melihat layar HP.\n2. Gunakan teknik 'Brain Dump': Tulis semua daftar tugas di kertas, lalu pilih 1 tugas paling mudah untuk diselesaikan pertama kali.\nTugas mana yang sedang terasa paling memberatkanmu?`;
+                return `Tekanan akademik sering kali memicu beban mental berlebih (*cognitive overload*), ${name}. Langkah praktis manajemen stres secara ilmiah meliputi:\n\n1. Teknik Pomodoro: Kerjakan tugas selama 25 menit fokus penuh, lalu istirahat mutlak 5 menit untuk menyegarkan kembali fungsi memori kerja otak.\n2. Dekomposisi Tugas: Pecah tugas besar menjadi sub-tugas kecil yang mudah diselesaikan agar menurunkan resistensi emosional (penundaan).\n3. Evaluasi Kendali: Pisahkan mana hal yang bisa kamu kontrol (usaha belajar) dan luar kontrol (hasil akhir).\n\nTugas atau mata pelajaran mana yang paling menguras energimu saat ini?`;
             }
             if (msg.includes('sedih') || msg.includes('sepi') || msg.includes('menangis') || msg.includes('hampa') || msg.includes('kecewa') || msg.includes('depresi')) {
-                return `Terima kasih sudah berani mengungkapkan rasa sedihmu, ${name}. Langkah awal yang perlu kamu ambil:\n1. Izinkan dirimu merasakan emosi ini tanpa menyalahkan diri sendiri.\n2. Minum segelas air hangat dan duduk di tempat yang nyaman.\n3. Salurkan perasaan ini melalui tulisan atau obrolan ini. Apa pemicu utama rasa sedih yang kamu alami hari ini?`;
+                return `Perasaan sedih dan hampa yang bertahan lama memerlukan pendekatan *Behavioral Activation* (Aktivasi Perilaku) untuk memulihkan energi emosional, ${name}. Langkah penanganannya:\n\n1. Validasi Emosional: Buka ruang bagi dirimu untuk merasakan sedih tanpa menghakimi diri sendiri.\n2. Mikro-Aktivitas Fisik: Lakukan kegiatan fisik ringan selama 10-15 menit (seperti berjalan santai atau merapikan tempat tidur) untuk memicu hormon dopamin dan serotonin.\n3. Ekspresi Terbuka: Tuangkan perasaan ke dalam tulisan tanpa menyunting kata-katanya.\n\nSejak kapan kamu merasakan kondisi sedih dan hampa ini?`;
             }
             if (msg.includes('keluarga') || msg.includes('orang tua') || msg.includes('rumah') || msg.includes('marah')) {
-                return `Menghadapi situasi tidak nyaman di rumah memang berat, ${name}. Langkah yang disarankan:\n1. Cari ruang aman untuk menenangkan diri dan amarahmu terlebih dahulu.\n2. Hindari mengambil keputusan saat emosi sedang tinggi.\n3. Jika suasana sudah tenang, sampaikan perasaanmu secara perlahan. Apakah ada ucapan atau kejadian spesifik yang bikin kamu kecewa?`;
+                return `Konflik interpersonal di lingkungan keluarga dapat memicu tekanan emosional intens, ${name}. Penanganan berbasis Komunikasi Asertif dan Regulasi Emosi meliputi:\n\n1. Time-Out Emosional: Saat emosi memuncak, ambil jeda fisik untuk menghindari respons impulsif.\n2. Teknik Pesan 'Saya' (I-Message): Ungkapkan perasaanmu tanpa menyalahkan, contoh: 'Saya merasa sedih ketika bicara dengan nada tinggi'.\n3. Batasan Emosional (*Emotional Boundary*): Sadari bahwa kamu tidak bertangung jawab penuh atas emosi orang lain.\n\nApakah ada situasi spesifik di rumah yang paling memicu rasa tertekanmu?`;
             }
             if (msg.includes('tidur') || msg.includes('insomnia') || msg.includes('begadang')) {
-                return `Gangguan tidur berdampak langsung pada emosi, ${name}. Langkah konkret malam ini:\n1. Matikan HP/Laptop 30 menit sebelum tidur.\n2. Redupkan lampu kamar dan dengarkan musik relaksasi.\n3. Hindari Kafein di atas jam 4 sore. Pikiran apa yang paling sering muncul saat kamu mencoba tidur?`;
+                return `Kualitas tidur berhubungan langsung dengan kesehatan mental. Berdasarkan regulasi *Sleep Hygiene*, cara menangani insomnia emosional adalah:\n\n1. Kontrol Stimulus: Gunakan tempat tidur hanya untuk tidur, bukan untuk bermain HP atau belajar.\n2. Batasi Cahaya Biru: Matikan layar elektronik 30-60 menit sebelum tidur agar produksi melatonin otak tidak terganggu.\n3. Teknik Relaksasi Otot Progresif: Kencangkan dan kendurkan otot dari ujung kaki hingga kepala secara bertahap.\n\nApakah ada pikiran tertentu yang terus berputar saat kamu mencoba tidur?`;
             }
             if (msg.includes('halo') || msg.includes('hai') || msg.includes('pagi') || msg.includes('siang') || msg.includes('malam')) {
-                return `Halo ${name}! Saya Konselor AI siap mendengarkan cerita dan mendampingimu. Apa keluhan atau masalah yang sedang kamu rasakan saat ini?`;
+                return `Halo ${name}! Saya Konselor AI siap mendengarkan cerita dan memberikan solusi ilmiah penanganan emosi. Apa keluhan atau tantangan yang sedang kamu hadapi saat ini?`;
             }
 
-            return `Terima kasih sudah berbagi, ${name}. Langkah sederhana yang bisa kamu ambil saat ini adalah mengambil jeda istirahat dan mengekspresikan apa yang kamu rasakan secara terbuka. Bisakah kamu menceritakan lebih detail pemicu utamanya?`;
+            return `Terima kasih sudah berbagi, ${name}. Berdasarkan prinsip regulasi emosi, langkah terbaik saat ini adalah mengurai perasaanmu menjadi bagian-bagian yang dapat dikelola secara bertahan. Bisakah kamu menceritakan pemicu utama dari keluhanmu tersebut?`;
         }
 
-        /* --- ROOMCHAT BERBASIS PERMANEN CLOUD & LOKAL --- */
-        function openChatModal(doctorName) {
+        /* --- LOGIKA SUARA SPESIFIK GENDER (PEREMPUAN & LAKI-LAKI) --- */
+        function speakCounselorVoice(text, gender) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'id-ID';
+
+                const voices = window.speechSynthesis.getVoices();
+                
+                if (gender === 'female') {
+                    // Konfigurasi Suara Perempuan
+                    utterance.pitch = 1.3; // Nada lebih tinggi & lembut
+                    utterance.rate = 0.95;
+                    const femaleVoice = voices.find(v => v.lang.includes('id') && (v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('gadis') || v.name.toLowerCase().includes('zira')));
+                    if (femaleVoice) utterance.voice = femaleVoice;
+                } else {
+                    // Konfigurasi Suara Laki-Laki
+                    utterance.pitch = 0.7; // Nada lebih rendah & berat
+                    utterance.rate = 0.9;
+                    const maleVoice = voices.find(v => v.lang.includes('id') && (v.name.toLowerCase().includes('male') || v.name.toLowerCase().includes('david') || v.name.toLowerCase().includes('mantap')));
+                    if (maleVoice) utterance.voice = maleVoice;
+                }
+
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+
+        /* --- CHAT MODAL INTERAKTIF --- */
+        function openChatModal(doctorName, gender) {
             if (!currentUser) {
                 alert('Silakan login terlebih dahulu.');
                 switchTab('authView');
                 return;
             }
             activeDoctor = doctorName;
-            document.getElementById('chatDoctorName').innerText = doctorName + " (AI Bot)";
+            activeGender = gender;
+
+            document.getElementById('chatDoctorName').innerText = doctorName;
+            document.getElementById('chatDoctorAvatar').innerText = gender === 'female' ? '👩‍⚕️' : '👨‍⚕️';
+            document.getElementById('chatDoctorVoiceLabel').innerText = gender === 'female' ? 'Suara Perempuan (Terhubung)' : 'Suara Laki-Laki (Terhubung)';
             
             renderChatHistory();
             document.getElementById('chatModal').classList.remove('hidden');
         }
 
         function closeChatModal() {
+            if ('speechSynthesis' in window) window.speechSynthesis.cancel();
             document.getElementById('chatModal').classList.add('hidden');
         }
 
@@ -940,13 +912,13 @@
             if (myChatLogs.length === 0) {
                 messagesBox.innerHTML = `
                     <div class="text-center text-[10px] text-warmbrown-500 my-2">-- Sesi Konsultasi Baru dengan ${activeDoctor} --</div>
-                    <div class="bg-white p-3 rounded-2xl max-w-[80%] border border-warmbrown-300/20 shadow-sm text-warmbrown-800 space-y-1">
+                    <div class="bg-white p-3 rounded-2xl max-w-[85%] border border-warmbrown-300/20 shadow-sm text-warmbrown-800 space-y-1">
                         <p class="font-bold text-[11px] text-warmbrown-600">${activeDoctor}</p>
-                        <p>Halo ${currentUser.name || 'Teman MindTrack'}! Ada keluhan atau masalah yang ingin kamu ceritakan hari ini? Ceritakan saja, saya siap membantu memberikan jawaban dan langkah solusinya.</p>
+                        <p>Halo ${currentUser.name || 'Teman MindTrack'}! Ada keluhan atau masalah yang ingin kamu ceritakan hari ini? Saya siap membantu memberikan solusi ilmiah penanganannya.</p>
                     </div>
                 `;
             } else {
-                messagesBox.innerHTML = `<div class="text-center text-[10px] text-warmbrown-500 my-2">-- Sesi Percakapan Tersimpan Permanen --</div>` + 
+                messagesBox.innerHTML = `<div class="text-center text-[10px] text-warmbrown-500 my-2">-- Percakapan Tersimpan Realtime --</div>` + 
                 myChatLogs.map(m => `
                     <div class="flex ${m.sender === 'user' ? 'justify-end' : 'justify-start'}">
                         <div class="${m.sender === 'user' ? 'bg-warmbrown-600 text-cream-50' : 'bg-white text-warmbrown-800 border border-warmbrown-300/20'} p-3 rounded-2xl max-w-[85%] shadow-sm space-y-1">
@@ -1003,18 +975,8 @@
             renderChatHistory();
         }
 
-        function speakCounselorVoice(text) {
-            if ('speechSynthesis' in window) {
-                window.speechSynthesis.cancel();
-                const utterance = new SpeechSynthesisUtterance(text);
-                utterance.lang = 'id-ID';
-                utterance.rate = 0.9;
-                utterance.pitch = 1.0;
-                window.speechSynthesis.speak(utterance);
-            }
-        }
-
-        function startCallModal(doctorName, type) {
+        /* --- MODAL PANGGILAN DENGAN SUARA GENDER --- */
+        function startCallModal(doctorName, type, gender) {
             if (!currentUser) {
                 alert('Silakan login terlebih dahulu.');
                 switchTab('authView');
@@ -1022,8 +984,10 @@
             }
 
             activeDoctor = doctorName;
+            activeGender = gender;
             document.getElementById('callDoctorName').innerText = doctorName;
             document.getElementById('callTypeLabel').innerText = `Sesi ${type} Berlangsung`;
+            document.getElementById('callAvatarIcon').innerText = gender === 'female' ? '👩‍⚕️' : '👨‍⚕️';
 
             if (type === 'Panggilan Video') {
                 document.getElementById('videoPlaceholder').classList.remove('hidden');
@@ -1042,9 +1006,10 @@
                 document.getElementById('callTimer').innerText = `${mins}:${secs}`;
             }, 1000);
 
-            const voiceSpeech = `Halo ${currentUser.name || 'Teman'}, saya ${doctorName}. Sambungan ${type} telah terhubung. Silakan ceritakan masalahmu, saya siap memberikan bantuan solusi.`;
-            document.getElementById('callStatusSub').innerText = "🔊 Suara Konselor AI berbicara...";
-            speakCounselorVoice(voiceSpeech);
+            const voiceSpeech = `Halo ${currentUser.name || 'Teman'}, saya ${doctorName}. Sambungan ${type} telah terhubung. Silakan ceritakan keluhanmu, saya siap memberikan bantuan solusi penanganannya.`;
+            document.getElementById('callStatusSub').innerText = gender === 'female' ? "🔊 Suara Konselor Perempuan Berbicara..." : "🔊 Suara Konselor Laki-Laki Berbicara...";
+            
+            speakCounselorVoice(voiceSpeech, gender);
 
             saveUserConsultHistory({
                 date: new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }),
@@ -1054,15 +1019,12 @@
         }
 
         function endCallModal() {
-            if ('speechSynthesis' in window) {
-                window.speechSynthesis.cancel();
-            }
+            if ('speechSynthesis' in window) window.speechSynthesis.cancel();
             clearInterval(callTimerInterval);
             document.getElementById('callModal').classList.add('hidden');
             alert(`Sesi panggilan dengan ${activeDoctor} telah selesai.`);
         }
 
-        /* --- PENYIMPANAN RIWAYAT UNTUK PENGGUNA AKTIF --- */
         function saveUserScreeningHistory(entry) {
             const cleanKey = sanitizeKey(currentUser.contact);
             let existingUsers = JSON.parse(localStorage.getItem('mindtrack_local_db')) || {};
@@ -1122,13 +1084,13 @@
                     </div>`).join('');
         }
 
-        /* --- LISTENER REALTIME PANEL ADMIN TERPUSAT --- */
+        /* --- SINKRONISASI PEMANTAUAN ADMIN REALTIME UNTUK SEMUA PERANGKAT --- */
         function listenToRealtimeAdminData() {
             const tbody = document.getElementById('adminTableBody');
 
             const renderTable = (usersData) => {
                 if (!usersData || Object.keys(usersData).length === 0) {
-                    tbody.innerHTML = `<tr><td colspan="5" class="p-4 text-center italic text-warmbrown-500">Belum ada data pengguna terdaftar.</td></tr>`;
+                    tbody.innerHTML = `<tr><td colspan="5" class="p-4 text-center italic text-warmbrown-500">Belum ada data pengguna terdaftar dari perangkat lain.</td></tr>`;
                     return;
                 }
 
@@ -1137,7 +1099,7 @@
                     const p = u.profile || {};
                     const lastScreening = u.history && u.history.length > 0 ? u.history[0] : null;
 
-                    let uniqueDevices = u.devices ? [...new Set(u.devices)] : ['Perangkat Tidak Terdeteksi'];
+                    let uniqueDevices = u.devices ? [...new Set(u.devices)] : ['Perangkat HP/PC'];
                     let devicesHtml = uniqueDevices.map(d => `• ${d}`).join('<br>');
 
                     return `
@@ -1149,7 +1111,7 @@
                                 ${devicesHtml}
                             </td>
                             <td class="p-3">
-                                ${p.name ? `<strong>Nama:</strong> ${p.name}<br><strong>Usia:</strong> ${p.age || '-'} thn | <strong>Gender:</strong> ${p.gender || '-'}<br><strong>Keluhan:</strong> <em>"${p.info || '-'}"</em>` : '<span class="text-warmbrown-400 italic">Profil belum diisi</span>'}
+                                ${p.name ? `<strong>Nama:</strong> ${p.name}<br><strong>Usia:</strong> ${p.age || '-'} thn | <strong>Gender:</strong> ${p.gender || '-'}<br><strong>Keluhan Utama:</strong> <em>"${p.info || '-'}"</em>` : '<span class="text-warmbrown-400 italic">Profil belum diisi</span>'}
                             </td>
                             <td class="p-3">
                                 ${lastScreening ? `<span class="font-bold">${lastScreening.risk}</span> (Skor: ${lastScreening.score}/45)<br><span class="text-[10px] text-warmbrown-500">${lastScreening.category} - ${lastScreening.date}</span>` : '<span class="text-warmbrown-400 italic">Belum skrining</span>'}
@@ -1162,23 +1124,27 @@
                 }).join('');
             };
 
-            // Ambil dari local storage pertama kali
+            // Muat Lokal Pertama
             let localDb = JSON.parse(localStorage.getItem('mindtrack_local_db')) || {};
             renderTable(localDb);
 
-            // Jika firebase terhubung, dengarkan realtime
+            // Dengarkan Firebase Realtime Database secara Live
             if (db) {
                 try {
                     db.ref('users').on('value', snapshot => {
                         const cloudData = snapshot.val();
-                        if (cloudData) renderTable(cloudData);
+                        if (cloudData) {
+                            renderTable(cloudData);
+                        }
                     });
-                } catch(e){}
+                } catch(e) {
+                    console.log("Firebase Live Listener Error:", e);
+                }
             }
         }
 
         function clearAdminData() {
-            if (confirm('Apakah Anda yakin ingin menghapus seluruh data pengguna dari database?')) {
+            if (confirm('Apakah Anda yakin ingin menghapus seluruh data pengguna dari database Cloud Realtime?')) {
                 localStorage.removeItem('mindtrack_local_db');
                 if (db) {
                     try { db.ref('users').remove(); } catch(e){}
