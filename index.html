@@ -1,1156 +1,285 @@
 <!DOCTYPE html>
-<html lang="id" class="scroll-smooth">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MindTrack Teen - Platform Kesehatan Mental Remaja</title>
-    <!-- Google Fonts & Tailwind CDN -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>MindTrack-Teen | Sistem Pemantauan Kesehatan Mental Remaja</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        cream: { 50: '#FDFBF7', 100: '#FAF7F2', 200: '#F5EFE6', 300: '#E8DFD1' },
-                        warmbrown: { 100: '#D9C3B0', 300: '#B88E68', 500: '#8B5A2B', 600: '#6F4E37', 700: '#5C3D2E', 800: '#4A3024' }
-                    },
-                    fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'] }
+                        warmbrown: {
+                            100: '#FDFBF7',
+                            200: '#F7F0E6',
+                            400: '#C8A97E',
+                            500: '#8B5E3C',
+                            800: '#4A3319'
+                        },
+                        cream: { 100: '#FFFDF9', 200: '#FAF3E0' }
+                    }
                 }
             }
         }
     </script>
-    <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #FAF7F2; color: #5C3D2E; }
-        .tab-content { display: none; }
-        .tab-content.active { display: block; }
-        .avatar-option { transition: all 0.2s ease-in-out; }
-        .avatar-option.selected { border-color: #8B5A2B; background-color: #F5EFE6; transform: scale(1.08); }
-    </style>
-
-    <!-- FIREBASE REALTIME DATABASE SDK (COMPAT VERSION FOR GLOBAL SYNC) -->
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+    <!-- Firebase SDK v8 -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 </head>
-<body class="bg-cream-100 text-warmbrown-700 antialiased min-h-screen flex flex-col justify-between">
+<body class="bg-warmbrown-100 text-warmbrown-800 font-sans antialiased">
 
     <!-- NAVBAR -->
-    <header class="sticky top-0 z-50 bg-cream-100/90 backdrop-blur-md border-b border-warmbrown-300/20">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-20">
-                <a href="javascript:void(0)" onclick="switchTab('homeView')" class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-2xl bg-warmbrown-600 flex items-center justify-center text-cream-100 shadow-md">
-                        <i data-lucide="heart-handshake" class="w-6 h-6"></i>
-                    </div>
-                    <span class="font-bold text-xl text-warmbrown-800">MindTrack <span class="text-warmbrown-500 font-semibold">Teen</span></span>
-                </a>
-
-                <!-- Nav Menu -->
-                <nav class="hidden md:flex items-center gap-6 text-sm font-semibold text-warmbrown-700">
-                    <button onclick="switchTab('homeView')" class="hover:text-warmbrown-500">Beranda</button>
-                    <button onclick="protectedNavigate('profilView')" class="hover:text-warmbrown-500">Profil Saya</button>
-                    <button onclick="startAutoScreening()" class="hover:text-warmbrown-500">Skrining Mental</button>
-                    <button onclick="protectedNavigate('riwayatView')" class="hover:text-warmbrown-500">Riwayat Saya</button>
-                    <button onclick="protectedNavigate('connectView')" class="hover:text-warmbrown-500 text-warmbrown-600 font-bold">Professional Connect</button>
-                    
-                    <button id="adminNavBtn" onclick="accessAdminPanel()" class="hidden text-xs bg-red-100 text-red-700 border border-red-300 font-bold px-3 py-1.5 rounded-lg hover:bg-red-200">Panel Admin (Real-time Cloud)</button>
-                </nav>
-
-                <div id="authNavContainer">
-                    <button id="btnLoginNav" onclick="switchTab('authView')" class="px-5 py-2.5 rounded-xl bg-warmbrown-600 text-cream-50 font-bold text-xs shadow-md hover:bg-warmbrown-700">Masuk / Daftar</button>
-                    <div id="userBadge" class="hidden items-center gap-3">
-                        <div id="navAvatarDisplay" class="w-8 h-8 rounded-full bg-warmbrown-200 flex items-center justify-center text-lg border border-warmbrown-300">👤</div>
-                        <span id="navUserName" class="text-xs font-bold text-warmbrown-800"></span>
-                        <button onclick="logout()" class="text-xs text-red-600 font-semibold hover:underline ml-1">Keluar</button>
-                    </div>
-                </div>
-            </div>
+    <nav class="bg-white/90 backdrop-blur-md border-b border-warmbrown-200 sticky top-0 z-50 px-6 py-4 flex justify-between items-center shadow-sm">
+        <div class="flex items-center gap-2 cursor-pointer" onclick="switchTab('hero')">
+            <span class="text-2xl">🌱</span>
+            <span class="font-bold text-xl text-warmbrown-800">MindTrack<span class="text-warmbrown-500">-Teen</span></span>
         </div>
-    </header>
+        <div class="flex gap-2 text-xs md:text-sm font-medium">
+            <button onclick="switchTab('hero')" class="px-3 py-1.5 rounded-lg hover:bg-warmbrown-200">Beranda</button>
+            <button onclick="switchTab('mood')" class="px-3 py-1.5 rounded-lg hover:bg-warmbrown-200">Mood Tracker</button>
+            <button onclick="switchTab('screening')" class="px-3 py-1.5 rounded-lg hover:bg-warmbrown-200">Skrining</button>
+            <button onclick="switchTab('admin')" class="px-3.5 py-1.5 rounded-lg bg-warmbrown-800 text-white hover:bg-warmbrown-500 shadow">Panel Admin</button>
+        </div>
+    </nav>
 
-    <main class="max-w-5xl mx-auto px-4 py-8 w-full flex-1">
+    <!-- 1. BERANDA / LANDING PAGE -->
+    <section id="tab-hero" class="tab-content max-w-5xl mx-auto px-6 py-12 text-center">
+        <div class="inline-block bg-warmbrown-200 text-warmbrown-800 text-xs font-semibold px-4 py-1.5 rounded-full mb-6 border border-warmbrown-400/30">
+            ✨ Ruang Aman Kesehatan Mental Remaja
+        </div>
+        <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight leading-tight text-warmbrown-800 mb-6">
+            Pahami Emosimu,<br><span class="text-warmbrown-500">Raih Hari Esok Lebih Cerah</span>
+        </h1>
+        <p class="text-base md:text-lg text-warmbrown-800/80 max-w-2xl mx-auto mb-8">
+            Aplikasi pemantauan harian dan tes kesehatan mental awal untuk remaja yang privat, responsif, dan terhubung secara langsung.
+        </p>
+        <div class="flex flex-wrap justify-center gap-4">
+            <button onclick="switchTab('mood')" class="px-6 py-3 rounded-xl bg-warmbrown-500 text-white font-semibold hover:bg-warmbrown-800 shadow">
+                Catat Mood Hari Ini 😃
+            </button>
+            <button onclick="switchTab('screening')" class="px-6 py-3 rounded-xl bg-white border border-warmbrown-400 text-warmbrown-800 font-semibold hover:bg-warmbrown-200">
+                Mulai Skrining Mandiri 📋
+            </button>
+        </div>
+    </section>
 
-        <!-- 1. BERANDA -->
-        <section id="homeView" class="tab-content active space-y-12">
-            <div class="text-center space-y-4 max-w-2xl mx-auto py-8">
-                <span class="text-xs px-3 py-1 rounded-full bg-warmbrown-100 text-warmbrown-800 font-bold tracking-wide uppercase">Ruang Aman Remaja</span>
-                <h1 class="text-3xl sm:text-4xl font-extrabold text-warmbrown-800 leading-tight">Pantau dan Jaga Kesehatan Mentalmu Sejak Dini</h1>
-                <p class="text-sm text-warmbrown-600 leading-relaxed">MindTrack Teen mendeteksi keluhan psikologis secara otomatis melalui instrumen terarah yang tersambung langsung dengan Bot Konselor AI cerdas.</p>
-                <div class="pt-4 flex justify-center gap-4">
-                    <button onclick="startAutoScreening()" class="px-6 py-3.5 rounded-2xl bg-warmbrown-600 text-cream-50 font-bold text-sm shadow-lg hover:bg-warmbrown-700 transition-all">Mulai Skrining Sekarang</button>
-                    <button onclick="switchTab('authView')" class="px-6 py-3.5 rounded-2xl border border-warmbrown-600 text-warmbrown-800 font-bold text-sm hover:bg-cream-200 transition-all">Daftar / Login Akun</button>
-                </div>
-            </div>
+    <!-- 2. MOOD TRACKER -->
+    <section id="tab-mood" class="tab-content hidden max-w-lg mx-auto px-6 py-10">
+        <div class="bg-white p-6 md:p-8 rounded-3xl border border-warmbrown-200 shadow-xl">
+            <h2 class="text-2xl font-bold text-center mb-1">Mood Tracker Harian</h2>
+            <p class="text-center text-xs text-warmbrown-800/70 mb-6">Catat suasana hatimu hari ini.</p>
 
-            <div class="grid sm:grid-cols-3 gap-6">
-                <div class="bg-cream-50 p-6 rounded-3xl border border-warmbrown-300/30 space-y-2">
-                    <div class="w-10 h-10 rounded-xl bg-warmbrown-100 flex items-center justify-center text-warmbrown-700"><i data-lucide="phone-call" class="w-5 h-5"></i></div>
-                    <h3 class="font-bold text-base text-warmbrown-800">Dukungan Login Semua HP/PC</h3>
-                    <p class="text-xs text-warmbrown-600">Bisa masuk menggunakan email, username, maupun semua nomor HP dari perangkat manapun dan tersimpan ke Cloud Admin.</p>
-                </div>
-                <div class="bg-cream-50 p-6 rounded-3xl border border-warmbrown-300/30 space-y-2">
-                    <div class="w-10 h-10 rounded-xl bg-warmbrown-100 flex items-center justify-center text-warmbrown-700"><i data-lucide="cpu" class="w-5 h-5"></i></div>
-                    <h3 class="font-bold text-base text-warmbrown-800">Konselor AI Laki & Perempuan</h3>
-                    <p class="text-xs text-warmbrown-600">Dilengkapi suara spesifik konselor Laki-Laki & Perempuan serta solusi berbasis pendekatan psikologi teruji.</p>
-                </div>
-                <div class="bg-cream-50 p-6 rounded-3xl border border-warmbrown-300/30 space-y-2">
-                    <div class="w-10 h-10 rounded-xl bg-warmbrown-100 flex items-center justify-center text-warmbrown-700"><i data-lucide="shield-check" class="w-5 h-5"></i></div>
-                    <h3 class="font-bold text-base text-warmbrown-800">Privasi Riwayat Terjaga</h3>
-                    <p class="text-xs text-warmbrown-600">Riwayat skrining dan konsultasi bersifat privat dan hanya dapat diakses oleh pemilik akun.</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- 2. LOGIN / REGISTRASI MULTI-AKUN -->
-        <section id="authView" class="tab-content">
-            <div class="max-w-md mx-auto bg-cream-50 p-8 rounded-3xl border border-warmbrown-300/30 shadow-xl space-y-6">
-                <div class="text-center space-y-2">
-                    <h2 class="text-2xl font-bold text-warmbrown-800">Masuk / Registrasi Akun</h2>
-                    <p class="text-xs text-warmbrown-600">Gunakan Username, Email, atau Nomor HP dari perangkat manapun.</p>
-                </div>
-
-                <form id="authMainForm" onsubmit="handleAuthSubmit(event)" class="space-y-4">
-                    <div>
-                        <label class="block text-xs font-semibold mb-1 text-warmbrown-800">Username / Email / Nomor HP</label>
-                        <input type="text" id="authContact" required placeholder="Contoh: user123, email@domain.com, atau 081234567890" class="w-full px-4 py-3 text-sm rounded-xl border border-warmbrown-300/40 bg-cream-100 text-warmbrown-800 focus:outline-none focus:border-warmbrown-600">
-                    </div>
-
-                    <div id="passwordFieldGroup">
-                        <label class="block text-xs font-semibold mb-1 text-warmbrown-800">Kata Sandi</label>
-                        <div class="relative">
-                            <input type="password" id="authPassword" placeholder="••••••••" class="w-full pl-4 pr-10 py-3 text-sm rounded-xl border border-warmbrown-300/40 bg-cream-100 text-warmbrown-800 focus:outline-none focus:border-warmbrown-600">
-                            <button type="button" onclick="togglePasswordVisibility()" class="absolute right-3 top-1/2 -translate-y-1/2 text-warmbrown-500 hover:text-warmbrown-800">
-                                <i id="eyeIcon" data-lucide="eye" class="w-4 h-4"></i>
-                            </button>
-                        </div>
-                    </div>
-
-                    <button type="submit" id="btnSubmitAuth" class="w-full py-3.5 rounded-xl bg-warmbrown-600 hover:bg-warmbrown-700 text-cream-50 font-bold text-sm transition-all shadow-md flex items-center justify-center gap-2">
-                        <span>Masuk / Daftar Sekarang</span>
-                        <i data-lucide="arrow-right" class="w-4 h-4"></i>
-                    </button>
-                </form>
-            </div>
-        </section>
-
-        <!-- 3. PROFIL PENGGUNA -->
-        <section id="profilView" class="tab-content">
-            <div class="bg-cream-50 p-6 sm:p-8 rounded-3xl border border-warmbrown-300/30 shadow-xl space-y-8 max-w-2xl mx-auto">
-                <div class="border-b border-warmbrown-300/20 pb-4 text-center sm:text-left">
-                    <h2 class="text-2xl font-bold text-warmbrown-800">Profil Saya</h2>
-                    <p class="text-xs text-warmbrown-600">Kelola identitas, foto profil, dan deskripsi keluhan utama kamu.</p>
-                </div>
-
-                <div class="space-y-3">
-                    <label class="block text-xs font-bold text-warmbrown-800">Pilih Icon Gambar Profil:</label>
-                    <div id="avatarPicker" class="grid grid-cols-4 sm:grid-cols-6 gap-3"></div>
-                </div>
-
-                <form onsubmit="saveProfile(event)" class="grid sm:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-xs font-semibold mb-1">Nama Lengkap / Panggilan</label>
-                        <input type="text" id="profNama" required class="w-full px-4 py-2.5 text-sm rounded-xl border border-warmbrown-300/40 bg-cream-100">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold mb-1">Usia (Tahun)</label>
-                        <input type="number" id="profUsia" required min="10" max="25" class="w-full px-4 py-2.5 text-sm rounded-xl border border-warmbrown-300/40 bg-cream-100">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold mb-1">Jenis Kelamin</label>
-                        <select id="profGender" required class="w-full px-4 py-2.5 text-sm rounded-xl border border-warmbrown-300/40 bg-cream-100">
-                            <option value="">Pilih...</option>
-                            <option value="Laki-laki">Laki-laki</option>
-                            <option value="Perempuan">Perempuan</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold mb-1">Tingkat Pendidikan</label>
-                        <select id="profPendidikan" required class="w-full px-4 py-2.5 text-sm rounded-xl border border-warmbrown-300/40 bg-cream-100">
-                            <option value="">Pilih...</option>
-                            <option value="SMP">SMP / Sederajat</option>
-                            <option value="SMA">SMA / SMK / Sederajat</option>
-                            <option value="Perguruan Tinggi">Perguruan Tinggi</option>
-                        </select>
-                    </div>
-                    <div class="sm:col-span-2">
-                        <label class="block text-xs font-semibold mb-1">Keluhan Utama / Apa yang Sedang Kamu Rasakan?</label>
-                        <textarea id="profInfo" rows="3" required placeholder="Contoh: Sering cemas berlebih kalau mau ujian, sedih tanpa alasan jelas, atau sering stres karena masalah keluarga..." class="w-full px-4 py-2.5 text-sm rounded-xl border border-warmbrown-300/40 bg-cream-100"></textarea>
-                    </div>
-                    <div class="sm:col-span-2 pt-2">
-                        <button type="submit" class="w-full py-3.5 rounded-xl bg-warmbrown-600 text-cream-50 font-bold text-sm hover:bg-warmbrown-700 transition-all shadow-md">
-                            Simpan Perubahan Profil
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </section>
-
-        <!-- 4. ISIAN SOAL SKRINING -->
-        <section id="skriningView" class="tab-content">
-            <div class="bg-cream-50 p-6 sm:p-8 rounded-3xl border border-warmbrown-300/30 shadow-xl space-y-6">
-                <div class="border-b border-warmbrown-300/20 pb-4">
-                    <span id="selectedCategoryBadge" class="text-xs px-3 py-1 rounded-full bg-warmbrown-100 text-warmbrown-800 font-bold">--</span>
-                    <h2 class="text-xl font-bold text-warmbrown-800 mt-2">Instrumen Evaluasi Psikologis (15 Pertanyaan)</h2>
-                    <p class="text-xs text-warmbrown-600">Jawablah 15 pertanyaan berikut sesuai dengan kondisi yang kamu rasakan dalam 2 minggu terakhir:</p>
-                </div>
-
-                <form onsubmit="calculateScreening(event)" class="space-y-6">
-                    <div id="questionsContainer" class="space-y-6"></div>
-                    <button type="submit" class="w-full py-3.5 rounded-xl bg-warmbrown-600 text-cream-50 font-bold text-sm hover:bg-warmbrown-700 transition-all shadow-md">
-                        Hitung & Tampilkan Hasil
-                    </button>
-                </form>
-            </div>
-        </section>
-
-        <!-- 5. HASIL SKRINING -->
-        <section id="hasilView" class="tab-content">
-            <div id="riskCard" class="p-6 sm:p-8 rounded-3xl border shadow-xl space-y-6">
-                <div class="flex items-center justify-between border-b pb-4">
-                    <div>
-                        <span class="text-xs font-bold uppercase tracking-wider text-warmbrown-600">Hasil Interpretasi Otomatis</span>
-                        <h2 id="riskTitle" class="text-2xl font-black mt-1">--</h2>
-                    </div>
-                    <div id="scoreBadge" class="text-2xl font-black px-4 py-2 rounded-2xl bg-white shadow-sm">
-                        Skor Total: <span id="scoreNum">0</span> / 45
-                    </div>
-                </div>
-
-                <p id="riskDesc" class="text-sm leading-relaxed">--</p>
-                <div id="riskActionBox" class="p-5 rounded-2xl space-y-3"></div>
-
-                <div class="flex flex-col sm:flex-row gap-4 pt-2">
-                    <button onclick="switchTab('riwayatView')" class="w-full py-3 rounded-xl border border-warmbrown-600 text-warmbrown-800 font-bold text-xs hover:bg-cream-200">
-                        Lihat Riwayat Saya
-                    </button>
-                    <button onclick="switchTab('connectView')" class="w-full py-3 rounded-xl bg-warmbrown-600 text-cream-50 font-bold text-xs hover:bg-warmbrown-700">
-                        Buka Professional Connect
-                    </button>
-                </div>
-            </div>
-        </section>
-
-        <!-- 6. PROFESSIONAL CONNECT -->
-        <section id="connectView" class="tab-content">
-            <div class="bg-cream-50 p-6 sm:p-8 rounded-3xl border border-warmbrown-300/30 shadow-xl space-y-6">
+            <form id="moodForm" class="space-y-5">
                 <div>
-                    <h2 class="text-xl font-bold text-warmbrown-800">Professional Connect (AI Chatbot & Konselor)</h2>
-                    <p class="text-xs text-warmbrown-600">Konsultasi interaktif dengan pilihan konselor suara Laki-Laki & Perempuan berdasarkan rekomendasi klinis psikologi.</p>
+                    <label class="block text-xs font-semibold mb-1">Kontak/ID Pengguna</label>
+                    <input type="text" id="userContactMood" placeholder="Contoh: WhatsApp / ID Perangkat" class="w-full px-4 py-2.5 rounded-xl border border-warmbrown-200 text-sm focus:outline-none focus:ring-2 focus:ring-warmbrown-500" required>
                 </div>
-
-                <div class="grid sm:grid-cols-2 gap-4">
-                    <!-- KONSULOR PEREMPUAN -->
-                    <div class="bg-cream-100 p-4 rounded-2xl border border-warmbrown-300/20 flex flex-col justify-between space-y-3">
-                        <div class="flex items-center gap-3">
-                            <div class="w-12 h-12 rounded-full bg-pink-200 text-pink-800 flex items-center justify-center font-bold">👩‍⚕️</div>
-                            <div>
-                                <h4 class="font-bold text-sm text-warmbrown-800">Siti Rahma, M.Psi., Psikolog</h4>
-                                <p class="text-[11px] text-pink-700 font-semibold">Spesialis Remaja (Suara Perempuan 👩)</p>
-                            </div>
-                        </div>
-                        <div class="grid grid-cols-3 gap-2">
-                            <button onclick="openChatModal('Siti Rahma, M.Psi., Psikolog', 'female')" class="py-2 bg-cream-50 hover:bg-warmbrown-600 hover:text-white rounded-lg text-xs font-semibold border border-warmbrown-300/30 flex justify-center items-center gap-1">
-                                <i data-lucide="message-square" class="w-3.5 h-3.5"></i> Chat
-                            </button>
-                            <button onclick="startCallModal('Siti Rahma, M.Psi., Psikolog', 'Telepon', 'female')" class="py-2 bg-cream-50 hover:bg-warmbrown-600 hover:text-white rounded-lg text-xs font-semibold border border-warmbrown-300/30 flex justify-center items-center gap-1">
-                                <i data-lucide="phone" class="w-3.5 h-3.5"></i> Voice
-                            </button>
-                            <button onclick="startCallModal('Siti Rahma, M.Psi., Psikolog', 'Panggilan Video', 'female')" class="py-2 bg-cream-50 hover:bg-warmbrown-600 hover:text-white rounded-lg text-xs font-semibold border border-warmbrown-300/30 flex justify-center items-center gap-1">
-                                <i data-lucide="video" class="w-3.5 h-3.5"></i> Video
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- KONSULOR LAKI-LAKI -->
-                    <div class="bg-cream-100 p-4 rounded-2xl border border-warmbrown-300/20 flex flex-col justify-between space-y-3">
-                        <div class="flex items-center gap-3">
-                            <div class="w-12 h-12 rounded-full bg-blue-200 text-blue-800 flex items-center justify-center font-bold">👨‍⚕️</div>
-                            <div>
-                                <h4 class="font-bold text-sm text-warmbrown-800">Ahmad Hidayat, S.Psi.</h4>
-                                <p class="text-[11px] text-blue-700 font-semibold">Konselor Bimbingan (Suara Laki-Laki 👨)</p>
-                            </div>
-                        </div>
-                        <div class="grid grid-cols-3 gap-2">
-                            <button onclick="openChatModal('Ahmad Hidayat, S.Psi.', 'male')" class="py-2 bg-cream-50 hover:bg-warmbrown-600 hover:text-white rounded-lg text-xs font-semibold border border-warmbrown-300/30 flex justify-center items-center gap-1">
-                                <i data-lucide="message-square" class="w-3.5 h-3.5"></i> Chat
-                            </button>
-                            <button onclick="startCallModal('Ahmad Hidayat, S.Psi.', 'Telepon', 'male')" class="py-2 bg-cream-50 hover:bg-warmbrown-600 hover:text-white rounded-lg text-xs font-semibold border border-warmbrown-300/30 flex justify-center items-center gap-1">
-                                <i data-lucide="phone" class="w-3.5 h-3.5"></i> Voice
-                            </button>
-                            <button onclick="startCallModal('Ahmad Hidayat, S.Psi.', 'Panggilan Video', 'male')" class="py-2 bg-cream-50 hover:bg-warmbrown-600 hover:text-white rounded-lg text-xs font-semibold border border-warmbrown-300/30 flex justify-center items-center gap-1">
-                                <i data-lucide="video" class="w-3.5 h-3.5"></i> Video
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- 7. RIWAYAT KHUSUS PENGGUNA AKTIF (PRIVAT) -->
-        <section id="riwayatView" class="tab-content">
-            <div class="bg-cream-50 p-6 sm:p-8 rounded-3xl border border-warmbrown-300/30 shadow-xl space-y-6">
                 <div>
-                    <h2 class="text-xl font-bold text-warmbrown-800">Riwayat Saya</h2>
-                    <p class="text-xs text-warmbrown-600">Catatan eksklusif milik akun (<span id="historyAccountLabel" class="font-bold">--</span>).</p>
-                </div>
-
-                <div class="space-y-4">
-                    <h3 class="text-sm font-bold text-warmbrown-800 border-b pb-2">Hasil Skrining Psikologis Saya</h3>
-                    <div id="screeningHistoryList" class="space-y-2 text-xs"></div>
-
-                    <h3 class="text-sm font-bold text-warmbrown-800 border-b pb-2 pt-4">Riwayat Sesi Konsultasi & Panggilan</h3>
-                    <div id="consultHistoryList" class="space-y-2 text-xs"></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- 8. PANEL ADMIN MONITORING LINTAS PERANGKAT -->
-        <section id="adminView" class="tab-content">
-            <div class="bg-cream-50 p-6 sm:p-8 rounded-3xl border border-warmbrown-300/30 shadow-xl space-y-6">
-                <div class="flex justify-between items-center border-b pb-4">
-                    <div>
-                        <div class="flex items-center gap-2">
-                            <span class="bg-red-600 text-white text-[10px] font-extrabold px-2 py-0.5 rounded-full">REALTIME CLOUD PANEL</span>
-                            <h2 class="text-xl font-bold text-warmbrown-800">Panel Pemantauan Admin (Semua Perangkat HP/PC)</h2>
-                        </div>
-                        <p class="text-xs text-warmbrown-600 mt-1">Setiap akun baru yang mendaftar atau login dari HP/PC manapun langsung terekam otomatis di bawah ini secara online.</p>
+                    <label class="block text-xs font-semibold mb-2">Pilih Emoji Mood</label>
+                    <div class="flex justify-between text-2xl p-2 bg-cream-100 rounded-2xl border border-warmbrown-200">
+                        <button type="button" onclick="selectEmoji('😄 Sangat Senang')" class="hover:scale-125 transition">😄</button>
+                        <button type="button" onclick="selectEmoji('🙂 Senang')" class="hover:scale-125 transition">🙂</button>
+                        <button type="button" onclick="selectEmoji('😐 Biasa Saja')" class="hover:scale-125 transition">😐</button>
+                        <button type="button" onclick="selectEmoji('😔 Sedih')" class="hover:scale-125 transition">😔</button>
+                        <button type="button" onclick="selectEmoji('😡 Marah')" class="hover:scale-125 transition">😡</button>
                     </div>
-                    <button onclick="clearAdminData()" class="text-xs px-3 py-1.5 bg-red-100 text-red-700 font-bold rounded-lg hover:bg-red-200">Reset Seluruh Data Cloud</button>
+                    <input type="hidden" id="selectedEmoji" required>
+                    <p id="selectedEmojiLabel" class="text-center text-xs text-warmbrown-500 mt-2">Belum memilih emoji</p>
                 </div>
-
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left text-xs border-collapse">
-                        <thead>
-                            <tr class="bg-cream-200 text-warmbrown-800 font-bold">
-                                <th class="p-3 border">Akun / Email / Nomor HP</th>
-                                <th class="p-3 border">Perangkat & Waktu Akses</th>
-                                <th class="p-3 border">Data Profil & Keluhan Utama</th>
-                                <th class="p-3 border">Skrining Terakhir</th>
-                                <th class="p-3 border">Semua Riwayat Skrining</th>
-                            </tr>
-                        </thead>
-                        <tbody id="adminTableBody"></tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
-
-    </main>
-
-    <!-- MODAL ROOMCHAT BOT INTERAKTIF -->
-    <div id="chatModal" class="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm hidden flex items-center justify-center p-4">
-        <div class="bg-cream-50 w-full max-w-lg rounded-3xl border border-warmbrown-300/30 shadow-2xl flex flex-col h-[580px] overflow-hidden">
-            <!-- Header Chat -->
-            <div class="bg-warmbrown-600 text-cream-50 p-4 flex justify-between items-center">
-                <div class="flex items-center gap-3">
-                    <div id="chatDoctorAvatar" class="w-10 h-10 rounded-full bg-warmbrown-500 flex items-center justify-center font-bold text-white text-sm">💬</div>
-                    <div>
-                        <h3 id="chatDoctorName" class="font-bold text-sm">Konselor AI</h3>
-                        <p id="chatDoctorVoiceLabel" class="text-[10px] text-cream-200 flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-green-400 inline-block"></span> Terhubung | Responsif Ilmiah</p>
+                <div>
+                    <label class="block text-xs font-semibold mb-1">Skala Energi (1 - 10)</label>
+                    <input type="range" id="moodScore" min="1" max="10" value="5" class="w-full accent-warmbrown-500" oninput="document.getElementById('scoreVal').innerText = this.value">
+                    <div class="flex justify-between text-[10px] font-bold text-warmbrown-500">
+                        <span>1 (Sangat Buruk)</span>
+                        <span id="scoreVal" class="text-sm text-warmbrown-800">5</span>
+                        <span>10 (Luar Biasa)</span>
                     </div>
                 </div>
-                <button onclick="closeChatModal()" class="text-cream-200 hover:text-white"><i data-lucide="x" class="w-6 h-6"></i></button>
-            </div>
-
-            <!-- Area Pesan Chat -->
-            <div id="chatMessages" class="flex-1 p-4 overflow-y-auto space-y-3 bg-cream-100 text-xs"></div>
-
-            <!-- Input Pesan -->
-            <form onsubmit="sendChatMessage(event)" class="p-3 bg-cream-50 border-t border-warmbrown-300/20 flex gap-2">
-                <input type="text" id="chatInput" placeholder="Sampaikan keluhanmu, konselor siap memberikan solusi ilmiah..." required class="flex-1 px-4 py-2.5 rounded-xl border border-warmbrown-300/40 bg-cream-100 text-xs focus:outline-none focus:border-warmbrown-600">
-                <button type="submit" class="px-4 py-2.5 rounded-xl bg-warmbrown-600 text-cream-50 font-bold text-xs hover:bg-warmbrown-700 flex items-center gap-1">
-                    Kirim <i data-lucide="send" class="w-3.5 h-3.5"></i>
-                </button>
+                <div>
+                    <label class="block text-xs font-semibold mb-1">Catatan Singkat</label>
+                    <textarea id="moodNote" rows="2" placeholder="Alasan merasa seperti ini..." class="w-full px-4 py-2 rounded-xl border border-warmbrown-200 text-xs focus:outline-none focus:ring-2 focus:ring-warmbrown-500"></textarea>
+                </div>
+                <button type="submit" class="w-full py-3 bg-warmbrown-500 text-white font-bold rounded-xl hover:bg-warmbrown-800 transition">Simpan Mood</button>
             </form>
         </div>
-    </div>
+    </section>
 
-    <!-- MODAL TELEPON / PANGGILAN VIDEO -->
-    <div id="callModal" class="fixed inset-0 z-50 bg-slate-900/90 backdrop-blur-md hidden flex items-center justify-center p-4">
-        <div class="bg-slate-800 text-white w-full max-w-md rounded-3xl shadow-2xl p-8 text-center space-y-6 border border-slate-700 relative overflow-hidden">
-            <div id="videoPlaceholder" class="hidden absolute inset-0 bg-slate-950 flex items-center justify-center">
-                <div class="text-center space-y-2">
-                    <i data-lucide="video" class="w-16 h-16 text-slate-600 mx-auto animate-pulse"></i>
-                    <p class="text-xs text-slate-400">Panggilan Video Berlangsung...</p>
-                </div>
-            </div>
+    <!-- 3. SKRINING DIRI -->
+    <section id="tab-screening" class="tab-content hidden max-w-xl mx-auto px-6 py-10">
+        <div class="bg-white p-6 md:p-8 rounded-3xl border border-warmbrown-200 shadow-xl">
+            <h2 class="text-2xl font-bold text-center mb-1">Skrining Kesehatan Mental</h2>
+            <p class="text-center text-xs text-warmbrown-800/70 mb-6">Jawab pertanyaan berikut sesuai perasaanmu dalam 30 hari terakhir.</p>
 
-            <div class="relative z-10 space-y-4">
-                <div id="callAvatarIcon" class="w-24 h-24 rounded-full bg-warmbrown-600 border-4 border-slate-700 mx-auto flex items-center justify-center text-3xl font-bold shadow-lg">
-                    👨‍⚕️
-                </div>
+            <form id="screeningForm" class="space-y-4">
                 <div>
-                    <h3 id="callDoctorName" class="text-lg font-bold text-white">Konselor</h3>
-                    <p id="callTypeLabel" class="text-xs text-slate-400 mt-1">Sesi Panggilan Berlangsung</p>
-                    <p id="callStatusSub" class="text-[11px] text-green-400 mt-1 animate-pulse">Menghubungkan suara konselor...</p>
-                    <p id="callTimer" class="text-sm font-mono text-green-400 font-bold mt-2">00:00</p>
+                    <label class="block text-xs font-semibold mb-1">Kontak/ID Pengguna</label>
+                    <input type="text" id="userContactScreening" placeholder="Masukkan Kontak/ID yang Sama" class="w-full px-4 py-2.5 rounded-xl border border-warmbrown-200 text-sm focus:outline-none focus:ring-2 focus:ring-warmbrown-500" required>
                 </div>
+                <div class="space-y-3 text-xs">
+                    <p class="font-semibold">1. Sering merasa sakit kepala/pusing?</p>
+                    <div class="flex gap-4"><label><input type="radio" name="q1" value="1" required> Ya</label><label><input type="radio" name="q1" value="0"> Tidak</label></div>
+                    
+                    <p class="font-semibold">2. Kurang nafsu makan?</p>
+                    <div class="flex gap-4"><label><input type="radio" name="q2" value="1" required> Ya</label><label><input type="radio" name="q2" value="0"> Tidak</label></div>
 
-                <div class="flex justify-center gap-4 pt-4">
-                    <button class="w-12 h-12 rounded-full bg-slate-700 hover:bg-slate-600 flex items-center justify-center"><i data-lucide="mic-off" class="w-5 h-5"></i></button>
-                    <button onclick="endCallModal()" class="w-14 h-14 rounded-full bg-red-600 hover:bg-red-700 flex items-center justify-center shadow-lg"><i data-lucide="phone-off" class="w-6 h-6"></i></button>
-                    <button class="w-12 h-12 rounded-full bg-slate-700 hover:bg-slate-600 flex items-center justify-center"><i data-lucide="volume-2" class="w-5 h-5"></i></button>
+                    <p class="font-semibold">3. Sulit tidur nyenyak atau tidur terganggu?</p>
+                    <div class="flex gap-4"><label><input type="radio" name="q3" value="1" required> Ya</label><label><input type="radio" name="q3" value="0"> Tidak</label></div>
+
+                    <p class="font-semibold">4. Mudah merasa cemas, tegang, atau khawatir?</p>
+                    <div class="flex gap-4"><label><input type="radio" name="q4" value="1" required> Ya</label><label><input type="radio" name="q4" value="0"> Tidak</label></div>
                 </div>
+                <button type="submit" class="w-full py-3 bg-warmbrown-800 text-white font-bold rounded-xl hover:bg-warmbrown-500 transition mt-4">Kirim Hasil Skrining</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- 4. PANEL ADMIN PEMANTAUAN -->
+    <section id="tab-admin" class="tab-content hidden max-w-6xl mx-auto px-6 py-10">
+        <div class="flex justify-between items-center mb-6">
+            <div>
+                <h2 class="text-2xl font-bold">Panel Pemantauan Admin</h2>
+                <p class="text-xs text-warmbrown-800/70">Pantau data Mood & Hasil Skrining Pengguna secara Real-Time.</p>
+            </div>
+            <button onclick="listenToRealtimeAdminData()" class="px-3 py-1.5 bg-warmbrown-200 text-xs font-semibold rounded-lg hover:bg-warmbrown-400">🔄 Refresh Data</button>
+        </div>
+
+        <div class="bg-white rounded-2xl border border-warmbrown-200 overflow-hidden shadow-sm">
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse text-xs">
+                    <thead>
+                        <tr class="bg-warmbrown-800 text-white uppercase tracking-wider">
+                            <th class="p-3">Pengguna / ID</th>
+                            <th class="p-3">Mood Terakhir</th>
+                            <th class="p-3">Skala Mood</th>
+                            <th class="p-3">Hasil Skrining</th>
+                            <th class="p-3">Riwayat Mood & Catatan</th>
+                        </tr>
+                    </thead>
+                    <tbody id="adminTableBody" class="divide-y divide-warmbrown-100">
+                        <tr><td colspan="5" class="p-4 text-center italic">Memuat data dari cloud...</td></tr>
+                    </tbody>
+                </table>
             </div>
         </div>
-    </div>
+    </section>
 
-    <footer class="text-center py-6 text-xs text-warmbrown-600 border-t border-warmbrown-300/20">
-        © 2026 MindTrack Teen — Platform Pemantauan Kesehatan Mental Remaja
-    </footer>
-
-    <!-- LOGIKA SISTEM INTEGRATED -->
+    <!-- SCRIPT FIREBASE LOGIC -->
     <script>
-        lucide.createIcons();
-
-        /* FIREBASE CONFIGURATION DENGAN PUBLIC OPEN ENDPOINT UNTUK REALTIME SYNC LINTAS HP/PERANGKAT */
+        // MASUKKAN URL DATABASE FIREBASE MILIKMU DI SINI
         const firebaseConfig = {
             databaseURL: "https://mindtrack-teen-default-rtdb.asia-southeast1.firebasedatabase.app/"
         };
 
         let db = null;
         try {
-            if (!firebase.apps.length) {
+            if (typeof firebase !== 'undefined') {
                 firebase.initializeApp(firebaseConfig);
+                db = firebase.database();
             }
-            db = firebase.database();
-        } catch (err) {
-            console.log("Firebase Database Init Fallback Active");
+        } catch (e) {
+            console.error("Firebase Error:", e);
         }
 
-        const avatarIcons = ['🐱', '🐶', '🐼', '🦊', '🐰', '🐻', '🐨', '🦁', '🐯', '🐸', '🦄', '🐣'];
-        let selectedAvatar = '🐱';
-        let activeDoctor = '';
-        let activeGender = 'female';
-        let callTimerInterval = null;
-        let callSeconds = 0;
-
-        const questionBank = {
-            "Indikasi Kecemasan": [
-                "Merasa gugup, cemas, atau gelisah secara berlebihan?",
-                "Sulit menghentikan atau mengendalikan rasa khawatir?",
-                "Khawatir berlebihan tentang berbagai hal yang belum tentu terjadi?",
-                "Sangat sulit untuk santai atau beristirahat tenang?",
-                "Merasa begitu gelisah sehingga sulit untuk duduk diam?",
-                "Mudah merasa jengkel, kesal, atau tersinggung?",
-                "Merasa takut seolah-olah sesuatu yang buruk akan terjadi?",
-                "Mengalami gejala fisik seperti jantung berdebar kencang tanpa alasan medis?",
-                "Mengalami otot tegang, pegal, atau gemetar saat merasa tertekan?",
-                "Sering merasa pusing, mual, atau keringat dingin saat cemas?",
-                "Sering menghindari situasi sosial karena takut dihakimi orang lain?",
-                "Sering memikirkan secara berulang-ulang kesalahan di masa lalu?",
-                "Merasa panik secara tiba-tiba di situasi yang sebenarnya aman?",
-                "Sulit berkonsentrasi karena pikiran dipenuhi rasa khawatir?",
-                "Mengalami gangguan tidur karena otak terus berfikir dan cemas?"
-            ],
-            "Indikasi Depresi": [
-                "Kurang berminat atau tidak menikmati melakukan berbagai aktivitas?",
-                "Merasa murung, sedih, hampa, atau putus asa hampir sepanjang hari?",
-                "Sulit tidur, sering terbangun, atau justru terlalu banyak tidur?",
-                "Merasa lelah, lemas, atau kekurangan energi hampir setiap hari?",
-                "Kurang nafsu makan atau justru makan secara berlebihan?",
-                "Merasa buruk tentang diri sendiri, gagal, atau mengecewakan keluarga?",
-                "Sulit berkonsentrasi saat membaca, belajar, atau menonton TV?",
-                "Bergerak atau berbicara sangat lambat, atau sebaliknya sangat gelisah?",
-                "Memiliki pikiran bahwa lebih baik mati atau ingin melukai diri sendiri?",
-                "Merasa masa depan tidak memiliki harapan atau tujuan jelas?",
-                "Sering menangis secara tiba-tiba tanpa alasan yang pasti?",
-                "Merasa terisolasi dan menarik diri dari teman dan keluarga?",
-                "Kehilangan rasa percaya diri dan merasa tidak berguna?",
-                "Merasa bersalah secara berlebihan atas hal yang bukan salahmu?",
-                "Merasa sangat lambat dalam merespons atau mengambil keputusan?"
-            ],
-            "Indikasi Stres Akademik/Lingkungan": [
-                "Merasa beban tugas/sekolah melebihi kemampuan yang kamu miliki?",
-                "Merasa tidak ada orang di sekitarmu yang memahami tekanan yang kamu alami?",
-                "Sering pusing/sakit perut saat menghadapi tekanan tugas atau ujian?",
-                "Merasa kewalahan dan sangat sulit membagi waktu harian?",
-                "Mudah emosi atau tidak stabil saat berinteraksi dengan teman/keluarga?",
-                "Merasa panik saat mendekati tenggat waktu (deadline) tugas?",
-                "Merasa cemas jika tidak mendapatkan nilai yang sempurna?",
-                "Merasa ekspektasi orang tua/guru sangat memberatkan pikiranmu?",
-                "Sering menunda-nunda tugas karena merasa terlalu tertekan?",
-                "Merasa lelah secara mental saat memikirkan rutinitas sekolah/kuliah?",
-                "Kehilangan motivasi belajar yang biasanya kamu miliki?",
-                "Merasa bersaing secara tidak sehat dan cemas dibanding-bandingkan?",
-                "Merasa lingkungan belajar/sosialmu sangat tidak mendukung?",
-                "Kurang memiliki waktu luang untuk beristirahat atau melakukan hobi?",
-                "Sering merasa bingung menentukan prioritas kegiatan harian?"
-            ],
-            "Evaluasi Kesejahteraan Umum": [
-                "Sering merasa cemas dan khawatir dalam menjalankan aktivitas harian?",
-                "Merasa kehilangan kegembiraan saat berkumpul bersama teman/keluarga?",
-                "Kesulitan fokus saat belajar atau menyelesaikan pekerjaan harian?",
-                "Merasa kualitas tidurmu sangat buruk atau tidak nyenyak belakangan ini?",
-                "Merasa tertekan oleh ekspektasi orang lain terhadap dirimu?",
-                "Sering merasa lelah secara fisik maupun emosional di siang hari?",
-                "Sulit untuk mengendalikan emosi ketika sedang menghadapi masalah?",
-                "Merasa jarang memiliki waktu untuk menenangkan pikiran secara mandiri?",
-                "Merasa komunikasi dengan keluarga atau teman terganggu belakangan ini?",
-                "Sering ragu saat harus mengambil keputusan-keputusan kecil?",
-                "Merasa pola hidup dan pola makanmu menjadi tidak teratur?",
-                "Merasa tidak memiliki ruang aman untuk menceritakan masalahmu?",
-                "Sering merasa kesepian meskipun sedang berada di keramaian?",
-                "Merasa motivasi dirimu menurun drastis dibanding beberapa bulan lalu?",
-                "Merasa membutuhkan bantuan profesional namun ragu untuk memulainya?"
-            ]
-        };
-
-        let currentUser = JSON.parse(localStorage.getItem('mindtrack_user')) || null;
-        let detectedCategory = 'Evaluasi Kesejahteraan Umum';
-
-        window.onload = function() {
-            renderAvatarPicker();
-            updateAuthUI();
-            checkSavedCredentials();
-            switchTab('homeView');
-            listenToRealtimeAdminData();
-        };
-
-        function sanitizeKey(key) {
-            return String(key).replace(/[.#$\[\]]/g, "_");
+        function switchTab(tab) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`tab-${tab}`).classList.remove('hidden');
+            if (tab === 'admin') listenToRealtimeAdminData();
         }
 
-        function togglePasswordVisibility() {
-            const pwdInput = document.getElementById('authPassword');
-            const eyeIcon = document.getElementById('eyeIcon');
-            if (pwdInput.type === 'password') {
-                pwdInput.type = 'text';
-                eyeIcon.setAttribute('data-lucide', 'eye-off');
-            } else {
-                pwdInput.type = 'password';
-                eyeIcon.setAttribute('data-lucide', 'eye');
-            }
-            lucide.createIcons();
+        function selectEmoji(val) {
+            document.getElementById('selectedEmoji').value = val;
+            document.getElementById('selectedEmojiLabel').innerText = `Terpilih: ${val}`;
         }
 
-        function checkSavedCredentials() {
-            const savedCreds = JSON.parse(localStorage.getItem('mindtrack_saved_creds'));
-            if (savedCreds) {
-                document.getElementById('authContact').value = savedCreds.contact || '';
-                document.getElementById('authPassword').value = savedCreds.password || '';
-            }
-        }
-
-        function renderAvatarPicker() {
-            const picker = document.getElementById('avatarPicker');
-            picker.innerHTML = avatarIcons.map(icon => `
-                <button type="button" onclick="selectAvatar('${icon}')" id="avatar-btn-${icon}" class="avatar-option p-3 text-2xl bg-cream-100 rounded-2xl border border-warmbrown-300/30 flex justify-center items-center hover:bg-cream-200">
-                    ${icon}
-                </button>
-            `).join('');
-        }
-
-        function selectAvatar(icon) {
-            selectedAvatar = icon;
-            document.querySelectorAll('.avatar-option').forEach(el => el.classList.remove('selected'));
-            const activeBtn = document.getElementById(`avatar-btn-${icon}`);
-            if (activeBtn) activeBtn.classList.add('selected');
-        }
-
-        function switchTab(tabId) {
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-            document.getElementById(tabId).classList.add('active');
-        }
-
-        function protectedNavigate(targetTab) {
-            if (!currentUser) {
-                alert('Silakan masuk atau mendaftar akun terlebih dahulu.');
-                switchTab('authView');
-            } else {
-                if (targetTab === 'profilView') loadProfileData();
-                if (targetTab === 'riwayatView') renderHistories();
-                switchTab(targetTab);
-            }
-        }
-
-        function accessAdminPanel() {
-            if (currentUser && currentUser.role === 'admin') {
-                switchTab('adminView');
-            } else {
-                alert('Akses Ditolak! Hanya Admin yang dapat mengakses halaman ini.');
-            }
-        }
-
-        function getDeviceDetails() {
-            const ua = navigator.userAgent;
-            let deviceType = "Desktop/PC";
-            if (/mobile/i.test(ua)) deviceType = "HP (Mobile)";
-            else if (/ipad|tablet/i.test(ua)) deviceType = "Tablet";
-
-            let browser = "Browser";
-            if (ua.includes("Chrome")) browser = "Chrome";
-            else if (ua.includes("Safari")) browser = "Safari";
-            else if (ua.includes("Firefox")) browser = "Firefox";
-
-            const loginTime = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
-            return `${deviceType} via ${browser} (${loginTime})`;
-        }
-
-        /* PERINGATAN LOGGING AKUN TERINTEGRASI REALTIME DATABASE */
-        function handleAuthSubmit(e) {
+        // SIMPAN MOOD TRACKER & RIWAYATNYA
+        document.getElementById('moodForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            const contactInput = document.getElementById('authContact').value.trim();
-            const passwordInput = document.getElementById('authPassword').value.trim();
+            const contact = document.getElementById('userContactMood').value.trim();
+            const emoji = document.getElementById('selectedEmoji').value;
+            const score = document.getElementById('moodScore').value;
+            const note = document.getElementById('moodNote').value.trim();
 
-            if (!contactInput) {
-                alert('Silakan masukkan Username, Email, atau Nomor HP.');
-                return;
-            }
+            if (!emoji) return alert("Pilih emoji terlebih dahulu!");
 
-            localStorage.setItem('mindtrack_saved_creds', JSON.stringify({ contact: contactInput, password: passwordInput }));
-
-            // Akun Khusus Admin
-            if ((contactInput === 'admin' || contactInput === 'admin@mindtrack.com') && passwordInput === 'admin123') {
-                currentUser = { contact: 'admin', name: 'Pemilik Web (Admin)', avatar: '🔑', role: 'admin' };
-                localStorage.setItem('mindtrack_user', JSON.stringify(currentUser));
-                updateAuthUI();
-                alert('Berhasil Masuk sebagai Admin!');
-                accessAdminPanel();
-                return;
-            }
-
-            processUserLogin(contactInput, passwordInput);
-        }
-
-        function processUserLogin(contact, password) {
-            const currentDevice = getDeviceDetails();
-            const cleanKey = sanitizeKey(contact);
-
-            let existingUsers = JSON.parse(localStorage.getItem('mindtrack_local_db')) || {};
-            let userData = existingUsers[cleanKey] || {
-                contact: contact,
-                password: password,
-                profile: {
-                    contact: contact,
-                    name: contact,
-                    age: '',
-                    gender: '',
-                    education: '',
-                    info: '',
-                    avatar: '🐱',
-                    role: 'user'
-                },
-                history: [],
-                consults: [],
-                chatLogs: {},
-                devices: [currentDevice]
-            };
-
-            if (!userData.devices.includes(currentDevice)) {
-                userData.devices.unshift(currentDevice);
-            }
-
-            // Simpan Ke Penyimpanan Lokal
-            existingUsers[cleanKey] = userData;
-            localStorage.setItem('mindtrack_local_db', JSON.stringify(existingUsers));
-
-            currentUser = userData.profile;
-            localStorage.setItem('mindtrack_user', JSON.stringify(currentUser));
-
-            // SIMPAN / SINKRONISASI KE FIREBASE CLOUD REALTIME DATABASE
-            if (db) {
-                try {
-                    db.ref('users/' + cleanKey).set(userData);
-                } catch(e) {
-                    console.log("Database Sync Error:", e);
-                }
-            }
-
-            updateAuthUI();
-            alert(`Berhasil Masuk! Selamat datang kembali, ${currentUser.name || contact}.`);
-            protectedNavigate('profilView');
-        }
-
-        function logout() {
-            localStorage.removeItem('mindtrack_user');
-            currentUser = null;
-            updateAuthUI();
-            switchTab('homeView');
-        }
-
-        function updateAuthUI() {
-            const adminNavBtn = document.getElementById('adminNavBtn');
-
-            if (currentUser) {
-                document.getElementById('btnLoginNav').classList.add('hidden');
-                document.getElementById('userBadge').classList.remove('hidden');
-                document.getElementById('userBadge').classList.add('flex');
-                document.getElementById('navAvatarDisplay').innerText = currentUser.avatar || '🐱';
-                document.getElementById('navUserName').innerText = currentUser.name || currentUser.contact;
-
-                if (currentUser.role === 'admin') {
-                    adminNavBtn.classList.remove('hidden');
-                } else {
-                    adminNavBtn.classList.add('hidden');
-                }
-            } else {
-                document.getElementById('btnLoginNav').classList.remove('hidden');
-                document.getElementById('userBadge').classList.add('hidden');
-                adminNavBtn.classList.add('hidden');
-            }
-        }
-
-        function saveProfile(e) {
-            e.preventDefault();
-            currentUser.name = document.getElementById('profNama').value;
-            currentUser.age = document.getElementById('profUsia').value;
-            currentUser.gender = document.getElementById('profGender').value;
-            currentUser.education = document.getElementById('profPendidikan').value;
-            currentUser.info = document.getElementById('profInfo').value;
-            currentUser.avatar = selectedAvatar;
-
-            localStorage.setItem('mindtrack_user', JSON.stringify(currentUser));
-            
-            const cleanKey = sanitizeKey(currentUser.contact);
-            
-            let existingUsers = JSON.parse(localStorage.getItem('mindtrack_local_db')) || {};
-            if (existingUsers[cleanKey]) {
-                existingUsers[cleanKey].profile = currentUser;
-                localStorage.setItem('mindtrack_local_db', JSON.stringify(existingUsers));
-            }
-
-            // Sync Cloud Profile
-            if (db) {
-                try { db.ref('users/' + cleanKey + '/profile').set(currentUser); } catch(e){}
-            }
-
-            updateAuthUI();
-            alert('Profil berhasil diperbarui dan tersimpan ke cloud!');
-        }
-
-        function loadProfileData() {
-            if (!currentUser) return;
-            if (currentUser.name) document.getElementById('profNama').value = currentUser.name;
-            if (currentUser.age) document.getElementById('profUsia').value = currentUser.age;
-            if (currentUser.gender) document.getElementById('profGender').value = currentUser.gender;
-            if (currentUser.education) document.getElementById('profPendidikan').value = currentUser.education;
-            if (currentUser.info) document.getElementById('profInfo').value = currentUser.info;
-            if (currentUser.avatar) selectAvatar(currentUser.avatar);
-        }
-
-        function startAutoScreening() {
-            if (!currentUser) {
-                alert('Silakan masuk atau mendaftar akun terlebih dahulu.');
-                switchTab('authView');
-                return;
-            }
-
-            if (!currentUser.info || currentUser.info.trim() === '') {
-                alert('Silakan lengkapi keluhan utama di profil kamu terlebih dahulu.');
-                protectedNavigate('profilView');
-                return;
-            }
-
-            const text = currentUser.info.toLowerCase();
-
-            if (text.includes('cemas') || text.includes('panik') || text.includes('takut') || text.includes('khawatir') || text.includes('gugup')) {
-                detectedCategory = 'Indikasi Kecemasan';
-            } else if (text.includes('sedih') || text.includes('sepi') || text.includes('hampa') || text.includes('kecewa') || text.includes('putus asa') || text.includes('murung') || text.includes('depresi')) {
-                detectedCategory = 'Indikasi Depresi';
-            } else if (text.includes('stres') || text.includes('tugas') || text.includes('sekolah') || text.includes('ujian') || text.includes('pusing') || text.includes('lelah') || text.includes('tekanan')) {
-                detectedCategory = 'Indikasi Stres Akademik/Lingkungan';
-            } else {
-                detectedCategory = 'Evaluasi Kesejahteraan Umum';
-            }
-
-            document.getElementById('selectedCategoryBadge').innerText = "Sistem Mendeteksi: " + detectedCategory;
-
-            const questions = questionBank[detectedCategory];
-            const container = document.getElementById('questionsContainer');
-            
-            container.innerHTML = questions.map((q, idx) => `
-                <div class="space-y-2 bg-cream-100 p-4 rounded-2xl border border-warmbrown-300/20">
-                    <p class="text-sm font-semibold text-warmbrown-800">${idx + 1}. ${q}</p>
-                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
-                        <label class="p-2.5 bg-cream-50 rounded-xl border border-warmbrown-300/30 cursor-pointer hover:border-warmbrown-500 flex items-center gap-1.5"><input type="radio" name="q${idx}" value="0" required> Tidak pernah</label>
-                        <label class="p-2.5 bg-cream-50 rounded-xl border border-warmbrown-300/30 cursor-pointer hover:border-warmbrown-500 flex items-center gap-1.5"><input type="radio" name="q${idx}" value="1"> Kadang-kadang</label>
-                        <label class="p-2.5 bg-cream-50 rounded-xl border border-warmbrown-300/30 cursor-pointer hover:border-warmbrown-500 flex items-center gap-1.5"><input type="radio" name="q${idx}" value="2"> Sering</label>
-                        <label class="p-2.5 bg-cream-50 rounded-xl border border-warmbrown-300/30 cursor-pointer hover:border-warmbrown-500 flex items-center gap-1.5"><input type="radio" name="q${idx}" value="3"> Selalu</label>
-                    </div>
-                </div>
-            `).join('');
-
-            switchTab('skriningView');
-        }
-
-        function calculateScreening(e) {
-            e.preventDefault();
-            const formData = new FormData(e.target);
-            let score = 0;
-            for (let value of formData.values()) { score += parseInt(value); }
-
-            let riskLevel = '', riskTitle = '', riskDesc = '', actionHtml = '', bgClass = '';
-
-            if (score <= 12) {
-                riskLevel = 'Rendah';
-                riskTitle = 'Risiko Rendah / Kondisi Stabil';
-                riskDesc = 'Kondisi emosional kamu tergolong baik dan relatif stabil. Pertahankan gaya hidup sehat dan pola istirahat yang cukup.';
-                bgClass = 'bg-green-50 border-green-200 text-green-800';
-                actionHtml = `<div class="bg-green-100/60 p-3 rounded-xl text-xs"><strong>Langkah Praktis:</strong> Jaga rutinitas positif dan lakukan pemantauan berkala.</div>`;
-            } else if (score <= 27) {
-                riskLevel = 'Sedang';
-                riskTitle = 'Risiko Sedang (' + detectedCategory + ')';
-                riskDesc = 'Kamu menunjukkan gejala tingkat sedang yang berpotensi mengganggu aktivitas harian. Disarankan untuk berdiskusi dengan konselor.';
-                bgClass = 'bg-yellow-50 border-yellow-200 text-yellow-800';
-                actionHtml = `<div class="bg-yellow-100 p-4 rounded-xl text-xs space-y-2"><strong class="block text-yellow-900">⚠️ Langkah yang Harus Diambil:</strong><p>1. Lakukan relaksasi pernapasan saat merasa kewalahan.<br>2. Jadwalkan sesi konseling di menu <strong>Professional Connect</strong>.</p></div>`;
-            } else {
-                riskLevel = 'Tinggi';
-                riskTitle = 'Risiko Tinggi (Membutuhkan Penanganan Segera)';
-                riskDesc = 'Tingkat indikasi gangguan emosional kamu cukup tinggi dan memerlukan bantuan profesional psikologi secepatnya.';
-                bgClass = 'bg-red-50 border-red-200 text-red-800';
-                actionHtml = `<div class="bg-red-100 p-4 rounded-xl text-xs space-y-2 border border-red-300"><strong class="block text-red-900 text-sm">🚨 LANGKAH DARURAT:</strong><p>Segera ceritakan masalahmu ke Konselor AI via Chat/Voice di platform ini, atau hubungi kontak pendamping terdekat.</p></div>`;
-            }
-
-            const card = document.getElementById('riskCard');
-            card.className = `p-6 sm:p-8 rounded-3xl border shadow-xl space-y-6 ${bgClass}`;
-            document.getElementById('riskTitle').innerText = riskTitle;
-            document.getElementById('scoreNum').innerText = score;
-            document.getElementById('riskDesc').innerText = riskDesc;
-            document.getElementById('riskActionBox').innerHTML = actionHtml;
-
-            const entry = {
-                date: new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }),
-                category: detectedCategory,
-                score: score,
-                risk: riskLevel
-            };
-
-            saveUserScreeningHistory(entry);
-            renderHistories();
-            switchTab('hasilView');
-        }
-
-        /* --- BOT AI KONSELOR BERDASARKAN PENDEKATAN KLINIS DAN ILMIAH (TANPA SEBUT NAMA AHLI) --- */
-        function generateSmartCounselorResponse(userMsg) {
-            const msg = userMsg.toLowerCase();
-            const name = currentUser?.name || 'Teman';
-
-            if (msg.includes('cemas') || msg.includes('takut') || msg.includes('panik') || msg.includes('gugup')) {
-                return `Halo ${name}. Berdasarkan prinsip Terapi Kognitif Perilaku (CBT), rasa cemas berlebihan muncul dari siklus pikiran otomatis yang memprediksi hal buruk. Berikut langkah ilmiah penanganannya:\n\n1. Respon Fisik (Relaksasi Diagfragma): Tarik napas dalam 4 detik, tahan 4 detik, dan hembuskan perlahan 6 detik untuk menurunkan aktivitas sistem saraf simpatis.\n2. Restrukturisasi Kognitif: Tuliskan ketakutanmu, lalu tanyakan pada diri sendiri: 'Apakah ada bukti nyata hal ini pasti terjadi?'\n3. Grounding 5-4-3-2-1: Sebutkan 5 benda yang kamu lihat dan 4 benda yang bisa kamu sentuh untuk membawa pikiran kembali ke masa kini.\n\nApa hal spesifik yang paling memicu rasa cemasmu saat ini?`;
-            } 
-            if (msg.includes('stres') || msg.includes('tugas') || msg.includes('sekolah') || msg.includes('kuliah') || msg.includes('ujian') || msg.includes('pusing')) {
-                return `Tekanan akademik sering kali memicu beban mental berlebih (*cognitive overload*), ${name}. Langkah praktis manajemen stres secara ilmiah meliputi:\n\n1. Teknik Pomodoro: Kerjakan tugas selama 25 menit fokus penuh, lalu istirahat mutlak 5 menit untuk menyegarkan kembali fungsi memori kerja otak.\n2. Dekomposisi Tugas: Pecah tugas besar menjadi sub-tugas kecil yang mudah diselesaikan agar menurunkan resistensi emosional (penundaan).\n3. Evaluasi Kendali: Pisahkan mana hal yang bisa kamu kontrol (usaha belajar) dan luar kontrol (hasil akhir).\n\nTugas atau mata pelajaran mana yang paling menguras energimu saat ini?`;
-            }
-            if (msg.includes('sedih') || msg.includes('sepi') || msg.includes('menangis') || msg.includes('hampa') || msg.includes('kecewa') || msg.includes('depresi')) {
-                return `Perasaan sedih dan hampa yang bertahan lama memerlukan pendekatan *Behavioral Activation* (Aktivasi Perilaku) untuk memulihkan energi emosional, ${name}. Langkah penanganannya:\n\n1. Validasi Emosional: Buka ruang bagi dirimu untuk merasakan sedih tanpa menghakimi diri sendiri.\n2. Mikro-Aktivitas Fisik: Lakukan kegiatan fisik ringan selama 10-15 menit (seperti berjalan santai atau merapikan tempat tidur) untuk memicu hormon dopamin dan serotonin.\n3. Ekspresi Terbuka: Tuangkan perasaan ke dalam tulisan tanpa menyunting kata-katanya.\n\nSejak kapan kamu merasakan kondisi sedih dan hampa ini?`;
-            }
-            if (msg.includes('keluarga') || msg.includes('orang tua') || msg.includes('rumah') || msg.includes('marah')) {
-                return `Konflik interpersonal di lingkungan keluarga dapat memicu tekanan emosional intens, ${name}. Penanganan berbasis Komunikasi Asertif dan Regulasi Emosi meliputi:\n\n1. Time-Out Emosional: Saat emosi memuncak, ambil jeda fisik untuk menghindari respons impulsif.\n2. Teknik Pesan 'Saya' (I-Message): Ungkapkan perasaanmu tanpa menyalahkan, contoh: 'Saya merasa sedih ketika bicara dengan nada tinggi'.\n3. Batasan Emosional (*Emotional Boundary*): Sadari bahwa kamu tidak bertangung jawab penuh atas emosi orang lain.\n\nApakah ada situasi spesifik di rumah yang paling memicu rasa tertekanmu?`;
-            }
-            if (msg.includes('tidur') || msg.includes('insomnia') || msg.includes('begadang')) {
-                return `Kualitas tidur berhubungan langsung dengan kesehatan mental. Berdasarkan regulasi *Sleep Hygiene*, cara menangani insomnia emosional adalah:\n\n1. Kontrol Stimulus: Gunakan tempat tidur hanya untuk tidur, bukan untuk bermain HP atau belajar.\n2. Batasi Cahaya Biru: Matikan layar elektronik 30-60 menit sebelum tidur agar produksi melatonin otak tidak terganggu.\n3. Teknik Relaksasi Otot Progresif: Kencangkan dan kendurkan otot dari ujung kaki hingga kepala secara bertahap.\n\nApakah ada pikiran tertentu yang terus berputar saat kamu mencoba tidur?`;
-            }
-            if (msg.includes('halo') || msg.includes('hai') || msg.includes('pagi') || msg.includes('siang') || msg.includes('malam')) {
-                return `Halo ${name}! Saya Konselor AI siap mendengarkan cerita dan memberikan solusi ilmiah penanganan emosi. Apa keluhan atau tantangan yang sedang kamu hadapi saat ini?`;
-            }
-
-            return `Terima kasih sudah berbagi, ${name}. Berdasarkan prinsip regulasi emosi, langkah terbaik saat ini adalah mengurai perasaanmu menjadi bagian-bagian yang dapat dikelola secara bertahan. Bisakah kamu menceritakan pemicu utama dari keluhanmu tersebut?`;
-        }
-
-        /* --- LOGIKA SUARA SPESIFIK GENDER (PEREMPUAN & LAKI-LAKI) --- */
-        function speakCounselorVoice(text, gender) {
-            if ('speechSynthesis' in window) {
-                window.speechSynthesis.cancel();
-                const utterance = new SpeechSynthesisUtterance(text);
-                utterance.lang = 'id-ID';
-
-                const voices = window.speechSynthesis.getVoices();
-                
-                if (gender === 'female') {
-                    // Konfigurasi Suara Perempuan
-                    utterance.pitch = 1.3; // Nada lebih tinggi & lembut
-                    utterance.rate = 0.95;
-                    const femaleVoice = voices.find(v => v.lang.includes('id') && (v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('gadis') || v.name.toLowerCase().includes('zira')));
-                    if (femaleVoice) utterance.voice = femaleVoice;
-                } else {
-                    // Konfigurasi Suara Laki-Laki
-                    utterance.pitch = 0.7; // Nada lebih rendah & berat
-                    utterance.rate = 0.9;
-                    const maleVoice = voices.find(v => v.lang.includes('id') && (v.name.toLowerCase().includes('male') || v.name.toLowerCase().includes('david') || v.name.toLowerCase().includes('mantap')));
-                    if (maleVoice) utterance.voice = maleVoice;
-                }
-
-                window.speechSynthesis.speak(utterance);
-            }
-        }
-
-        /* --- CHAT MODAL INTERAKTIF --- */
-        function openChatModal(doctorName, gender) {
-            if (!currentUser) {
-                alert('Silakan login terlebih dahulu.');
-                switchTab('authView');
-                return;
-            }
-            activeDoctor = doctorName;
-            activeGender = gender;
-
-            document.getElementById('chatDoctorName').innerText = doctorName;
-            document.getElementById('chatDoctorAvatar').innerText = gender === 'female' ? '👩‍⚕️' : '👨‍⚕️';
-            document.getElementById('chatDoctorVoiceLabel').innerText = gender === 'female' ? 'Suara Perempuan (Terhubung)' : 'Suara Laki-Laki (Terhubung)';
-            
-            renderChatHistory();
-            document.getElementById('chatModal').classList.remove('hidden');
-        }
-
-        function closeChatModal() {
-            if ('speechSynthesis' in window) window.speechSynthesis.cancel();
-            document.getElementById('chatModal').classList.add('hidden');
-        }
-
-        function renderChatHistory() {
-            const messagesBox = document.getElementById('chatMessages');
-            const cleanKey = sanitizeKey(currentUser.contact);
-            const doctorKey = sanitizeKey(activeDoctor);
-
-            let existingUsers = JSON.parse(localStorage.getItem('mindtrack_local_db')) || {};
-            let myChatLogs = existingUsers[cleanKey]?.chatLogs?.[doctorKey] || [];
-
-            if (myChatLogs.length === 0) {
-                messagesBox.innerHTML = `
-                    <div class="text-center text-[10px] text-warmbrown-500 my-2">-- Sesi Konsultasi Baru dengan ${activeDoctor} --</div>
-                    <div class="bg-white p-3 rounded-2xl max-w-[85%] border border-warmbrown-300/20 shadow-sm text-warmbrown-800 space-y-1">
-                        <p class="font-bold text-[11px] text-warmbrown-600">${activeDoctor}</p>
-                        <p>Halo ${currentUser.name || 'Teman MindTrack'}! Ada keluhan atau masalah yang ingin kamu ceritakan hari ini? Saya siap membantu memberikan solusi ilmiah penanganannya.</p>
-                    </div>
-                `;
-            } else {
-                messagesBox.innerHTML = `<div class="text-center text-[10px] text-warmbrown-500 my-2">-- Percakapan Tersimpan Realtime --</div>` + 
-                myChatLogs.map(m => `
-                    <div class="flex ${m.sender === 'user' ? 'justify-end' : 'justify-start'}">
-                        <div class="${m.sender === 'user' ? 'bg-warmbrown-600 text-cream-50' : 'bg-white text-warmbrown-800 border border-warmbrown-300/20'} p-3 rounded-2xl max-w-[85%] shadow-sm space-y-1">
-                            <p class="font-bold text-[10px] ${m.sender === 'user' ? 'text-cream-200' : 'text-warmbrown-600'}">${m.sender === 'user' ? 'Kamu' : activeDoctor}</p>
-                            <p class="whitespace-pre-line">${m.text}</p>
-                            <span class="block text-[8px] opacity-70 text-right">${m.time}</span>
-                        </div>
-                    </div>
-                `).join('');
-            }
-            messagesBox.scrollTop = messagesBox.scrollHeight;
-        }
-
-        function sendChatMessage(e) {
-            e.preventDefault();
-            const input = document.getElementById('chatInput');
-            const message = input.value.trim();
-            if (!message) return;
-
-            const timeStr = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
-
-            saveChatMessageToStorage(activeDoctor, 'user', message, timeStr);
-            input.value = '';
-
-            saveUserConsultHistory({
-                date: new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }),
-                doctor: activeDoctor,
-                method: 'Roomchat (Bot AI)'
-            });
-
-            setTimeout(() => {
-                const smartReply = generateSmartCounselorResponse(message);
-                saveChatMessageToStorage(activeDoctor, 'doctor', smartReply, new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }));
-            }, 600);
-        }
-
-        function saveChatMessageToStorage(doctor, sender, text, time) {
-            const cleanKey = sanitizeKey(currentUser.contact);
-            const doctorKey = sanitizeKey(doctor);
-
-            let existingUsers = JSON.parse(localStorage.getItem('mindtrack_local_db')) || {};
-            if (!existingUsers[cleanKey]) return;
-
-            if (!existingUsers[cleanKey].chatLogs) existingUsers[cleanKey].chatLogs = {};
-            if (!existingUsers[cleanKey].chatLogs[doctorKey]) existingUsers[cleanKey].chatLogs[doctorKey] = [];
-
-            existingUsers[cleanKey].chatLogs[doctorKey].push({ sender, text, time });
-            localStorage.setItem('mindtrack_local_db', JSON.stringify(existingUsers));
+            const moodData = { emoji, score, note: note || '-', date: new Date().toLocaleString('id-ID') };
+            const userKey = contact.replace(/[^a-zA-Z0-9]/g, "_");
 
             if (db) {
-                try { db.ref(`users/${cleanKey}/chatLogs/${doctorKey}`).set(existingUsers[cleanKey].chatLogs[doctorKey]); } catch(e){}
+                db.ref(`users/${userKey}`).transaction(u => {
+                    if (!u) u = { contact };
+                    if (!u.moodHistory) u.moodHistory = [];
+                    u.moodHistory.unshift(moodData);
+                    return u;
+                }, (err) => {
+                    if (!err) {
+                        alert("Mood Berhasil Disimpan!");
+                        document.getElementById('moodForm').reset();
+                        document.getElementById('selectedEmojiLabel').innerText = "Belum memilih emoji";
+                    }
+                });
             }
+        });
 
-            renderChatHistory();
-        }
+        // SIMPAN SKRINING
+        document.getElementById('screeningForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const contact = document.getElementById('userContactScreening').value.trim();
+            const q1 = parseInt(document.querySelector('input[name="q1"]:checked').value);
+            const q2 = parseInt(document.querySelector('input[name="q2"]:checked').value);
+            const q3 = parseInt(document.querySelector('input[name="q3"]:checked').value);
+            const q4 = parseInt(document.querySelector('input[name="q4"]:checked').value);
 
-        /* --- MODAL PANGGILAN DENGAN SUARA GENDER --- */
-        function startCallModal(doctorName, type, gender) {
-            if (!currentUser) {
-                alert('Silakan login terlebih dahulu.');
-                switchTab('authView');
-                return;
-            }
-
-            activeDoctor = doctorName;
-            activeGender = gender;
-            document.getElementById('callDoctorName').innerText = doctorName;
-            document.getElementById('callTypeLabel').innerText = `Sesi ${type} Berlangsung`;
-            document.getElementById('callAvatarIcon').innerText = gender === 'female' ? '👩‍⚕️' : '👨‍⚕️';
-
-            if (type === 'Panggilan Video') {
-                document.getElementById('videoPlaceholder').classList.remove('hidden');
-            } else {
-                document.getElementById('videoPlaceholder').classList.add('hidden');
-            }
-
-            document.getElementById('callModal').classList.remove('hidden');
-
-            callSeconds = 0;
-            clearInterval(callTimerInterval);
-            callTimerInterval = setInterval(() => {
-                callSeconds++;
-                const mins = String(Math.floor(callSeconds / 60)).padStart(2, '0');
-                const secs = String(callSeconds % 60).padStart(2, '0');
-                document.getElementById('callTimer').innerText = `${mins}:${secs}`;
-            }, 1000);
-
-            const voiceSpeech = `Halo ${currentUser.name || 'Teman'}, saya ${doctorName}. Sambungan ${type} telah terhubung. Silakan ceritakan keluhanmu, saya siap memberikan bantuan solusi penanganannya.`;
-            document.getElementById('callStatusSub').innerText = gender === 'female' ? "🔊 Suara Konselor Perempuan Berbicara..." : "🔊 Suara Konselor Laki-Laki Berbicara...";
+            const totalScore = q1 + q2 + q3 + q4;
+            const risk = totalScore >= 2 ? 'Perlu Perhatian' : 'Stabil';
             
-            speakCounselorVoice(voiceSpeech, gender);
+            const screeningData = { score: totalScore, risk, date: new Date().toLocaleString('id-ID') };
+            const userKey = contact.replace(/[^a-zA-Z0-9]/g, "_");
 
-            saveUserConsultHistory({
-                date: new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }),
-                doctor: doctorName,
-                method: type
-            });
-        }
-
-        function endCallModal() {
-            if ('speechSynthesis' in window) window.speechSynthesis.cancel();
-            clearInterval(callTimerInterval);
-            document.getElementById('callModal').classList.add('hidden');
-            alert(`Sesi panggilan dengan ${activeDoctor} telah selesai.`);
-        }
-
-        function saveUserScreeningHistory(entry) {
-            const cleanKey = sanitizeKey(currentUser.contact);
-            let existingUsers = JSON.parse(localStorage.getItem('mindtrack_local_db')) || {};
-
-            if (existingUsers[cleanKey]) {
-                if (!existingUsers[cleanKey].history) existingUsers[cleanKey].history = [];
-                existingUsers[cleanKey].history.unshift(entry);
-                localStorage.setItem('mindtrack_local_db', JSON.stringify(existingUsers));
-
-                if (db) {
-                    try { db.ref(`users/${cleanKey}/history`).set(existingUsers[cleanKey].history); } catch(e){}
-                }
+            if (db) {
+                db.ref(`users/${userKey}`).transaction(u => {
+                    if (!u) u = { contact };
+                    if (!u.screeningHistory) u.screeningHistory = [];
+                    u.screeningHistory.unshift(screeningData);
+                    return u;
+                }, (err) => {
+                    if (!err) alert(`Hasil Skrining Disimpan! Skor: ${totalScore} (${risk})`);
+                });
             }
-        }
+        });
 
-        function saveUserConsultHistory(entry) {
-            const cleanKey = sanitizeKey(currentUser.contact);
-            let existingUsers = JSON.parse(localStorage.getItem('mindtrack_local_db')) || {};
-
-            if (existingUsers[cleanKey]) {
-                if (!existingUsers[cleanKey].consults) existingUsers[cleanKey].consults = [];
-                existingUsers[cleanKey].consults.unshift(entry);
-                localStorage.setItem('mindtrack_local_db', JSON.stringify(existingUsers));
-
-                if (db) {
-                    try { db.ref(`users/${cleanKey}/consults`).set(existingUsers[cleanKey].consults); } catch(e){}
-                }
-            }
-        }
-
-        function renderHistories() {
-            if (!currentUser) return;
-
-            document.getElementById('historyAccountLabel').innerText = currentUser.name || currentUser.contact;
-
-            const screenList = document.getElementById('screeningHistoryList');
-            const consultList = document.getElementById('consultHistoryList');
-            const cleanKey = sanitizeKey(currentUser.contact);
-
-            let existingUsers = JSON.parse(localStorage.getItem('mindtrack_local_db')) || {};
-            let myData = existingUsers[cleanKey] || {};
-            let screenings = myData.history || [];
-            let consults = myData.consults || [];
-
-            screenList.innerHTML = screenings.length === 0 ? `<p class="text-warmbrown-500 italic">Belum ada riwayat skrining pada akun ini.</p>` :
-                screenings.map(s => `
-                    <div class="bg-cream-100 p-3 rounded-xl border border-warmbrown-300/20 flex justify-between items-center">
-                        <div><span class="font-bold">[${s.category}]</span> Skor: ${s.score}/45 — <span class="font-semibold">${s.risk}</span></div>
-                        <span class="text-[10px] text-warmbrown-500">${s.date}</span>
-                    </div>`).join('');
-
-            consultList.innerHTML = consults.length === 0 ? `<p class="text-warmbrown-500 italic">Belum ada riwayat konsultasi pada akun ini.</p>` :
-                consults.map(c => `
-                    <div class="bg-cream-100 p-3 rounded-xl border border-warmbrown-300/20 flex justify-between items-center">
-                        <div><span class="font-bold">${c.doctor}</span> (${c.method})</div>
-                        <span class="text-[10px] text-warmbrown-500">${c.date}</span>
-                    </div>`).join('');
-        }
-
-        /* --- SINKRONISASI PEMANTAUAN ADMIN REALTIME UNTUK SEMUA PERANGKAT --- */
+        // BACA DATA DI PANEL ADMIN (MENAMPILKAN RIWAYAT LENGKAP)
         function listenToRealtimeAdminData() {
-            const tbody = document.getElementById('adminTableBody');
+            if (!db) return;
+            db.ref('users').on('value', snapshot => {
+                const users = snapshot.val() || {};
+                const tbody = document.getElementById('adminTableBody');
 
-            const renderTable = (usersData) => {
-                if (!usersData || Object.keys(usersData).length === 0) {
-                    tbody.innerHTML = `<tr><td colspan="5" class="p-4 text-center italic text-warmbrown-500">Belum ada data pengguna terdaftar dari perangkat lain.</td></tr>`;
+                if (Object.keys(users).length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="5" class="p-4 text-center italic">Belum ada data masuk.</td></tr>`;
                     return;
                 }
 
-                tbody.innerHTML = Object.keys(usersData).map(key => {
-                    const u = usersData[key];
-                    const p = u.profile || {};
-                    const lastScreening = u.history && u.history.length > 0 ? u.history[0] : null;
-
-                    let uniqueDevices = u.devices ? [...new Set(u.devices)] : ['Perangkat HP/PC'];
-                    let devicesHtml = uniqueDevices.map(d => `• ${d}`).join('<br>');
+                tbody.innerHTML = Object.keys(users).map(k => {
+                    const u = users[k];
+                    const history = u.moodHistory || [];
+                    const lastMood = history[0] || {};
+                    const lastScr = (u.screeningHistory && u.screeningHistory[0]) || {};
 
                     return `
-                        <tr class="border-b hover:bg-cream-100">
-                            <td class="p-3 font-semibold text-warmbrown-800">
-                                <span class="text-lg mr-1">${p.avatar || '👤'}</span> ${u.contact}
-                            </td>
-                            <td class="p-3 text-[11px] text-warmbrown-700">
-                                ${devicesHtml}
-                            </td>
+                        <tr class="hover:bg-warmbrown-100">
+                            <td class="p-3 font-semibold">${u.contact || k}</td>
+                            <td class="p-3">${lastMood.emoji || '-'}</td>
+                            <td class="p-3"><span class="px-2 py-0.5 bg-warmbrown-200 rounded font-bold">${lastMood.score || '-'}/10</span></td>
+                            <td class="p-3">${lastScr.risk ? `<span class="font-bold ${lastScr.risk === 'Perlu Perhatian' ? 'text-red-600' : 'text-green-600'}">${lastScr.risk}</span> (Skor: ${lastScr.score})` : '-'}</td>
                             <td class="p-3">
-                                ${p.name ? `<strong>Nama:</strong> ${p.name}<br><strong>Usia:</strong> ${p.age || '-'} thn | <strong>Gender:</strong> ${p.gender || '-'}<br><strong>Keluhan Utama:</strong> <em>"${p.info || '-'}"</em>` : '<span class="text-warmbrown-400 italic">Profil belum diisi</span>'}
-                            </td>
-                            <td class="p-3">
-                                ${lastScreening ? `<span class="font-bold">${lastScreening.risk}</span> (Skor: ${lastScreening.score}/45)<br><span class="text-[10px] text-warmbrown-500">${lastScreening.category} - ${lastScreening.date}</span>` : '<span class="text-warmbrown-400 italic">Belum skrining</span>'}
-                            </td>
-                            <td class="p-3">
-                                ${u.history && u.history.length > 0 ? u.history.map(h => `• ${h.date}: ${h.category} (${h.score}/45, ${h.risk})`).join('<br>') : '-'}
+                                ${history.length > 0 ? history.map(h => `<div>• <b>${h.date}</b>: ${h.emoji} (${h.score}/10) - <i>"${h.note}"</i></div>`).join('') : '-'}
                             </td>
                         </tr>
                     `;
                 }).join('');
-            };
-
-            // Muat Lokal Pertama
-            let localDb = JSON.parse(localStorage.getItem('mindtrack_local_db')) || {};
-            renderTable(localDb);
-
-            // Dengarkan Firebase Realtime Database secara Live
-            if (db) {
-                try {
-                    db.ref('users').on('value', snapshot => {
-                        const cloudData = snapshot.val();
-                        if (cloudData) {
-                            renderTable(cloudData);
-                        }
-                    });
-                } catch(e) {
-                    console.log("Firebase Live Listener Error:", e);
-                }
-            }
-        }
-
-        function clearAdminData() {
-            if (confirm('Apakah Anda yakin ingin menghapus seluruh data pengguna dari database Cloud Realtime?')) {
-                localStorage.removeItem('mindtrack_local_db');
-                if (db) {
-                    try { db.ref('users').remove(); } catch(e){}
-                }
-                listenToRealtimeAdminData();
-            }
+            });
         }
     </script>
 </body>
