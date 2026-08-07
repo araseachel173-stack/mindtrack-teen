@@ -52,7 +52,7 @@
                     <button onclick="protectedNavigate('riwayatView')" class="hover:text-warmbrown-500">Riwayat & Perkembangan</button>
                     <button onclick="protectedNavigate('connectView')" class="hover:text-warmbrown-500 text-warmbrown-600 font-bold">Professional Connect</button>
                     
-                    <!-- MENU ADMIN: HANYA MUNCUL PADA AKUN ADMIN -->
+                    <!-- MENU ADMIN HANYA MUNCUL PADA AKUN ADMIN -->
                     <button id="adminNavBtn" onclick="accessAdminPanel()" class="hidden text-xs bg-red-100 text-red-700 border border-red-300 font-bold px-3 py-1.5 rounded-lg hover:bg-red-200">Panel Admin</button>
                 </nav>
 
@@ -75,7 +75,7 @@
             <div class="text-center space-y-4 max-w-2xl mx-auto py-8">
                 <span class="text-xs px-3 py-1 rounded-full bg-warmbrown-100 text-warmbrown-800 font-bold tracking-wide uppercase">Ruang Aman Remaja</span>
                 <h1 class="text-3xl sm:text-4xl font-extrabold text-warmbrown-800 leading-tight">Pantau dan Jaga Kesehatan Mentalmu Sejak Dini</h1>
-                <p class="text-sm text-warmbrown-600 leading-relaxed">MindTrack Teen mendeteksi keluhan psikologis secara otomatis melalui 15 instrumen terarah yang tersambung dengan profesional.</p>
+                <p class="text-sm text-warmbrown-600 leading-relaxed">MindTrack Teen mendeteksi keluhan psikologis secara otomatis melalui 15 instrumen terarah yang tersambung langsung dengan konselor.</p>
                 <div class="pt-4 flex justify-center gap-4">
                     <button onclick="startAutoScreening()" class="px-6 py-3.5 rounded-2xl bg-warmbrown-600 text-cream-50 font-bold text-sm shadow-lg hover:bg-warmbrown-700 transition-all">Mulai Skrining Sekarang</button>
                     <button onclick="switchTab('authView')" class="px-6 py-3.5 rounded-2xl border border-warmbrown-600 text-warmbrown-800 font-bold text-sm hover:bg-cream-200 transition-all">Daftar Akun</button>
@@ -91,12 +91,12 @@
                 <div class="bg-cream-50 p-6 rounded-3xl border border-warmbrown-300/30 space-y-2">
                     <div class="w-10 h-10 rounded-xl bg-warmbrown-100 flex items-center justify-center text-warmbrown-700"><i data-lucide="user-check" class="w-5 h-5"></i></div>
                     <h3 class="font-bold text-base text-warmbrown-800">Professional Connect</h3>
-                    <p class="text-xs text-warmbrown-600">Terhubung langsung dengan psikolog dan konselor melalui Chat, Voice, atau Video Call.</p>
+                    <p class="text-xs text-warmbrown-600">Terhubung langsung melalui Roomchat, Voice Call, atau Video Call dengan konselor.</p>
                 </div>
                 <div class="bg-cream-50 p-6 rounded-3xl border border-warmbrown-300/30 space-y-2">
                     <div class="w-10 h-10 rounded-xl bg-warmbrown-100 flex items-center justify-center text-warmbrown-700"><i data-lucide="line-chart" class="w-5 h-5"></i></div>
-                    <h3 class="font-bold text-base text-warmbrown-800">Pemantauan Pribadi</h3>
-                    <p class="text-xs text-warmbrown-600">Riwayat perkembangan emosionalmu tersimpan secara khusus dan privat pada akunmu.</p>
+                    <h3 class="font-bold text-base text-warmbrown-800">Riwayat Tak Terbatas</h3>
+                    <p class="text-xs text-warmbrown-600">Simpan seluruh riwayat perkembangan psikologis tanpa batasan kuota.</p>
                 </div>
             </div>
         </section>
@@ -106,13 +106,13 @@
             <div class="max-w-md mx-auto bg-cream-50 p-8 rounded-3xl border border-warmbrown-300/30 shadow-xl space-y-6">
                 <div class="text-center space-y-2">
                     <h2 class="text-2xl font-bold text-warmbrown-800">Masuk / Registrasi</h2>
-                    <p class="text-xs text-warmbrown-600">Gunakan email/ID Pengguna atau Akun Khusus Admin</p>
+                    <p class="text-xs text-warmbrown-600">Masukkan Email atau Username untuk melanjutkan</p>
                 </div>
 
                 <form onsubmit="handleAuth(event)" class="space-y-4">
                     <div>
                         <label class="block text-xs font-semibold mb-1 text-warmbrown-800">Email / Username</label>
-                        <input type="text" id="authContact" required placeholder="contoh@email.com atau 'admin'" class="w-full px-4 py-3 text-sm rounded-xl border border-warmbrown-300/40 bg-cream-100 text-warmbrown-800 focus:outline-none focus:border-warmbrown-600">
+                        <input type="text" id="authContact" required placeholder="Masukkan nama/email" class="w-full px-4 py-3 text-sm rounded-xl border border-warmbrown-300/40 bg-cream-100 text-warmbrown-800 focus:outline-none focus:border-warmbrown-600">
                     </div>
                     <div>
                         <label class="block text-xs font-semibold mb-1 text-warmbrown-800">Kata Sandi</label>
@@ -122,11 +122,10 @@
                         Masuk / Daftar Akun
                     </button>
                 </form>
-                <p class="text-[11px] text-center text-warmbrown-500">Akses Pemilik Web (Admin): Username <strong>admin</strong> | Password <strong>admin123</strong></p>
             </div>
         </section>
 
-        <!-- 3. BAGIAN PROFIL TERSENDIRI + SELEKSI 12 AVATAR LUCU -->
+        <!-- 3. PROFIL PENGGUNA -->
         <section id="profilView" class="tab-content">
             <div class="bg-cream-50 p-6 sm:p-8 rounded-3xl border border-warmbrown-300/30 shadow-xl space-y-8 max-w-2xl mx-auto">
                 <div class="border-b border-warmbrown-300/20 pb-4 text-center sm:text-left">
@@ -134,12 +133,10 @@
                     <p class="text-xs text-warmbrown-600">Kelola identitas, foto profil lucu, dan deskripsi keluhan utama kamu.</p>
                 </div>
 
-                <!-- PILIHAN 12 AVATAR LUCU -->
+                <!-- 12 AVATAR LUCU -->
                 <div class="space-y-3">
                     <label class="block text-xs font-bold text-warmbrown-800">Pilih Icon Gambar Profil (12 Avatar Lucu):</label>
-                    <div id="avatarPicker" class="grid grid-cols-4 sm:grid-cols-6 gap-3">
-                        <!-- Generasi 12 Avatar Lucu lewat JS -->
-                    </div>
+                    <div id="avatarPicker" class="grid grid-cols-4 sm:grid-cols-6 gap-3"></div>
                 </div>
 
                 <form onsubmit="saveProfile(event)" class="grid sm:grid-cols-2 gap-4">
@@ -191,10 +188,7 @@
                 </div>
 
                 <form onsubmit="calculateScreening(event)" class="space-y-6">
-                    <div id="questionsContainer" class="space-y-6">
-                        <!-- Pertanyaan diisi secara dinamis via JS -->
-                    </div>
-
+                    <div id="questionsContainer" class="space-y-6"></div>
                     <button type="submit" class="w-full py-3.5 rounded-xl bg-warmbrown-600 text-cream-50 font-bold text-sm hover:bg-warmbrown-700 transition-all shadow-md">
                         Hitung & Tampilkan Hasil
                     </button>
@@ -216,10 +210,7 @@
                 </div>
 
                 <p id="riskDesc" class="text-sm leading-relaxed">--</p>
-
-                <div id="riskActionBox" class="p-5 rounded-2xl space-y-3">
-                    <!-- Notifikasi tindakan diisi JS -->
-                </div>
+                <div id="riskActionBox" class="p-5 rounded-2xl space-y-3"></div>
 
                 <div class="flex flex-col sm:flex-row gap-4 pt-2">
                     <button onclick="switchTab('riwayatView')" class="w-full py-3 rounded-xl border border-warmbrown-600 text-warmbrown-800 font-bold text-xs hover:bg-cream-200">
@@ -237,7 +228,7 @@
             <div class="bg-cream-50 p-6 sm:p-8 rounded-3xl border border-warmbrown-300/30 shadow-xl space-y-6">
                 <div>
                     <h2 class="text-xl font-bold text-warmbrown-800">Professional Connect</h2>
-                    <p class="text-xs text-warmbrown-600">Konsultasi langsung dengan Psikolog dan Konselor Terlisensi.</p>
+                    <p class="text-xs text-warmbrown-600">Konsultasi langsung dengan Psikolog dan Konselor Terlisensi melalui Roomchat, Telepon, atau Panggilan Video.</p>
                 </div>
 
                 <div class="grid sm:grid-cols-2 gap-4">
@@ -250,13 +241,13 @@
                             </div>
                         </div>
                         <div class="grid grid-cols-3 gap-2">
-                            <button onclick="startConsult('Chat', 'Siti Rahma, M.Psi.')" class="py-2 bg-cream-50 hover:bg-warmbrown-600 hover:text-white rounded-lg text-xs font-semibold border border-warmbrown-300/30 flex justify-center items-center gap-1">
+                            <button onclick="openChatModal('Siti Rahma, M.Psi., Psikolog')" class="py-2 bg-cream-50 hover:bg-warmbrown-600 hover:text-white rounded-lg text-xs font-semibold border border-warmbrown-300/30 flex justify-center items-center gap-1">
                                 <i data-lucide="message-square" class="w-3.5 h-3.5"></i> Chat
                             </button>
-                            <button onclick="startConsult('Voice Call', 'Siti Rahma, M.Psi.')" class="py-2 bg-cream-50 hover:bg-warmbrown-600 hover:text-white rounded-lg text-xs font-semibold border border-warmbrown-300/30 flex justify-center items-center gap-1">
+                            <button onclick="startCallModal('Siti Rahma, M.Psi., Psikolog', 'Telepon')" class="py-2 bg-cream-50 hover:bg-warmbrown-600 hover:text-white rounded-lg text-xs font-semibold border border-warmbrown-300/30 flex justify-center items-center gap-1">
                                 <i data-lucide="phone" class="w-3.5 h-3.5"></i> Voice
                             </button>
-                            <button onclick="startConsult('Video Call', 'Siti Rahma, M.Psi.')" class="py-2 bg-cream-50 hover:bg-warmbrown-600 hover:text-white rounded-lg text-xs font-semibold border border-warmbrown-300/30 flex justify-center items-center gap-1">
+                            <button onclick="startCallModal('Siti Rahma, M.Psi., Psikolog', 'Panggilan Video')" class="py-2 bg-cream-50 hover:bg-warmbrown-600 hover:text-white rounded-lg text-xs font-semibold border border-warmbrown-300/30 flex justify-center items-center gap-1">
                                 <i data-lucide="video" class="w-3.5 h-3.5"></i> Video
                             </button>
                         </div>
@@ -271,13 +262,13 @@
                             </div>
                         </div>
                         <div class="grid grid-cols-3 gap-2">
-                            <button onclick="startConsult('Chat', 'Ahmad Hidayat, S.Psi.')" class="py-2 bg-cream-50 hover:bg-warmbrown-600 hover:text-white rounded-lg text-xs font-semibold border border-warmbrown-300/30 flex justify-center items-center gap-1">
+                            <button onclick="openChatModal('Ahmad Hidayat, S.Psi.')" class="py-2 bg-cream-50 hover:bg-warmbrown-600 hover:text-white rounded-lg text-xs font-semibold border border-warmbrown-300/30 flex justify-center items-center gap-1">
                                 <i data-lucide="message-square" class="w-3.5 h-3.5"></i> Chat
                             </button>
-                            <button onclick="startConsult('Voice Call', 'Ahmad Hidayat, S.Psi.')" class="py-2 bg-cream-50 hover:bg-warmbrown-600 hover:text-white rounded-lg text-xs font-semibold border border-warmbrown-300/30 flex justify-center items-center gap-1">
+                            <button onclick="startCallModal('Ahmad Hidayat, S.Psi.', 'Telepon')" class="py-2 bg-cream-50 hover:bg-warmbrown-600 hover:text-white rounded-lg text-xs font-semibold border border-warmbrown-300/30 flex justify-center items-center gap-1">
                                 <i data-lucide="phone" class="w-3.5 h-3.5"></i> Voice
                             </button>
-                            <button onclick="startConsult('Video Call', 'Ahmad Hidayat, S.Psi.')" class="py-2 bg-cream-50 hover:bg-warmbrown-600 hover:text-white rounded-lg text-xs font-semibold border border-warmbrown-300/30 flex justify-center items-center gap-1">
+                            <button onclick="startCallModal('Ahmad Hidayat, S.Psi.', 'Panggilan Video')" class="py-2 bg-cream-50 hover:bg-warmbrown-600 hover:text-white rounded-lg text-xs font-semibold border border-warmbrown-300/30 flex justify-center items-center gap-1">
                                 <i data-lucide="video" class="w-3.5 h-3.5"></i> Video
                             </button>
                         </div>
@@ -286,25 +277,25 @@
             </div>
         </section>
 
-        <!-- 7. RIWAYAT PENGGUNA (KHUSUS PEMILIK AKUN LOGIN) -->
+        <!-- 7. RIWAYAT TANPA BATAS -->
         <section id="riwayatView" class="tab-content">
             <div class="bg-cream-50 p-6 sm:p-8 rounded-3xl border border-warmbrown-300/30 shadow-xl space-y-6">
                 <div>
                     <h2 class="text-xl font-bold text-warmbrown-800">Riwayat & Perkembangan Saya</h2>
-                    <p class="text-xs text-warmbrown-600">Catatan khusus dari akun yang sedang aktif (<span id="historyAccountLabel" class="font-bold">--</span>).</p>
+                    <p class="text-xs text-warmbrown-600">Catatan khusus dari akun yang sedang aktif (<span id="historyAccountLabel" class="font-bold">--</span>). Seluruh riwayat tersimpan tanpa batas.</p>
                 </div>
 
                 <div class="space-y-4">
                     <h3 class="text-sm font-bold text-warmbrown-800 border-b pb-2">Catatan Skrining Mandiri</h3>
                     <div id="screeningHistoryList" class="space-y-2 text-xs"></div>
 
-                    <h3 class="text-sm font-bold text-warmbrown-800 border-b pb-2 pt-4">Riwayat Sesi Konsultasi</h3>
+                    <h3 class="text-sm font-bold text-warmbrown-800 border-b pb-2 pt-4">Riwayat Sesi Konsultasi & Chat</h3>
                     <div id="consultHistoryList" class="space-y-2 text-xs"></div>
                 </div>
             </div>
         </section>
 
-        <!-- 8. PANEL ADMIN (KHUSUS PEMILIK WEB / ADMIN) -->
+        <!-- 8. PANEL ADMIN -->
         <section id="adminView" class="tab-content">
             <div class="bg-cream-50 p-6 sm:p-8 rounded-3xl border border-warmbrown-300/30 shadow-xl space-y-6">
                 <div class="flex justify-between items-center border-b pb-4">
@@ -313,7 +304,7 @@
                             <span class="bg-red-600 text-white text-[10px] font-extrabold px-2 py-0.5 rounded-full">PANEL KELOLA</span>
                             <h2 class="text-xl font-bold text-warmbrown-800">Panel Pemantauan Admin Web</h2>
                         </div>
-                        <p class="text-xs text-warmbrown-600 mt-1">Daftar seluruh pengguna, profil lengkap, keluhan, serta rekap hasil skrining.</p>
+                        <p class="text-xs text-warmbrown-600 mt-1">Daftar seluruh pengguna terdaftar, profil lengkap, keluhan, serta rekap riwayat skrining.</p>
                     </div>
                     <button onclick="clearAdminData()" class="text-xs px-3 py-1.5 bg-red-100 text-red-700 font-bold rounded-lg hover:bg-red-200">Reset Seluruh Data</button>
                 </div>
@@ -325,12 +316,10 @@
                                 <th class="p-3 border">Akun Pengguna</th>
                                 <th class="p-3 border">Data Profil & Keluhan Utama</th>
                                 <th class="p-3 border">Hasil Skrining Terakhir</th>
-                                <th class="p-3 border">Seluruh Riwayat Skrining</th>
+                                <th class="p-3 border">Seluruh Riwayat Skrining (Tak Terbatas)</th>
                             </tr>
                         </thead>
-                        <tbody id="adminTableBody">
-                            <!-- Dimuat via JS -->
-                        </tbody>
+                        <tbody id="adminTableBody"></tbody>
                     </table>
                 </div>
             </div>
@@ -338,23 +327,77 @@
 
     </main>
 
+    <!-- MODAL ROOMCHAT INTERAKTIF -->
+    <div id="chatModal" class="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-cream-50 w-full max-w-lg rounded-3xl border border-warmbrown-300/30 shadow-2xl flex flex-col h-[550px] overflow-hidden">
+            <!-- Header Chat -->
+            <div class="bg-warmbrown-600 text-cream-50 p-4 flex justify-between items-center">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full bg-warmbrown-500 flex items-center justify-center font-bold text-white text-sm">💬</div>
+                    <div>
+                        <h3 id="chatDoctorName" class="font-bold text-sm">Konselor</h3>
+                        <p class="text-[10px] text-cream-200 flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-green-400 inline-block"></span> Online | MindTrack Roomchat</p>
+                    </div>
+                </div>
+                <button onclick="closeChatModal()" class="text-cream-200 hover:text-white"><i data-lucide="x" class="w-6 h-6"></i></button>
+            </div>
+
+            <!-- Area Pesan -->
+            <div id="chatMessages" class="flex-1 p-4 overflow-y-auto space-y-3 bg-cream-100 text-xs"></div>
+
+            <!-- Input Pesan -->
+            <form onsubmit="sendChatMessage(event)" class="p-3 bg-cream-50 border-t border-warmbrown-300/20 flex gap-2">
+                <input type="text" id="chatInput" placeholder="Tulis pesan atau keluhanmu di sini..." required class="flex-1 px-4 py-2.5 rounded-xl border border-warmbrown-300/40 bg-cream-100 text-xs focus:outline-none focus:border-warmbrown-600">
+                <button type="submit" class="px-4 py-2.5 rounded-xl bg-warmbrown-600 text-cream-50 font-bold text-xs hover:bg-warmbrown-700 flex items-center gap-1">
+                    Kirim <i data-lucide="send" class="w-3.5 h-3.5"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL TELEPON / PANGGILAN VIDEO -->
+    <div id="callModal" class="fixed inset-0 z-50 bg-slate-900/90 backdrop-blur-md hidden flex items-center justify-center p-4">
+        <div class="bg-slate-800 text-white w-full max-w-md rounded-3xl shadow-2xl p-8 text-center space-y-6 border border-slate-700 relative overflow-hidden">
+            <div id="videoPlaceholder" class="hidden absolute inset-0 bg-slate-950 flex items-center justify-center">
+                <div class="text-center space-y-2">
+                    <i data-lucide="video" class="w-16 h-16 text-slate-600 mx-auto animate-pulse"></i>
+                    <p class="text-xs text-slate-400">Panggilan Video Berlangsung...</p>
+                </div>
+            </div>
+
+            <div class="relative z-10 space-y-4">
+                <div class="w-24 h-24 rounded-full bg-warmbrown-600 border-4 border-slate-700 mx-auto flex items-center justify-center text-3xl font-bold shadow-lg">
+                    👨‍⚕️
+                </div>
+                <div>
+                    <h3 id="callDoctorName" class="text-lg font-bold text-white">Konselor</h3>
+                    <p id="callTypeLabel" class="text-xs text-slate-400 mt-1">Sesi Panggilan Berlangsung</p>
+                    <p id="callTimer" class="text-sm font-mono text-green-400 font-bold mt-2">00:00</p>
+                </div>
+
+                <div class="flex justify-center gap-4 pt-4">
+                    <button class="w-12 h-12 rounded-full bg-slate-700 hover:bg-slate-600 flex items-center justify-center"><i data-lucide="mic-off" class="w-5 h-5"></i></button>
+                    <button onclick="endCallModal()" class="w-14 h-14 rounded-full bg-red-600 hover:bg-red-700 flex items-center justify-center shadow-lg"><i data-lucide="phone-off" class="w-6 h-6"></i></button>
+                    <button class="w-12 h-12 rounded-full bg-slate-700 hover:bg-slate-600 flex items-center justify-center"><i data-lucide="volume-2" class="w-5 h-5"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <footer class="text-center py-6 text-xs text-warmbrown-600 border-t border-warmbrown-300/20">
         © 2026 MindTrack Teen — Platform Pemantauan Kesehatan Mental Remaja
     </footer>
 
-    <!-- LOGIKA SISTEM -->
+    <!-- LOGIKA SISTEM INTEGRATED -->
     <script>
         lucide.createIcons();
 
-        // 12 Icon Avatar Lucu MindTrack Teen
-        const avatarIcons = [
-            '🐱', '🐶', '🐼', '🦊', '🐰', '🐻', 
-            '🐨', '🦁', '🐯', '🐸', '🦄', '🐣'
-        ];
-
+        const avatarIcons = ['🐱', '🐶', '🐼', '🦊', '🐰', '🐻', '🐨', '🦁', '🐯', '🐸', '🦄', '🐣'];
         let selectedAvatar = '🐱';
+        let activeDoctor = '';
+        let callTimerInterval = null;
+        let callSeconds = 0;
 
-        // Bank Soal 15 Pertanyaan per Kategori Risiko
         const questionBank = {
             "Indikasi Kecemasan": [
                 "Merasa gugup, cemas, atau gelisah secara berlebihan?",
@@ -458,7 +501,7 @@
 
         function protectedNavigate(targetTab) {
             if (!currentUser) {
-                alert('Akses Terkunci! Silakan masuk atau mendaftar akun terlebih dahulu.');
+                alert('Silakan masuk atau mendaftar akun terlebih dahulu.');
                 switchTab('authView');
             } else {
                 if (targetTab === 'profilView') loadProfileData();
@@ -467,7 +510,6 @@
             }
         }
 
-        // PANEL ADMIN HANYA BISA DIAKSES ADMIN
         function accessAdminPanel() {
             if (currentUser && currentUser.role === 'admin') {
                 renderAdminDashboard();
@@ -482,14 +524,9 @@
             const contact = document.getElementById('authContact').value.trim();
             const password = document.getElementById('authPassword').value.trim();
 
-            // Kredensial Admin Web
+            // Kredensial Khusus Admin
             if ((contact === 'admin' || contact === 'admin@mindtrack.com') && password === 'admin123') {
-                currentUser = {
-                    contact: 'admin',
-                    name: 'Pemilik Web (Admin)',
-                    avatar: '🔑',
-                    role: 'admin'
-                };
+                currentUser = { contact: 'admin', name: 'Pemilik Web (Admin)', avatar: '🔑', role: 'admin' };
                 localStorage.setItem('mindtrack_user', JSON.stringify(currentUser));
                 updateAuthUI();
                 alert('Berhasil Masuk sebagai Admin!');
@@ -497,14 +534,14 @@
                 return;
             }
 
-            // Pengguna Biasa
+            // Pengguna Biasa -> Otomatis Tersimpan ke Admin Monitoring
             let adminUsers = JSON.parse(localStorage.getItem('mindtrack_all_users')) || [];
             let existingUser = adminUsers.find(u => u.contact === contact);
 
             if (existingUser && existingUser.profile) {
                 currentUser = {
                     contact: contact,
-                    name: existingUser.profile.name || '',
+                    name: existingUser.profile.name || contact,
                     age: existingUser.profile.age || '',
                     gender: existingUser.profile.gender || '',
                     education: existingUser.profile.education || '',
@@ -515,7 +552,7 @@
             } else {
                 currentUser = {
                     contact: contact,
-                    name: '',
+                    name: contact,
                     age: '',
                     gender: '',
                     education: '',
@@ -550,7 +587,6 @@
                 document.getElementById('navAvatarDisplay').innerText = currentUser.avatar || '🐱';
                 document.getElementById('navUserName').innerText = currentUser.name || currentUser.contact;
 
-                // Tampilkan menu Admin hanya jika role admin
                 if (currentUser.role === 'admin') {
                     adminNavBtn.classList.remove('hidden');
                 } else {
@@ -576,7 +612,7 @@
             syncUserDataToAdmin();
 
             updateAuthUI();
-            alert('Profil dan foto avatar berhasil diperbarui!');
+            alert('Profil berhasil diperbarui!');
         }
 
         function loadProfileData() {
@@ -590,7 +626,7 @@
 
         function startAutoScreening() {
             if (!currentUser) {
-                alert('Akses Terkunci! Silakan masuk atau mendaftar akun terlebih dahulu.');
+                alert('Silakan masuk atau mendaftar akun terlebih dahulu.');
                 switchTab('authView');
                 return;
             }
@@ -637,9 +673,7 @@
             e.preventDefault();
             const formData = new FormData(e.target);
             let score = 0;
-            for (let value of formData.values()) {
-                score += parseInt(value);
-            }
+            for (let value of formData.values()) { score += parseInt(value); }
 
             let riskLevel = '', riskTitle = '', riskDesc = '', actionHtml = '', bgClass = '';
 
@@ -654,21 +688,13 @@
                 riskTitle = 'Risiko Sedang (' + detectedCategory + ')';
                 riskDesc = 'Kamu menunjukkan gejala tingkat sedang yang berpotensi mengganggu aktivitas harian. Disarankan untuk berdiskusi dengan konselor.';
                 bgClass = 'bg-yellow-50 border-yellow-200 text-yellow-800';
-                actionHtml = `
-                    <div class="bg-yellow-100 p-4 rounded-xl text-xs space-y-2">
-                        <strong class="block text-yellow-900">⚠️ Rekomendasi Konsultasi:</strong>
-                        <p>Jadwalkan sesi konseling dengan profesional di menu <strong>Professional Connect</strong>.</p>
-                    </div>`;
+                actionHtml = `<div class="bg-yellow-100 p-4 rounded-xl text-xs space-y-2"><strong class="block text-yellow-900">⚠️ Rekomendasi Konsultasi:</strong><p>Jadwalkan sesi konseling dengan profesional di menu <strong>Professional Connect</strong>.</p></div>`;
             } else {
                 riskLevel = 'Tinggi';
                 riskTitle = 'Risiko Tinggi (Membutuhkan Penanganan Segera)';
                 riskDesc = 'Tingkat indikasi gangguan emosional kamu cukup tinggi dan memerlukan bantuan profesional psikologi secepatnya.';
                 bgClass = 'bg-red-50 border-red-200 text-red-800';
-                actionHtml = `
-                    <div class="bg-red-100 p-4 rounded-xl text-xs space-y-2 border border-red-300">
-                        <strong class="block text-red-900 text-sm">🚨 PERINGATAN RISIKO TINGGI:</strong>
-                        <p>Segera hubungi psikolog melalui fitur Chat, Voice, atau Video Call di platform ini atau kunjungi Fasilitas Kesehatan terdekat.</p>
-                    </div>`;
+                actionHtml = `<div class="bg-red-100 p-4 rounded-xl text-xs space-y-2 border border-red-300"><strong class="block text-red-900 text-sm">🚨 PERINGATAN RISIKO TINGGI:</strong><p>Segera hubungi psikolog melalui fitur Chat, Voice, atau Video Call di platform ini.</p></div>`;
             }
 
             const card = document.getElementById('riskCard');
@@ -685,24 +711,128 @@
                 risk: riskLevel
             };
 
-            // Simpan riwayat khusus pengguna yang sedang login
             saveUserScreeningHistory(entry);
             renderHistories();
             switchTab('hasilView');
         }
 
-        function startConsult(type, doctorName) {
-            alert(`Memulai sesi ${type} dengan ${doctorName}...`);
-            const entry = {
+        /* --- FITUR ROOMCHAT INTERAKTIF --- */
+        function openChatModal(doctorName) {
+            if (!currentUser) {
+                alert('Silakan login terlebih dahulu.');
+                switchTab('authView');
+                return;
+            }
+            activeDoctor = doctorName;
+            document.getElementById('chatDoctorName').innerText = doctorName;
+            
+            const messagesBox = document.getElementById('chatMessages');
+            messagesBox.innerHTML = `
+                <div class="text-center text-[10px] text-warmbrown-500 my-2">-- Sesi Roomchat Dimulai dengan ${doctorName} --</div>
+                <div class="bg-white p-3 rounded-2xl max-w-[80%] border border-warmbrown-300/20 shadow-sm text-warmbrown-800 space-y-1">
+                    <p class="font-bold text-[11px] text-warmbrown-600">${doctorName}</p>
+                    <p>Halo ${currentUser.name || 'Teman MindTrack'}! Halo, ada yang ingin kamu ceritakan atau konsultasikan hari ini? Aku siap mendengarkan.</p>
+                </div>
+            `;
+            document.getElementById('chatModal').classList.remove('hidden');
+        }
+
+        function closeChatModal() {
+            document.getElementById('chatModal').classList.add('hidden');
+        }
+
+        function sendChatMessage(e) {
+            e.preventDefault();
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            if (!message) return;
+
+            const messagesBox = document.getElementById('chatMessages');
+
+            // Pesan Pengguna
+            messagesBox.innerHTML += `
+                <div class="flex justify-end">
+                    <div class="bg-warmbrown-600 text-cream-50 p-3 rounded-2xl max-w-[80%] shadow-sm space-y-1">
+                        <p class="font-bold text-[10px] text-cream-200">Kamu</p>
+                        <p>${message}</p>
+                    </div>
+                </div>
+            `;
+
+            input.value = '';
+            messagesBox.scrollTop = messagesBox.scrollHeight;
+
+            // Catat ke Riwayat Sesi Konsultasi Pengguna
+            saveUserConsultHistory({
+                date: new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }),
+                doctor: activeDoctor,
+                method: 'Roomchat'
+            });
+
+            // Respon Otomatis Konselor
+            setTimeout(() => {
+                const autoReplies = [
+                    `Terima kasih sudah berbagi cerita, ${currentUser.name || ''}. Perasaan yang kamu alami itu sangat valid. Apa yang biasanya kamu lakukan saat rasa tertekan itu muncul?`,
+                    `Aku memahami kondisi kamu. Ingat bahwa kamu tidak sendirian. Mari kita urai perlahan-lahan apa yang paling mengganggumu saat ini.`,
+                    `Terima kasih atas keterbukaanmu. Mengakui keluhan adalah langkah awal yang sangat berani. Cobalah tarik napas dalam-dalam, mari kita cari solusinya bersama.`
+                ];
+                const reply = autoReplies[Math.floor(Math.random() * autoReplies.length)];
+
+                messagesBox.innerHTML += `
+                    <div class="bg-white p-3 rounded-2xl max-w-[80%] border border-warmbrown-300/20 shadow-sm text-warmbrown-800 space-y-1">
+                        <p class="font-bold text-[11px] text-warmbrown-600">${activeDoctor}</p>
+                        <p>${reply}</p>
+                    </div>
+                `;
+                messagesBox.scrollTop = messagesBox.scrollHeight;
+            }, 1000);
+        }
+
+        /* --- FITUR PANGGILAN TELEPON / VIDEO --- */
+        function startCallModal(doctorName, type) {
+            if (!currentUser) {
+                alert('Silakan login terlebih dahulu.');
+                switchTab('authView');
+                return;
+            }
+
+            activeDoctor = doctorName;
+            document.getElementById('callDoctorName').innerText = doctorName;
+            document.getElementById('callTypeLabel').innerText = `Sesi ${type} Berlangsung`;
+
+            if (type === 'Panggilan Video') {
+                document.getElementById('videoPlaceholder').classList.remove('hidden');
+            } else {
+                document.getElementById('videoPlaceholder').classList.add('hidden');
+            }
+
+            document.getElementById('callModal').classList.remove('hidden');
+
+            // Timer Panggilan
+            callSeconds = 0;
+            clearInterval(callTimerInterval);
+            callTimerInterval = setInterval(() => {
+                callSeconds++;
+                const mins = String(Math.floor(callSeconds / 60)).padStart(2, '0');
+                const secs = String(callSeconds % 60).padStart(2, '0');
+                document.getElementById('callTimer').innerText = `${mins}:${secs}`;
+            }, 1000);
+
+            // Simpan ke Riwayat Konsultasi
+            saveUserConsultHistory({
                 date: new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }),
                 doctor: doctorName,
                 method: type
-            };
-            saveUserConsultHistory(entry);
-            renderHistories();
+            });
         }
 
-        // FUNGSI KHUSUS RIWAYAT AKUN AKTIF
+        function endCallModal() {
+            clearInterval(callTimerInterval);
+            document.getElementById('callModal').classList.add('hidden');
+            alert(`Sesi panggilan dengan ${activeDoctor} telah diakhiri dan dicatat ke riwayat.`);
+        }
+
+        /* --- SIMPAN RIWAYAT TANPA BATAS & SYNC PENGGUNA TERDAFTAR --- */
         function saveUserScreeningHistory(entry) {
             let adminUsers = JSON.parse(localStorage.getItem('mindtrack_all_users')) || [];
             let idx = adminUsers.findIndex(u => u.contact === currentUser.contact);
@@ -732,7 +862,6 @@
             }
         }
 
-        // TAMPILKAN HANYA RIWAYAT MILIK AKUN TERSEBUT
         function renderHistories() {
             if (!currentUser) return;
 
@@ -781,7 +910,7 @@
                             <span class="text-lg mr-1">${p.avatar || '👤'}</span> ${u.contact}
                         </td>
                         <td class="p-3">
-                            ${p.name ? `<strong>Nama:</strong> ${p.name}<br><strong>Usia:</strong> ${p.age} thn | <strong>Gender:</strong> ${p.gender}<br><strong>Keluhan:</strong> <em>"${p.info}"</em>` : '<span class="text-warmbrown-400 italic">Profil belum diisi</span>'}
+                            ${p.name ? `<strong>Nama:</strong> ${p.name}<br><strong>Usia:</strong> ${p.age || '-'} thn | <strong>Gender:</strong> ${p.gender || '-'}<br><strong>Keluhan:</strong> <em>"${p.info || '-'}"</em>` : '<span class="text-warmbrown-400 italic">Profil belum diisi</span>'}
                         </td>
                         <td class="p-3">
                             ${lastScreening ? `<span class="font-bold">${lastScreening.risk}</span> (Skor: ${lastScreening.score}/45)<br><span class="text-[10px] text-warmbrown-500">${lastScreening.category} - ${lastScreening.date}</span>` : '<span class="text-warmbrown-400 italic">Belum skrining</span>'}
