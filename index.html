@@ -437,17 +437,18 @@
     <script>
         lucide.createIcons();
 
-        /* FIREBASE CONFIGURATION */
-        const firebaseConfig = {
-            databaseURL: "https://mindtrack-teen-default-rtdb.asia-southeast1.firebasedatabase.app/"
-        };
-
+        /* FIREBASE SAFE CONFIGURATION */
         let db = null;
         try {
-            if (!firebase.apps.length) {
-                firebase.initializeApp(firebaseConfig);
+            if (typeof firebase !== 'undefined') {
+                const firebaseConfig = {
+                    databaseURL: "https://mindtrack-teen-default-rtdb.asia-southeast1.firebasedatabase.app/"
+                };
+                if (!firebase.apps.length) {
+                    firebase.initializeApp(firebaseConfig);
+                }
+                db = firebase.database();
             }
-            db = firebase.database();
         } catch (err) {
             console.log("Firebase Database Init Fallback Active");
         }
@@ -460,7 +461,7 @@
         let callSeconds = 0;
         let pendingDeleteUserKey = null;
 
-        /* BANK SOAL SKRINING DENGAN PERTANYAAN TERDIFERENSIASI SETIAP MASALAH */
+        /* BANK SOAL SKRINING LENGKAP */
         const questionBank = {
             "Indikasi Kecemasan": [
                 "Merasa cemas, gugup, atau gelisah secara berlebihan dalam aktivitas harian?",
@@ -604,6 +605,7 @@
 
         function renderAvatarPicker() {
             const picker = document.getElementById('avatarPicker');
+            if (!picker) return;
             picker.innerHTML = avatarIcons.map(icon => `
                 <button type="button" onclick="selectAvatar('${icon}')" id="avatar-btn-${icon}" class="avatar-option p-3 text-2xl bg-cream-100 rounded-2xl border border-warmbrown-300/30 flex justify-center items-center hover:bg-cream-200">
                     ${icon}
@@ -620,7 +622,8 @@
 
         function switchTab(tabId) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-            document.getElementById(tabId).classList.add('active');
+            const target = document.getElementById(tabId);
+            if (target) target.classList.add('active');
         }
 
         function protectedNavigate(targetTab) {
@@ -781,7 +784,7 @@
             }
 
             updateAuthUI();
-            alert('Profil berhasil diperbarui dan tersimpan ke cloud!');
+            alert('Profil berhasil diperbarui dan tersimpan!');
         }
 
         function loadProfileData() {
@@ -891,25 +894,25 @@
             switchTab('hasilView');
         }
 
-        /* --- RESPON KONSELOR --- */
+        /* --- RESPON KONSELOR AI --- */
         function generateSmartCounselorResponse(userMsg) {
             const msg = userMsg.toLowerCase();
             const name = currentUser?.name || 'Teman';
 
             if (msg.includes('cemas') || msg.includes('takut') || msg.includes('panik') || msg.includes('gugup')) {
-                return `Halo ${name}. Berdasarkan prinsip Terapi Kognitif Perilaku (CBT), rasa cemas berlebihan muncul dari siklus pikiran otomatis yang memprediksi hal buruk. Berikut langkah ilmiah penanganannya:\n\n1. Respon Fisik (Relaksasi Diagfragma): Tarik napas dalam 4 detik, tahan 4 detik, dan hembuskan perlahan 6 detik untuk menurunkan aktivitas sistem saraf simpatis.\n2. Restrukturisasi Kognitif: Tuliskan ketakutanmu, lalu tanyakan pada diri sendiri: 'Apakah ada bukti nyata hal ini pasti terjadi?'\n3. Grounding 5-4-3-2-1: Sebutkan 5 benda yang kamu lihat dan 4 benda yang bisa kamu sentuh untuk membawa pikiran kembali ke masa kini.\n\nApa hal spesifik yang paling memicu rasa cemasmu saat ini?`;
+                return `Halo ${name}. Berdasarkan prinsip Terapi Kognitif Perilaku (CBT), rasa cemas berlebihan muncul dari siklus pikiran otomatis yang memprediksi hal buruk. Berikut langkah ilmiah penanganannya:\n\n1. Respon Fisik (Relaksasi Diagfragma): Tarik napas dalam 4 detik, tahan 4 detik, dan hembuskan perlahan 6 detik.\n2. Restrukturisasi Kognitif: Tuliskan ketakutanmu, lalu tanyakan pada diri sendiri: 'Apakah ada bukti nyata hal ini pasti terjadi?'\n3. Grounding 5-4-3-2-1: Sebutkan 5 benda yang kamu lihat dan 4 benda yang bisa kamu sentuh.\n\nApa hal spesifik yang paling memicu rasa cemasmu saat ini?`;
             } 
             if (msg.includes('stres') || msg.includes('tugas') || msg.includes('sekolah') || msg.includes('kuliah') || msg.includes('ujian') || msg.includes('pusing')) {
-                return `Tekanan akademik sering kali memicu beban mental berlebih (*cognitive overload*), ${name}. Langkah practical manajemen stres secara ilmiah meliputi:\n\n1. Teknik Pomodoro: Kerjakan tugas selama 25 menit fokus penuh, lalu istirahat mutlak 5 menit untuk menyegarkan kembali fungsi memori kerja otak.\n2. Dekomposisi Tugas: Pecah tugas besar menjadi sub-tugas kecil yang mudah diselesaikan agar menurunkan resistensi emosional (penundaan).\n3. Evaluasi Kendali: Pisahkan mana hal yang bisa kamu kontrol (usaha belajar) dan luar kontrol (hasil akhir).\n\nTugas atau mata pelajaran mana yang paling menguras energimu saat ini?`;
+                return `Tekanan akademik sering kali memicu beban mental berlebih (*cognitive overload*), ${name}. Langkah practical manajemen stres secara ilmiah meliputi:\n\n1. Teknik Pomodoro: Kerjakan tugas selama 25 menit fokus penuh, lalu istirahat 5 menit.\n2. Dekomposisi Tugas: Pecah tugas besar menjadi sub-tugas kecil yang mudah diselesaikan.\n3. Evaluasi Kendali: Pisahkan mana hal yang bisa kamu kontrol dan luar kontrol.\n\nTugas mana yang paling menguras energimu saat ini?`;
             }
             if (msg.includes('sedih') || msg.includes('sepi') || msg.includes('menangis') || msg.includes('hampa') || msg.includes('kecewa') || msg.includes('depresi')) {
-                return `Perasaan sedih dan hampa yang bertahan lama memerlukan pendekatan *Behavioral Activation* (Aktivasi Perilaku) untuk memulihkan energi emosional, ${name}. Langkah penanganannya:\n\n1. Validasi Emosional: Buka ruang bagi dirimu untuk merasakan sedih tanpa menghakimi diri sendiri.\n2. Mikro-Aktivitas Fisik: Lakukan kegiatan fisik ringan selama 10-15 menit (seperti berjalan santai atau merapikan tempat tidur) untuk memicu hormon dopamin dan serotonin.\n3. Ekspresi Terbuka: Tuangkan perasaan ke dalam tulisan tanpa menyunting kata-katanya.\n\nSejak kapan kamu merasakan kondisi sedih dan hampa ini?`;
+                return `Perasaan sedih dan hampa yang bertahan lama memerlukan pendekatan *Behavioral Activation* untuk memulihkan energi emosional, ${name}. Langkah penanganannya:\n\n1. Validasi Emosional: Buka ruang bagi dirimu untuk merasakan sedih tanpa menghakimi diri sendiri.\n2. Mikro-Aktivitas Fisik: Lakukan kegiatan fisik ringan selama 10-15 menit untuk memicu hormon dopamin dan serotonin.\n3. Ekspresi Terbuka: Tuangkan perasaan ke dalam tulisan.\n\nSejak kapan kamu merasakan kondisi sedih dan hampa ini?`;
             }
             if (msg.includes('keluarga') || msg.includes('orang tua') || msg.includes('rumah') || msg.includes('marah')) {
-                return `Konflik interpersonal di lingkungan keluarga dapat memicu tekanan emosional intens, ${name}. Penanganan berbasis Komunikasi Asertif dan Regulasi Emosi meliputi:\n\n1. Time-Out Emosional: Saat emosi memuncak, ambil jeda fisik untuk menghindari respons impulsif.\n2. Teknik Pesan 'Saya' (I-Message): Ungkapkan perasaanmu tanpa menyalahkan, contoh: 'Saya merasa sedih ketika bicara dengan nada tinggi'.\n3. Batasan Emosional (*Emotional Boundary*): Sadari bahwa kamu tidak bertangung jawab penuh atas emosi orang lain.\n\nApakah ada situasi spesifik di rumah yang paling memicu rasa tertekanmu?`;
+                return `Konflik interpersonal di lingkungan keluarga dapat memicu tekanan emosional intens, ${name}. Penanganan berbasis Komunikasi Asertif dan Regulasi Emosi meliputi:\n\n1. Time-Out Emosional: Saat emosi memuncak, ambil jeda fisik untuk menghindari respons impulsif.\n2. Teknik Pesan 'Saya' (I-Message): Ungkapkan perasaanmu tanpa menyalahkan.\n3. Batasan Emosional: Sadari bahwa kamu tidak bertangung jawab penuh atas emosi orang lain.\n\nApakah ada situasi spesifik di rumah yang paling memicu rasa tertekanmu?`;
             }
             if (msg.includes('tidur') || msg.includes('insomnia') || msg.includes('begadang')) {
-                return `Kualitas tidur berhubungan langsung dengan kesehatan mental. Berdasarkan regulasi *Sleep Hygiene*, cara menangani insomnia emosional adalah:\n\n1. Kontrol Stimulus: Gunakan tempat tidur hanya untuk tidur, bukan untuk bermain HP atau belajar.\n2. Batasi Cahaya Biru: Matikan layar elektronik 30-60 menit sebelum tidur agar produksi melatonin otak tidak terganggu.\n3. Teknik Relaksasi Otot Progresif: Kencangkan dan kendurkan otot dari ujung kaki hingga kepala secara bertahap.\n\nApakah ada pikiran tertentu yang terus berputar saat kamu mencoba tidur?`;
+                return `Kualitas tidur berhubungan langsung dengan kesehatan mental. Berdasarkan regulasi *Sleep Hygiene*, cara menangani insomnia emosional adalah:\n\n1. Kontrol Stimulus: Gunakan tempat tidur hanya untuk tidur, bukan untuk bermain HP atau belajar.\n2. Batasi Cahaya Biru: Matikan layar elektronik 30-60 menit sebelum tidur.\n3. Relaksasi Otot Progresif: Kencangkan dan kendurkan otot secara bertahap.\n\nApakah ada pikiran tertentu yang terus berputar saat kamu mencoba tidur?`;
             }
             if (msg.includes('halo') || msg.includes('hai') || msg.includes('pagi') || msg.includes('siang') || msg.includes('malam')) {
                 return `Halo ${name}! Saya Konselor siap mendengarkan cerita dan memberikan solusi ilmiah penanganan emosi. Apa keluhan atau tantangan yang sedang kamu hadapi saat ini?`;
@@ -918,28 +921,31 @@
             return `Terima kasih sudah berbagi, ${name}. Berdasarkan prinsip regulasi emosi, langkah terbaik saat ini adalah mengurai perasaanmu menjadi bagian-bagian yang dapat dikelola secara bertahap. Bisakah kamu menceritakan pemicu utama dari keluhanmu tersebut?`;
         }
 
-        /* --- SINTESIS SUARA TERPISAH --- */
+        /* --- SINTESIS SUARA --- */
         function speakCounselorVoice(text, gender) {
-            if ('speechSynthesis' in window) {
-                window.speechSynthesis.cancel();
-                const utterance = new SpeechSynthesisUtterance(text);
-                utterance.lang = 'id-ID';
+            try {
+                if ('speechSynthesis' in window) {
+                    window.speechSynthesis.cancel();
+                    const utterance = new SpeechSynthesisUtterance(text);
+                    utterance.lang = 'id-ID';
 
-                const voices = window.speechSynthesis.getVoices();
-                
-                if (gender === 'female') {
-                    utterance.pitch = 1.3;
-                    utterance.rate = 0.95;
-                    const femaleVoice = voices.find(v => v.lang.includes('id') && (v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('gadis') || v.name.toLowerCase().includes('zira')));
-                    if (femaleVoice) utterance.voice = femaleVoice;
-                } else {
-                    utterance.pitch = 0.7;
-                    utterance.rate = 0.9;
-                    const maleVoice = voices.find(v => v.lang.includes('id') && (v.name.toLowerCase().includes('male') || v.name.toLowerCase().includes('david') || v.name.toLowerCase().includes('mantap')));
-                    if (maleVoice) utterance.voice = maleVoice;
+                    const voices = window.speechSynthesis.getVoices();
+                    if (gender === 'female') {
+                        utterance.pitch = 1.3;
+                        utterance.rate = 0.95;
+                        const femaleVoice = voices.find(v => v.lang.includes('id') && (v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('zira')));
+                        if (femaleVoice) utterance.voice = femaleVoice;
+                    } else {
+                        utterance.pitch = 0.7;
+                        utterance.rate = 0.9;
+                        const maleVoice = voices.find(v => v.lang.includes('id') && (v.name.toLowerCase().includes('male') || v.name.toLowerCase().includes('david')));
+                        if (maleVoice) utterance.voice = maleVoice;
+                    }
+
+                    window.speechSynthesis.speak(utterance);
                 }
-
-                window.speechSynthesis.speak(utterance);
+            } catch(e) {
+                console.log("Speech synthesis error ignored");
             }
         }
 
@@ -962,7 +968,7 @@
         }
 
         function closeChatModal() {
-            if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+            try { if ('speechSynthesis' in window) window.speechSynthesis.cancel(); } catch(e){}
             document.getElementById('chatModal').classList.add('hidden');
         }
 
@@ -1084,7 +1090,7 @@
         }
 
         function endCallModal() {
-            if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+            try { if ('speechSynthesis' in window) window.speechSynthesis.cancel(); } catch(e){}
             clearInterval(callTimerInterval);
             document.getElementById('callModal').classList.add('hidden');
             alert(`Sesi panggilan dengan ${activeDoctor} telah selesai.`);
@@ -1152,6 +1158,7 @@
         /* --- SINKRONISASI PEMANTAUAN ADMIN REALTIME & HAPUS DATA --- */
         function listenToRealtimeAdminData() {
             const tbody = document.getElementById('adminTableBody');
+            if (!tbody) return;
 
             const renderTable = (usersData) => {
                 if (!usersData || Object.keys(usersData).length === 0) {
@@ -1207,6 +1214,8 @@
                         if (cloudData) {
                             renderTable(cloudData);
                         }
+                    }, err => {
+                        console.log("Firebase listener error gracefully caught");
                     });
                 } catch(e) {
                     console.log("Firebase Live Listener Error:", e);
