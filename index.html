@@ -188,13 +188,13 @@
             </div>
         </section>
 
-        <!-- 4. ISIAN SOAL SKRINING -->
+        <!-- 4. ISIAN SOAL SKRINING BERBEDA SESUAI KELUHAN -->
         <section id="skriningView" class="tab-content">
             <div class="bg-cream-50 p-6 sm:p-8 rounded-3xl border border-warmbrown-300/30 shadow-xl space-y-6">
                 <div class="border-b border-warmbrown-300/20 pb-4">
                     <span id="selectedCategoryBadge" class="text-xs px-3 py-1 rounded-full bg-warmbrown-100 text-warmbrown-800 font-bold">--</span>
-                    <h2 class="text-xl font-bold text-warmbrown-800 mt-2">Instrumen Evaluasi Psikologis (15 Pertanyaan)</h2>
-                    <p class="text-xs text-warmbrown-600">Jawablah 15 pertanyaan berikut sesuai dengan kondisi yang kamu rasakan dalam 2 minggu terakhir:</p>
+                    <h2 class="text-xl font-bold text-warmbrown-800 mt-2">Instrumen Evaluasi Psikologis (Spesifik Sesuai Keluhan)</h2>
+                    <p class="text-xs text-warmbrown-600">Pertanyaan berikut disesuaikan secara khusus dengan keluhan utama kamu. Jawablah sesuai kondisi 2 minggu terakhir:</p>
                 </div>
 
                 <form onsubmit="calculateScreening(event)" class="space-y-6">
@@ -460,57 +460,92 @@
         let callSeconds = 0;
         let pendingDeleteUserKey = null;
 
+        /* BANK SOAL SKRINING DENGAN PERTANYAAN TERDIFERENSIASI SETIAP MASALAH */
         const questionBank = {
             "Indikasi Kecemasan": [
-                "Merasa gugup, cemas, atau gelisah secara berlebihan?",
-                "Sulit menghentikan atau mengendalikan rasa khawatir?",
-                "Khawatir berlebihan tentang berbagai hal yang belum tentu terjadi?",
-                "Sangat sulit untuk santai atau beristirahat tenang?",
-                "Merasa begitu gelisah sehingga sulit untuk duduk diam?",
-                "Mudah merasa jengkel, kesal, atau tersinggung?",
-                "Merasa takut seolah-olah sesuatu yang buruk akan terjadi?",
-                "Mengalami gejala fisik seperti jantung berdebar kencang tanpa alasan medis?",
-                "Mengalami otot tegang, pegal, atau gemetar saat merasa tertekan?",
-                "Sering merasa pusing, mual, atau keringat dingin saat cemas?",
-                "Sering menghindari situasi sosial karena takut dihakimi orang lain?",
-                "Sering memikirkan secara berulang-ulang kesalahan di masa lalu?",
-                "Merasa panik secara tiba-tiba di situasi yang sebenarnya aman?",
-                "Sulit berkonsentrasi karena pikiran dipenuhi rasa khawatir?",
-                "Mengalami gangguan tidur karena otak terus berfikir dan cemas?"
+                "Merasa cemas, gugup, atau gelisah secara berlebihan dalam aktivitas harian?",
+                "Sulit menghentikan atau mengendalikan rasa khawatir berlebih tentang masa depan?",
+                "Mengalami jantung berdebar kencang, napas pendek, atau dada sesak saat merasa tertekan?",
+                "Sering membayangkan skenario terburuk dari suatu kejadian yang belum tentu terjadi?",
+                "Merasa sangat tegang hingga sulit merilekskan otot-otot tubuh?",
+                "Sering menghindari tempat ramai atau situasi sosial karena takut dinilai buruk?",
+                "Merasa panik secara tiba-tiba tanpa alasan yang jelas?",
+                "Kesulitan tidur karena otak terus berfikir dan cemas mengenai hari esok?",
+                "Mudah terkejut, merasa tidak tenang, atau gemetar saat menghadapi tekanan?",
+                "Merasa cemas jika tidak mendapatkan kepastian atas segala sesuatu?",
+                "Sering mengalami gangguan pencernaan, mual, atau pusing saat merasa gugup?",
+                "Sulit fokus belajar/bekerja karena pikiran terdistraksi rasa takut?",
+                "Sering memikirkan kesalahan kecil di masa lalu secara berulang-ulang (*overthinking*)?",
+                "Merasa membutuhkan kehadiran orang lain untuk merasa aman di lingkungan baru?",
+                "Merasa khawatir berlebihan mengenai kondisi kesehatan fisik dirimu sendiri?"
             ],
             "Indikasi Depresi": [
-                "Kurang berminat atau tidak menikmati melakukan berbagai aktivitas?",
-                "Merasa murung, sedih, hampa, atau putus asa hampir sepanjang hari?",
-                "Sulit tidur, sering terbangun, atau justru terlalu banyak tidur?",
-                "Merasa lelah, lemas, atau kekurangan energi hampir setiap hari?",
-                "Kurang nafsu makan atau justru makan secara berlebihan?",
-                "Merasa buruk tentang diri sendiri, gagal, atau mengecewakan keluarga?",
-                "Sulit berkonsentrasi saat membaca, belajar, atau menonton TV?",
-                "Bergerak atau berbicara sangat lambat, atau sebaliknya sangat gelisah?",
-                "Memiliki pikiran bahwa lebih baik mati atau ingin melukai diri sendiri?",
-                "Merasa masa depan tidak memiliki harapan atau tujuan jelas?",
-                "Sering menangis secara tiba-tiba tanpa alasan yang pasti?",
-                "Merasa terisolasi dan menarik diri dari teman dan keluarga?",
-                "Kehilangan rasa percaya diri dan merasa tidak berguna?",
-                "Merasa bersalah secara berlebihan atas hal yang bukan salahmu?",
-                "Merasa sangat lambat dalam merespons atau mengambil keputusan?"
+                "Merasa murung, sedih mendalam, hampa, atau putus asa hampir sepanjang hari?",
+                "Kehilangan minat dan kegembiraan pada aktivitas/hobi yang biasanya kamu sukai?",
+                "Merasa sangat lelah dan tidak memiliki energi meskipun tidak beraktivitas berat?",
+                "Memiliki pandangan buruk terhadap diri sendiri, merasa gagal, atau tidak berguna?",
+                "Sulit untuk tidur nyenyak, sering terbangun, atau sebaliknya tidur berlebihan?",
+                "Kehilangan nafsu makan secara signifikan atau justru makan secara meluap-luap?",
+                "Menarik diri dari pergaulan, enggan menyapa teman, dan lebih memilih mengurung diri?",
+                "Merasa masa depan suram dan tidak memiliki harapan untuk menjadi lebih baik?",
+                "Sering menangis tiba-tiba tanpa tahu pasti apa pemicu utamanya?",
+                "Kesulitan mengambil keputusan sederhana karena merasa pikiran sangat lambat?",
+                "Merasa menjadi beban bagi keluarga, teman, atau orang-orang di sekitarmu?",
+                "Merasa tidak ada orang yang peduli atau benar-benar memahami perasaanmu?",
+                "Bergerak, lambat berbicara, atau sebaliknya merasa sangat gelisah tanpa arah?",
+                "Sering merasa bersalah secara berlebihan atas hal yang bukan sepenuhnya salahmu?",
+                "Pernah memiliki lintasan pikiran bahwa hidup ini terlalu berat atau ingin menyerah?"
             ],
             "Indikasi Stres Akademik/Lingkungan": [
-                "Merasa beban tugas/sekolah melebihi kemampuan yang kamu miliki?",
-                "Merasa tidak ada orang di sekitarmu yang memahami tekanan yang kamu alami?",
-                "Sering pusing/sakit perut saat menghadapi tekanan tugas atau ujian?",
-                "Merasa kewalahan dan sangat sulit membagi waktu harian?",
-                "Mudah emosi atau tidak stabil saat berinteraksi dengan teman/keluarga?",
-                "Merasa panik saat mendekati tenggat waktu (deadline) tugas?",
-                "Merasa cemas jika tidak mendapatkan nilai yang sempurna?",
-                "Merasa ekspektasi orang tua/guru sangat memberatkan pikiranmu?",
-                "Sering menunda-nunda tugas karena merasa terlalu tertekan?",
-                "Merasa lelah secara mental saat memikirkan rutinitas sekolah/kuliah?",
-                "Kehilangan motivasi belajar yang biasanya kamu miliki?",
-                "Merasa bersaing secara tidak sehat dan cemas dibanding-bandingkan?",
-                "Merasa lingkungan belajar/sosialmu sangat tidak mendukung?",
-                "Kurang memiliki waktu luang untuk beristirahat atau melakukan hobi?",
-                "Sering merasa bingung menentukan prioritas kegiatan harian?"
+                "Merasa jumlah tugas sekolah/kuliah sudah melebihi batas kemampuanmu?",
+                "Sering merasa pusing, sakit perut, atau lelah mental saat memikirkan sekolah?",
+                "Merasa panik atau kewalahan ketika mendekati tenggat waktu (*deadline*) tugas?",
+                "Merasa tertekan oleh ekspektasi tinggi dari orang tua atau guru terkait nilai?",
+                "Sering menunda-nunda tugas (*procrastination*) karena merasa terlalu terbeban?",
+                "Kehilangan motivasi belajar yang dahulu pernah kamu miliki?",
+                "Merasa waktu 24 jam sehari tidak cukup untuk menyelesaikan seluruh tuntutanmu?",
+                "Merasa cemas berlebih jika tidak berhasil meraih peringkat atau nilai sempurna?",
+                "Merasa bersaing secara tidak sehat dan sering membandingkan diri dengan teman?",
+                "Mudah emosi, jengkel, atau tersinggung saat belajar atau saat diajak bicara?",
+                "Merasa lingkungan belajar atau sekolahmu sangat tidak mendukung dan toxic?",
+                "Kurang memiliki waktu luang untuk beristirahat, bersantai, atau menyalurkan hobi?",
+                "Kesulitan menentukan prioritas mana tugas yang harus dikerjakan terlebih dahulu?",
+                "Merasa lelah secara fisik dan mental di pagi hari saat harus berangkat sekolah?",
+                "Sering mempertanyakan apakah jurusan/sekolah yang kamu jalani saat ini sudah tepat?"
+            ],
+            "Indikasi Masalah Keluarga & Hubungan Interpersonal": [
+                "Sering merasa tidak nyaman, tegang, atau tertekan saat berada di rumah?",
+                "Merasa pendapat atau perasaanmu jarang didengar dan dihargai oleh keluarga?",
+                "Sering terlibat konflik, perdebatan, atau adu argumen keras dengan anggota keluarga?",
+                "Merasa dipaksa untuk memenuhi ekspektasi keluarga yang tidak sesuai keinginanmu?",
+                "Sering memendam rasa marah, kecewa, atau sakit hati terhadap sikap orang tua/saudara?",
+                "Merasa disudutkan, disalahkan, atau dibanding-bandingkan dengan orang lain di rumah?",
+                "Kesulitan untuk berkomunikasi secara terbuka dan jujur tentang masalahmu ke keluarga?",
+                "Merasa tidak memiliki ruang aman (*safe space*) di lingkungan rumah sendiri?",
+                "Sering merasa kesepian meskipun sedang berkumpul bersama keluarga?",
+                "Merasa masalah finansial atau dinamika internal keluarga sangat memberatkan pikiranmu?",
+                "Sering merasa takut atau panik saat mendengar nada suara tinggi di rumah?",
+                "Merasa cemas jika konflik keluarga akan berdampak buruk pada masa depanmu?",
+                "Sering memilih keluar rumah atau mengurung diri di kamar untuk menghindari masalah?",
+                "Merasa lelah secara emosional karena harus selalu berpura-pura baik-baik saja di depan keluarga?",
+                "Merasa butuh bantuan pihak luar untuk menjembatani komunikasi dengan keluargamu?"
+            ],
+            "Indikasi Gangguan Tidur & Kelelahan Emosional (Burnout)": [
+                "Kesulitan untuk memejamkan mata dan tidur di malam hari meskipun tubuh sudah lelah?",
+                "Pikiran terus berputar (*overthinking*) mengenai berbagai hal saat berada di atas kasur?",
+                "Sering terbangun di tengah malam dan sangat sulit untuk melanjutkan tidur kembali?",
+                "Bangun tidur di pagi hari dengan kondisi tubuh tetap terasa lelah dan tidak segar?",
+                "Sering mengantuk berat dan kehilangan konsentrasi di siang hari saat beraktivitas?",
+                "Bergantung pada kafein, HP, atau kebiasaan lain hanya untuk bisa bertahan tetap terjaga?",
+                "Merasa lelah secara emosional, merasa 'kosong', dan kehabisan energi (*burnout*)?",
+                "Mengalami perubahan jadwal tidur yang tidak teratur (sering begadang hingga subuh)?",
+                "Merasa mudah marah atau emosional karena kualitas tidur yang buruk?",
+                "Sering mengalami pusing, mata lelah, atau otot leher tegang akibat kurang tidur?",
+                "Merasa cemas saat waktu malam tiba karena takut tidak bisa tidur lagi?",
+                "Sering terbangun dengan perasaan gugup atau jantung berdebar di pagi hari?",
+                "Kesulitan untuk fokus membaca atau mendengarkan penjelasan dalam waktu lama?",
+                "Merasa motivasi dan efisiensi kerjamu menurun drastis dalam beberapa minggu terakhir?",
+                "Merasa butuh waktu istirahat yang sangat panjang untuk memulihkan kondisi fisik dan mentalmu?"
             ],
             "Evaluasi Kesejahteraan Umum": [
                 "Sering merasa cemas dan khawatir dalam menjalankan aktivitas harian?",
@@ -759,6 +794,7 @@
             if (currentUser.avatar) selectAvatar(currentUser.avatar);
         }
 
+        /* DETEKSI KELUHAN & DETEKSI KATEGORI SKRINING SPESIFIK */
         function startAutoScreening() {
             if (!currentUser) {
                 alert('Silakan masuk atau mendaftar akun terlebih dahulu.');
@@ -778,15 +814,19 @@
                 detectedCategory = 'Indikasi Kecemasan';
             } else if (text.includes('sedih') || text.includes('sepi') || text.includes('hampa') || text.includes('kecewa') || text.includes('putus asa') || text.includes('murung') || text.includes('depresi')) {
                 detectedCategory = 'Indikasi Depresi';
-            } else if (text.includes('stres') || text.includes('tugas') || text.includes('sekolah') || text.includes('ujian') || text.includes('pusing') || text.includes('lelah') || text.includes('tekanan')) {
+            } else if (text.includes('stres') || text.includes('tugas') || text.includes('sekolah') || text.includes('ujian') || text.includes('pusing') || text.includes('deadline')) {
                 detectedCategory = 'Indikasi Stres Akademik/Lingkungan';
+            } else if (text.includes('keluarga') || text.includes('orang tua') || text.includes('rumah') || text.includes('marah') || text.includes('konflik')) {
+                detectedCategory = 'Indikasi Masalah Keluarga & Hubungan Interpersonal';
+            } else if (text.includes('tidur') || text.includes('insomnia') || text.includes('begadang') || text.includes('lelah') || text.includes('burnout')) {
+                detectedCategory = 'Indikasi Gangguan Tidur & Kelelahan Emosional (Burnout)';
             } else {
                 detectedCategory = 'Evaluasi Kesejahteraan Umum';
             }
 
-            document.getElementById('selectedCategoryBadge').innerText = "Sistem Mendeteksi: " + detectedCategory;
+            document.getElementById('selectedCategoryBadge').innerText = "Kategori Deteksi: " + detectedCategory;
 
-            const questions = questionBank[detectedCategory];
+            const questions = questionBank[detectedCategory] || questionBank['Evaluasi Kesejahteraan Umum'];
             const container = document.getElementById('questionsContainer');
             
             container.innerHTML = questions.map((q, idx) => `
@@ -1138,13 +1178,13 @@
                                 ${devicesHtml}
                             </td>
                             <td class="p-3">
-                                ${p.name ? `<strong>Nama:</strong> ${p.name}<br><strong>Usia:</strong> ${p.age || '-'} thn | <strong>Gender:</strong> ${p.gender || '-'}<br><strong>Keluhan Utama:</strong> <em>"${p.info || '-'}"</em>` : '<span class="text-warmbrown-400 italic">Profil belum diisi</span>'}
+                                ${p.name ? `<strong>Nama:</strong> ${p.name}<br><strong>Usia:</strong> ${p.age \vert{}\vert{} '-'} thn \vert{} <strong>Gender:</strong>${p.gender || '-'}<br><strong>Keluhan Utama:</strong> <em>"${p.info || '-'}"</em>` : '<span class="text-warmbrown-400 italic">Profil belum diisi</span>'}
                             </td>
                             <td class="p-3">
-                                ${lastScreening ? `<span class="font-bold">${lastScreening.risk}</span> (Skor: ${lastScreening.score}/45)<br><span class="text-[10px] text-warmbrown-500">${lastScreening.category} - ${lastScreening.date}</span>` : '<span class="text-warmbrown-400 italic">Belum skrining</span>'}
+                                ${lastScreening ? `<span class="font-bold">${lastScreening.risk}</span> (Skor:${lastScreening.score}/45)<br><span class="text-[10px] text-warmbrown-500">${lastScreening.category} -${lastScreening.date}</span>` : '<span class="text-warmbrown-400 italic">Belum skrining</span>'}
                             </td>
                             <td class="p-3">
-                                ${u.history && u.history.length > 0 ? u.history.map(h => `• ${h.date}: ${h.category} (${h.score}/45, ${h.risk})`).join('<br>') : '<span class="text-warmbrown-400 italic">Tidak ada riwayat</span>'}
+                                ${u.history && u.history.length > 0 ? u.history.map(h => `• ${h.date}:${h.category} (${h.score}/45,${h.risk})`).join('<br>') : '<span class="text-warmbrown-400 italic">Tidak ada riwayat</span>'}
                             </td>
                             <td class="p-3 text-center">
                                 <button onclick="openDeleteConfirmModal('${key}', '${userDisplayName.replace(/'/g, "\\'")}')" class="px-2.5 py-1.5 bg-red-100 text-red-700 font-bold text-[11px] rounded-lg hover:bg-red-200 border border-red-300 flex items-center gap-1 mx-auto">
@@ -1211,7 +1251,6 @@
                 }
             }
 
-            // Refreshes UI jika admin sedang menghapus akun yang sedang aktif
             if (currentUser && sanitizeKey(currentUser.contact) === targetKey) {
                 renderHistories();
             }
